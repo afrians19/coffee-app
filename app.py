@@ -1,6 +1,6 @@
 import streamlit as st
 from multiapp import MultiApp
-from apps import basic, sca_form, tasting_wheel # import your app modules here
+from apps import basic, sca_form, tasting_wheel,recipe # import your app modules here
 
 app = MultiApp()
 st.set_page_config(page_title='Sensory Scoresheet')
@@ -23,6 +23,7 @@ st.text('You can also visualize and download the data.')
 app.add_app("Basic", basic.app)
 app.add_app("SCA Form", sca_form.app)
 app.add_app("Tasting Wheel", tasting_wheel.app)
+app.add_app("Recipe", recipe.app)
 
 # The main app
 app.run()
