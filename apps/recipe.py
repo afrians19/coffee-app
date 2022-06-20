@@ -1,10 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import base64
-import SessionState
-import datetime
 import gspread
 from google.oauth2.service_account import Credentials
 import plotly.express as px
@@ -32,15 +27,18 @@ flavor_df_temp = 'FlavorWheelRaw.csv'
 
 def app():
     st.write("""
-    # Dial in - Basic
-
+    # Recipe
     """)
+
     st.sidebar.header('Input Parameters')
+    
     def user_input_features():
         # 1st: min | 2nd: max | 3rd: default value
         id = st.sidebar.number_input('id', 0, 1000, 1)
-        
+        grinder_micron = st.sidebar.number_input('Micron to Grinder', 0, 2000, 720)
         data = {'id': id,
+                'grinder_micron': grinder_micron,
+
                 }
         features = pd.DataFrame(data, index=[0])
         return features
@@ -120,6 +118,10 @@ def app():
         
         return temp
 
+    def CoffeeProcessCheck(process):
+        if process == 'Natural' or 'Wine' or 'Anaerobic Natural' or 'Carbonic Maceration Natural' or 'Anaerobic Washed' or 'Anaerobic Honey':
+            st.write("Process:", process, " - less agitaion, faster brew time, <93C for fruity notes")
+
     df = user_input_features()
     
     #ghseet data
@@ -131,12 +133,17 @@ def app():
     st.write(df_gsheet['Notes'])
     st.write(df_gsheet['Recipe Manual Brew - Intense'])
     st.write(df_gsheet['Recipe Manual Brew - Fruity'])
+    
+    density = df_gsheet['Density'].iloc[0]
+    st.write("Density: ", density)
 
-    density = df_gsheet['Density']
+    process = df_gsheet['Process'].iloc[0]
+    CoffeeProcessCheck(process)
+
+    grinder_setting =  df['grinder_micron'].iloc[0]
+    st.write("Grinder Setting: ", grinder_setting / 12.5)
 
     temp_brew = DensityToTemp(int(density))
-    
-    st.write(density)
     st.write("Temperature: ", temp_brew)
 
     flavorNotes = notesGsheet(df_gsheet)

@@ -47,13 +47,14 @@ def app():
         brew_method = st.sidebar.selectbox(
             'Select Brew Method', 
                 (
-                    'Modern Espresso', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 'Espresso Custom', 'Espresso Manual', 'Aeropress', 
+                    'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 'Espresso Over (Sprover)', 'Espresso Custom', 'Espresso Manual', 'Aeropress', 
                     'French press','Tubruk', 'Pour Over', 'Hybrid Percolation Immersion', 'Cupping'
-                ))        
+                )
+        )
         brew_tool = st.sidebar.selectbox(
             'Select Brew Tool', 
                 (
-                    'Espresso Machine', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 'V60 Switch 03', 'V60 Switch Hybird', 'April Plastic',
+                    'Espresso Machine', 'Nomad Espresso', 'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 'V60 Switch Hybird', 'April Plastic',
                     'Suji Wave', 'Mokapot','Vietnam Drip',
                 )
         )

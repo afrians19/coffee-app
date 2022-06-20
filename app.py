@@ -11,6 +11,7 @@ st.markdown("""
 
 st.subheader("""
 Scoresheet Forms
+0. Recipe
 1. Basic
 2. SCA Cupping Form
 3. Tasting Wheel
