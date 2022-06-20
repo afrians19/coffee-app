@@ -21,10 +21,10 @@ st.text('This is a digital version for taking notes when you dial-in any brewing
 st.text('You can also visualize and download the data.')
 
 # Add all your application here
+app.add_app("Recipe", recipe.app)
 app.add_app("Basic", basic.app)
 app.add_app("SCA Form", sca_form.app)
 app.add_app("Tasting Wheel", tasting_wheel.app)
-app.add_app("Recipe", recipe.app)
 
 # The main app
 app.run()
