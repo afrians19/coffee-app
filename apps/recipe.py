@@ -142,6 +142,7 @@ def app():
 
     grinder_setting =  df['grinder_micron'].iloc[0]
     st.write("Grinder Setting: ", grinder_setting / 12.5)
+    st.write("Grinder Setting C40: ", grinder_setting / 30, "Click")
 
     temp_brew = DensityToTemp(int(density))
     st.write("Temperature: ", temp_brew)
