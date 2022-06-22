@@ -36,9 +36,19 @@ def app():
         # 1st: min | 2nd: max | 3rd: default value
         id = st.sidebar.number_input('id', 0, 1000, 1)
         grinder_micron = st.sidebar.number_input('Micron to Grinder', 0, 2000, 720)
+        dose = st.sidebar.number_input('Dose', 0.0, 1000.0, 12.0)
+        strength = st.sidebar.selectbox(
+            'Select Coffee Strength', 
+                (
+                    '60g/L 16.67 Intense (L)', '65g/L 15.4 Intense (M)', '70g/L 14.3 Fruity (L / MD)',
+                    '80g/L 12.5 Fine Single Sweet', '100g/L 10 Bulletproof'
+                )
+        )
+
         data = {'id': id,
                 'grinder_micron': grinder_micron,
-
+                'strength': strength,
+                'dose': dose,
                 }
         features = pd.DataFrame(data, index=[0])
         return features
@@ -122,6 +132,25 @@ def app():
         if process == 'Natural' or process == 'Wine' or process == 'Anaerobic Natural' or process == 'Carbonic Maceration Natural' or process == 'Anaerobic Washed' or process == 'Anaerobic Honey':
             st.write("Process:", process, " - faster flow rate, no splash, faster brew time, ~90C for acidity")
 
+    def CoffeeWaterRatio(strength, dose):
+
+        if strength == '60g/L 16.67 Intense (L)':
+            water = dose * 16.67
+             
+        if strength == '65g/L 15.4 Intense (M)':
+            water = dose * 15.4
+
+        if strength == '70g/L 14.3 Fruity (L / MD)':
+            water = dose * 14.3
+
+        if strength == '80g/L 12.5 Fine Single Sweet':
+            water = dose * 12.5
+
+        if strength == '100g/L 10 Bulletproof':
+            water = dose * 10
+
+        return int(water)
+
     df = user_input_features()
     
     #ghseet data
@@ -146,6 +175,12 @@ def app():
 
     temp_brew = DensityToTemp(int(density))
     st.write("Temperature: ", temp_brew)
+
+    strength =  df['strength'].iloc[0]
+    dose = df['dose'].iloc[0]
+
+    coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
+    st.write("Coffee to Water Ratio: ", int(dose),':', coffee_water_ratio, ' ( 60% water: ', int(coffee_water_ratio*0.6), ')')
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_temp)
