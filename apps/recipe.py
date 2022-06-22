@@ -119,8 +119,8 @@ def app():
         return temp
 
     def CoffeeProcessCheck(process):
-        if process == 'Natural' or 'Wine' or 'Anaerobic Natural' or 'Carbonic Maceration Natural' or 'Anaerobic Washed' or 'Anaerobic Honey':
-            st.write("Process:", process, " - less agitaion, faster brew time, <93C for fruity notes")
+        if process == 'Natural' or process == 'Wine' or process == 'Anaerobic Natural' or process == 'Carbonic Maceration Natural' or process == 'Anaerobic Washed' or process == 'Anaerobic Honey':
+            st.write("Process:", process, " - faster flow rate, no splash, faster brew time, ~90C for acidity")
 
     df = user_input_features()
     
