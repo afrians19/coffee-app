@@ -6,13 +6,18 @@ Floral,Floral,Hibiscus
 Floral,Floral,Clementine
 Floral,Floral,Elderflower
 Floral,Floral,Blossoms
+Floral,Floral,Floral
 Floral,Black tea,Black Tea
+Floral,Black tea,Tea
 Floral,Black tea,Earl Grey
 Fruity,Berry,Blackberry
 Fruity,Berry,Raspberry
 Fruity,Berry,Blueberry
+Fruity,Berry,Blueberry Jam
 Fruity,Berry,Strawberry
 Fruity,Berry,Cranberry
+Fruity,Berry,Red Berry
+Fruity,Berry,Berries
 Fruity,Dried fruit,Raisin
 Fruity,Dried fruit,Dried Berries
 Fruity,Dried fruit,Dried Strawberry
@@ -25,7 +30,11 @@ Fruity,Other fruit,Pineapple
 Fruity,Other fruit,Apricot
 Fruity,Other fruit,Red Grape
 Fruity,Other fruit,Grape
+Fruity,Other fruit,Muscat Grape
+Fruity,Other fruit,Ripe Fruits
 Fruity,Other fruit,Apple
+Fruity,Other fruit,Red Apple
+Fruity,Other fruit,Green Apple
 Fruity,Other fruit,Apple Juice
 Fruity,Other fruit,Blackcurrant
 Fruity,Other fruit,Peach
@@ -39,6 +48,7 @@ Fruity,Other fruit,Tropical Fruits
 Fruity,Other fruit,Honeydew
 Fruity,Other fruit,Stone Fruits
 Fruity,Other fruit,Plum
+Fruity,Other fruit,Passion Fruit
 Fruity,Citrus fruit,Grapefruit
 Fruity,Citrus fruit,Orange
 Fruity,Citrus fruit,Lemon
@@ -46,16 +56,21 @@ Fruity,Citrus fruit,Lime
 Fruity,Citrus fruit,Lime Juice
 Fruity,Citrus fruit,Bergamot
 Fruity,Citrus fruit,Blood Orange
-Fruity,Citrus fruit,Mandarin Orange 
+Fruity,Citrus fruit,Mandarin Orange
 Fruity,Citrus fruit,Orange Peel
+Fruity,Citrus fruit,Orange Zest
 Fruity,Citrus fruit,Lemon Zest
+Fruity,Citrus fruit,Citrus
 Sour/fermented,Sour,Sour Aromatics
+Sour/fermented,Sour,Tartaric Acid
 Sour/fermented,Sour,Acetic Acid
 Sour/fermented,Sour,Butyric Acid
 Sour/fermented,Sour,Iso-valeric Acid
 Sour/fermented,Sour,Citric Acid
 Sour/fermented,Sour,Malic Acid
 Sour/fermented,Alcohol/fermented,Winey
+Sour/fermented,Alcohol/fermented,Red Wine
+Sour/fermented,Alcohol/fermented,Chocolate Liqueur
 Sour/fermented,Alcohol/fermented,Whiskey
 Sour/fermented,Alcohol/fermented,Fermented
 Sour/fermented,Alcohol/fermented,Overripe
@@ -112,6 +127,7 @@ Other,Chemical Bitter,Skunky
 Other,Chemical Bitter,Rubber
 Other,Unlisted,Sparkling
 Other,Unlisted,Cola
+Other,Unlisted,Banana Bread
 Sweet,Brown sugar,Molasses
 Sweet,Brown sugar,Brown Sugar
 Sweet,Brown sugar,Sugarcane
@@ -119,6 +135,7 @@ Sweet,Brown sugar,Maple Syrup
 Sweet,Brown sugar,Caramel
 Sweet,Brown sugar,Honey
 Sweet,Vanilla,Vanilla
+Sweet,Vanilla,Vanilla Biscuit
 Sweet,Vanillin,
 Sweet,Candy-like,Cotton Candy
 Sweet,Candy-like,Candy
@@ -126,3 +143,4 @@ Sweet,Candy-like,Grape Candy
 Sweet,Candy-like,Peach Gummy
 Sweet,Candy-like,Fox Candy
 Sweet,Sweet aromatics,
+Sweet,Sweet aromatics,Sweet
