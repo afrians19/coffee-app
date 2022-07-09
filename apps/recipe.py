@@ -57,7 +57,7 @@ def app():
         df_gsheet = pd.DataFrame(worksheet.get_all_records())
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
-            'Id', 'Coffee','Notes', 'Height', 'Process', 'Location', 'Density',
+            'Id', 'Coffee','Notes', 'Age(rdtotoday)', 'Height', 'Process', 'Location', 'Density',
             'Recipe Manual Brew - Intense', 'Recipe Manual Brew - Fruity',
             ]]
 
@@ -159,9 +159,9 @@ def app():
     """)
     df_gsheet = dataGsheet(worksheet, df)
     st.write(df_gsheet)
-    st.write(df_gsheet['Notes'])
-    st.write(df_gsheet['Recipe Manual Brew - Intense'])
-    st.write(df_gsheet['Recipe Manual Brew - Fruity'])
+    st.write('Tasting Notes: ', df_gsheet['Notes'].iloc[0])
+    st.write('Intense Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
+    st.write('Fruity Recipe: ', df_gsheet['Recipe Manual Brew - Fruity'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
     st.write("Density: ", density)
