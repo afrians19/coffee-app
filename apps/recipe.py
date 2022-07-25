@@ -180,7 +180,28 @@ def app():
     dose = df['dose'].iloc[0]
 
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
-    st.write("Coffee to Water Ratio: ", int(dose),':', coffee_water_ratio, ' ( 60% water: ', int(coffee_water_ratio*0.6), ')')
+    st.write(
+        "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
+    )
+    st.write('6-4 : ', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio)
+    st.write(
+        'Tetsu 4-6 : ', 
+        '(', coffee_water_ratio*0.4, ')', 
+        coffee_water_ratio*0.2, ':',
+        coffee_water_ratio*0.4, ':',
+        coffee_water_ratio*0.6, ':',
+        coffee_water_ratio*0.8, ':',
+        coffee_water_ratio, 
+        '(', int(coffee_water_ratio*0.6), ')', 
+        )
+    st.write(
+        'Joachim : ', 
+        coffee_water_ratio*0.15, ':',
+        coffee_water_ratio*0.35, ':',
+        coffee_water_ratio*0.55, ':',
+        coffee_water_ratio*0.8, ':',
+        coffee_water_ratio, 
+        )        
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_temp)
