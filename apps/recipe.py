@@ -179,11 +179,14 @@ def app():
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
 
+    # Brewing Recipe
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
     st.write(
         "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
     )
-    st.write('6-4 : ', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio)
+    # Recipe 1 Hoffman
+    st.write('6-4 : ', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio, '( -', (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')')
+    # Recipe 2 Tetsu
     st.write(
         'Tetsu 4-6 : ', 
         '(', coffee_water_ratio*0.4, ')', 
@@ -194,6 +197,7 @@ def app():
         coffee_water_ratio, 
         '(', int(coffee_water_ratio*0.6), ')', 
         )
+    # Recipe 3 Joachim 
     st.write(
         'Joachim : ', 
         coffee_water_ratio*0.15, ':',
