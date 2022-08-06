@@ -23,8 +23,11 @@ gc = gspread.authorize(credentials)
 
 sh = gc.open("Coffee Stock")
 
-#select Stock (first sheet)
+#select Stock (1st sheet)
 worksheet = sh.sheet1
+
+#select Dial-in SCA (2nd sheet)
+worksheet_dialin = sh.worksheet("Dial-in Basic")
 
 # data from gsheet <end>
 
@@ -227,6 +230,12 @@ def app():
 
     # random value to append; could be a num_input widget if you want
     # random_value = np.random.randn()
+    
+    if st.button("Spreadsheet Upload Basic"):
+        df['date_time'] = df['date_time'].astype(str)
+        dial_in_data = df.values.flatten().tolist()
+        # st.write(dial_in_data)
+        worksheet_dialin.append_row(dial_in_data, table_range='A1')
 
     if st.button("Add new value"):
         # update dataframe state
