@@ -4,6 +4,7 @@ Floral,Floral,Rose
 Floral,Floral,Jasmine
 Floral,Floral,Hibiscus
 Floral,Floral,Clementine
+Floral,Floral,Chrysanthemum
 Floral,Floral,Elderflower
 Floral,Floral,Blossoms
 Floral,Floral,Floral
@@ -19,14 +20,19 @@ Fruity,Berry,Cranberry
 Fruity,Berry,Red Berry
 Fruity,Berry,Berries
 Fruity,Dried fruit,Raisin
+Fruity,Dried fruit,Golden Raisin
 Fruity,Dried fruit,Dried Berries
+Fruity,Dried fruit,Dried Apricot
 Fruity,Dried fruit,Dried Strawberry
 Fruity,Dried fruit,Prune
 Fruity,Dried fruit,Dates
 Fruity,Other fruit,Coconut
+Fruity,Other fruit,Golden Kiwi
+Fruity,Other fruit, Kiwi
 Fruity,Other fruit,Cherry
 Fruity,Other fruit,Pomegranate
 Fruity,Other fruit,Pineapple
+Fruity,Other fruit,Starfruit
 Fruity,Other fruit,Apricot
 Fruity,Other fruit,Red Grape
 Fruity,Other fruit,Grape
@@ -39,6 +45,7 @@ Fruity,Other fruit,Apple Juice
 Fruity,Other fruit,Blackcurrant
 Fruity,Other fruit,Peach
 Fruity,Other fruit,Pear
+Fruity,Other fruit,Poached Pear
 Fruity,Other fruit,Banana
 Fruity,Other fruit,Mango
 Fruity,Other fruit,Mangosteen

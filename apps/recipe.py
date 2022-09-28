@@ -8,7 +8,7 @@ scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/drive'
 ]
-
+ 
 credentials = Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=scopes
@@ -164,17 +164,17 @@ def app():
     st.write('Fruity Recipe: ', df_gsheet['Recipe Manual Brew - Fruity'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
-    st.write("Density: ", density)
-
+    st.write("Density: ", int(density))
+    
+    temp_brew = DensityToTemp(int(density))
+    st.write("Temperature: ", temp_brew)
+    
     process = df_gsheet['Process'].iloc[0]
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", grinder_setting / 12.5)
+    st.write("Grinder Setting: ", grinder_setting / 12)
     st.write("Grinder Setting C40: ", grinder_setting / 30, "Click")
-
-    temp_brew = DensityToTemp(int(density))
-    st.write("Temperature: ", temp_brew)
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
@@ -184,26 +184,28 @@ def app():
     st.write(
         "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
     )
+
     # Recipe 1 Hoffman
-    st.write('6-4 : ', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio, '( -', (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')')
+    st.write('6-4 :', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio, '( -', (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')')
+    
     # Recipe 2 Tetsu
     st.write(
-        'Tetsu 4-6 : ', 
+        'Tetsu 4-6 : \n \n', 
         '(', coffee_water_ratio*0.4, ')', 
         coffee_water_ratio*0.2, ':',
-        coffee_water_ratio*0.4, ':',
+        coffee_water_ratio*0.4, ' \n \n',
         coffee_water_ratio*0.6, ':',
         coffee_water_ratio*0.8, ':',
         coffee_water_ratio, 
-        '(', int(coffee_water_ratio*0.6), ')', 
+        '( ', int(coffee_water_ratio*0.6), ')', 
         )
     # Recipe 3 Joachim 
     st.write(
-        'Joachim : ', 
-        coffee_water_ratio*0.15, ':',
-        coffee_water_ratio*0.35, ':',
-        coffee_water_ratio*0.55, ':',
-        coffee_water_ratio*0.8, ':',
+        'Joachim :  \n \n ', 
+        coffee_water_ratio*0.15, ': \n \n ',
+        coffee_water_ratio*0.35, ': \n \n ',
+        coffee_water_ratio*0.55, ': \n \n ',
+        coffee_water_ratio*0.8, ': \n \n ',
         coffee_water_ratio, 
         )        
 
