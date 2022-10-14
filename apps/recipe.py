@@ -173,7 +173,7 @@ def app():
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", grinder_setting / 12)
+    st.write("Grinder Setting: ", grinder_setting / 13)
     st.write("Grinder Setting C40: ", grinder_setting / 30, "Click")
 
     strength =  df['strength'].iloc[0]
