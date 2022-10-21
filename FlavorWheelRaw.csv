@@ -27,37 +27,37 @@ Fruity,Dried fruit,Dried Apricot
 Fruity,Dried fruit,Dried Strawberry
 Fruity,Dried fruit,Prune
 Fruity,Dried fruit,Dates
-Fruity,Other fruit,Coconut
-Fruity,Other fruit,Golden Kiwi
-Fruity,Other fruit, Kiwi
-Fruity,Other fruit,Cherry
-Fruity,Other fruit,Pomegranate
-Fruity,Other fruit,Pineapple
-Fruity,Other fruit,Starfruit
-Fruity,Other fruit,Apricot
-Fruity,Other fruit,Red Grape
-Fruity,Other fruit,White Grape
-Fruity,Other fruit,Grape
-Fruity,Other fruit,Muscat Grape
-Fruity,Other fruit,Ripe Fruits
-Fruity,Other fruit,Apple
-Fruity,Other fruit,Red Apple
-Fruity,Other fruit,Green Apple
-Fruity,Other fruit,Apple Juice
-Fruity,Other fruit,Blackcurrant
-Fruity,Other fruit,Peach
-Fruity,Other fruit,Pear
-Fruity,Other fruit,Poached Pear
-Fruity,Other fruit,Banana
-Fruity,Other fruit,Mango
-Fruity,Other fruit,Mangosteen
-Fruity,Other fruit,Tamarind
-Fruity,Other fruit,Guava
-Fruity,Other fruit,Tropical Fruits
-Fruity,Other fruit,Honeydew
-Fruity,Other fruit,Stone Fruits
-Fruity,Other fruit,Plum
-Fruity,Other fruit,Passion Fruit
+Fruity,Other fruit,Coconut 
+Fruity,Sweet fruit,Golden Kiwi
+Fruity,Acidic fruit,Kiwi
+Fruity,Sweet fruit,Cherry
+Fruity,Acidic fruit,Pomegranate
+Fruity,Acidic fruit,Pineapple
+Fruity,Acidic fruit,Starfruit
+Fruity,Sweet fruit,Apricot
+Fruity,Sweet fruit,Red Grape
+Fruity,Acidic fruit,White Grape
+Fruity,Sweet fruit,Grape
+Fruity,Sweet fruit,Muscat Grape
+Fruity,Sweet fruit,Ripe Fruits
+Fruity,Sweet fruit,Apple
+Fruity,Sweet fruit,Red Apple
+Fruity,Acidic fruit,Green Apple
+Fruity,Sweet fruit,Apple Juice
+Fruity,Acidic fruit,Blackcurrant
+Fruity,Sweet fruit,Peach
+Fruity,Sweet fruit,Pear
+Fruity,Sweet fruit,Poached Pear
+Fruity,Sweet fruit,Banana
+Fruity,Sweet fruit,Mango
+Fruity,Acidic fruit,Mangosteen
+Fruity,Acidic fruit,Tamarind
+Fruity,Sweet fruit,Guava
+Fruity,Sweet fruit,Tropical Fruits
+Fruity,Sweet fruit,Honeydew
+Fruity,Sweet fruit,Stone Fruits
+Fruity,Sweet fruit,Plum
+Fruity,Sweet fruit,Passion Fruit
 Fruity,Citrus fruit,Grapefruit
 Fruity,Citrus fruit,Orange
 Fruity,Citrus fruit,Lemon
@@ -70,21 +70,21 @@ Fruity,Citrus fruit,Orange Peel
 Fruity,Citrus fruit,Orange Zest
 Fruity,Citrus fruit,Lemon Zest
 Fruity,Citrus fruit,Citrus
-Sour/fermented,Sour,Sour Aromatics
-Sour/fermented,Sour,Tartaric Acid
-Sour/fermented,Sour,Acetic Acid
-Sour/fermented,Sour,Butyric Acid
-Sour/fermented,Sour,Iso-valeric Acid
-Sour/fermented,Sour,Citric Acid
-Sour/fermented,Sour,Malic Acid
-Sour/fermented,Alcohol/fermented,Winey
-Sour/fermented,Alcohol/fermented,Red Wine
-Sour/fermented,Alcohol/fermented,Chocolate Liqueur
-Sour/fermented,Alcohol/fermented,Whiskey
-Sour/fermented,Alcohol/fermented,Fermented
-Sour/fermented,Alcohol/fermented,Overripe
-Sour/fermented,Alcohol/fermented,Yoghurt
-Sour/fermented,Alcohol/fermented,Port Wine
+Sour,Sour,Sour Aromatics
+Sour,Sour,Tartaric Acid
+Sour,Sour,Acetic Acid
+Sour,Sour,Butyric Acid
+Sour,Sour,Iso-valeric Acid
+Sour,Sour,Citric Acid
+Sour,Sour,Malic Acid
+Sour,Fermented,Winey
+Sour,Fermented,Red Wine
+Sour,Fermented,Chocolate Liqueur
+Sour,Fermented,Whiskey
+Sour,Fermented,Fermented
+Sour,Fermented,Overripe
+Sour,Fermented,Yoghurt
+Sour,Fermented,Port Wine
 Green/vegetative,Olive Oil,
 Green/vegetative,Raw,
 Green/vegetative,Green/vegetative,Under-ripe

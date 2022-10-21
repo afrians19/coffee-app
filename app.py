@@ -17,8 +17,8 @@ Scoresheet Forms
 3. Tasting Wheel
 """)
 
-st.text('This is a digital version for taking notes when you dial-in coffee in any brewing method.')
-st.text('You can also visualize and download the data.')
+st.markdown('This is a digital version for taking notes when you dial-in coffee in any brewing method.')
+st.markdown('You can also visualize and download the data.')
 
 # Add all your application here
 app.add_app("Recipe", recipe.app)

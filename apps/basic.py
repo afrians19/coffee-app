@@ -31,7 +31,7 @@ worksheet_dialin = sh.worksheet("Dial-in Basic")
 
 # data from gsheet <end>
 
-flavor_df_temp = 'FlavorWheelRaw.csv'
+flavor_df_list = 'FlavorWheelRaw.csv'
 
 def app():
     st.write("""
@@ -145,6 +145,7 @@ def app():
         values_list = df_gsheet.loc[df_gsheet['Id'] == str(df['id'].iloc[0])]
         return values_list
 
+    #Select flavor notes based on id
     def notesGsheet(df_gsheet):
         values_list_notes = df_gsheet['Notes']
         values_list_notes = [x for xs in values_list_notes for x in xs.split(',')]
@@ -152,13 +153,14 @@ def app():
         
         return values_list_notes
 
+    #Matching and selecting flavor notes from database | return flavor notes based on id
     def initDF(notes, flavorWheelList):
-        flavor_df_temp = pd.read_csv(flavorWheelList)
-        flavor_df_temp = flavor_df_temp.reset_index()  # make sure indexes pair with number of rows
+        flavor_df_list = pd.read_csv(flavorWheelList)
+        flavor_df_list = flavor_df_list.reset_index()  # make sure indexes pair with number of rows
         header = [{'Parent':10, 'Child':100, 'Grandchild': 1000}]
         input_df = pd.DataFrame(header)
         input_df.drop(input_df.index, inplace=True)
-        for index, row in flavor_df_temp.iterrows():
+        for index, row in flavor_df_list.iterrows():
             for i in notes:
                 if i == row['Grandchild']:
                     input_data = {'Parent':[row['Parent']], 'Child':[row['Child']], 'Grandchild': [i]}
@@ -166,9 +168,11 @@ def app():
                     input_df = input_df.append(notes_df, ignore_index = True)
         return input_df
 
+    # Initiate flavor wheel that matched and selected
     def flavorWheel(input_df):
         fig = px.sunburst(input_df, path=['Parent', 'Child', 'Grandchild'])
         fig.update_layout(
+            width=400,
             title={
                 'text': "Coffee Tasting Notes",
                 'y':0.95,
@@ -184,14 +188,19 @@ def app():
             )
         return fig
 
-    #user input data
+    # MAIN APP #
+    st.sidebar.markdown('''
+    ---
+    Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
+    ''')
+    # User input data
     st.subheader("""
     Your input
     """)
     df = user_input_features()
     st.write(df)
     
-    #ghseet data
+    # Gsheet data
     st.subheader("""
     Coffee data
     """)
@@ -199,13 +208,9 @@ def app():
     st.write(df_gsheet)
 
     flavorNotes = notesGsheet(df_gsheet)
-    input_df = initDF(flavorNotes, flavor_df_temp)
+    input_df = initDF(flavorNotes, flavor_df_list)
     fig = flavorWheel(input_df)
     st.plotly_chart(fig)
-    
-
-    # Magic commands implicitly `st.write()`
-    # ''' _This_ is some __Markdown__ '''
 
     categories = ['Aroma', 'Acidity', 'Sweetness', 'Flavor', 'Body', 'After Taste']
     categories = [*categories, categories[0]]
@@ -219,17 +224,9 @@ def app():
 
     # Create an empty dataframe
     data = df
-    # st.text("Original dataframe")
-
-    # with every interaction, the script runs from top to bottom
-    # resulting in the empty dataframe
-    # st.dataframe(data) 
 
     # persist state of dataframe
     session_state = SessionState.get(df=data)
-
-    # random value to append; could be a num_input widget if you want
-    # random_value = np.random.randn()
     
     if st.button("Spreadsheet Upload Basic"):
         df['date_time'] = df['date_time'].astype(str)

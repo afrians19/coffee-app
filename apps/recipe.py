@@ -23,7 +23,7 @@ worksheet = sh.sheet1
 
 # data from gsheet <end>
 
-flavor_df_temp = 'FlavorWheelRaw.csv'
+flavor_df_list = 'FlavorWheelRaw.csv'
 
 def app():
     st.write("""
@@ -73,12 +73,12 @@ def app():
         return values_list_notes
 
     def initDF(notes, flavorWheelList):
-        flavor_df_temp = pd.read_csv(flavorWheelList)
-        flavor_df_temp = flavor_df_temp.reset_index()  # make sure indexes pair with number of rows
+        flavor_df_list = pd.read_csv(flavorWheelList)
+        flavor_df_list = flavor_df_list.reset_index()  # make sure indexes pair with number of rows
         header = [{'Parent':10, 'Child':100, 'Grandchild': 1000}]
         input_df = pd.DataFrame(header)
         input_df.drop(input_df.index, inplace=True)
-        for index, row in flavor_df_temp.iterrows():
+        for index, row in flavor_df_list.iterrows():
             for i in notes:
                 if i == row['Grandchild']:
                     input_data = {'Parent':[row['Parent']], 'Child':[row['Child']], 'Grandchild': [i]}
@@ -89,6 +89,7 @@ def app():
     def flavorWheel(input_df):
         fig = px.sunburst(input_df, path=['Parent', 'Child', 'Grandchild'])
         fig.update_layout(
+            width=400,
             title={
                 'text': "Coffee Tasting Notes",
                 'y':0.95,
@@ -154,6 +155,10 @@ def app():
     df = user_input_features()
     
     #ghseet data
+    st.sidebar.markdown('''
+    ---
+    Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
+    ''')      
     st.subheader("""
     Coffee data
     """)
@@ -173,7 +178,7 @@ def app():
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", grinder_setting / 13)
+    st.write("Grinder Setting: ", grinder_setting / 13.5)
     st.write("Grinder Setting C40: ", grinder_setting / 30, "Click")
 
     strength =  df['strength'].iloc[0]
@@ -210,6 +215,6 @@ def app():
         )        
 
     flavorNotes = notesGsheet(df_gsheet)
-    input_df = initDF(flavorNotes, flavor_df_temp)
+    input_df = initDF(flavorNotes, flavor_df_list)
     fig = flavorWheel(input_df)
     st.plotly_chart(fig)
