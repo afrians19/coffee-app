@@ -155,8 +155,8 @@ def app():
         df_gsheet = pd.DataFrame(worksheet.get_all_records())
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
-            'Id', 'Coffee', 'Notes', 'Process', 'Profilroast', 
-            'Density', 'Age(days)', 'Age(rdtofreeze)']]
+            'id', 'Coffee','Age (days)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
+            'Density']]
 
         #select row based on id 
         values_list = df_gsheet.loc[df_gsheet['Id'] == str(df['id'].iloc[0])]

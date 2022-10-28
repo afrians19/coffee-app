@@ -57,7 +57,7 @@ def app():
         df_gsheet = pd.DataFrame(worksheet.get_all_records())
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
-            'Id', 'Coffee','Notes', 'Age(rdtotoday)', 'Height', 'Process', 'Location', 'Density',
+            'id', 'Coffee','Notes', 'Age (rdtotoday)', 'Height', 'Process', 'Location', 'Density',
             'Recipe Manual Brew - Intense', 'Recipe Manual Brew - Fruity',
             ]]
 

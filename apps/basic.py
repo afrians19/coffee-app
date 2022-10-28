@@ -138,7 +138,7 @@ def app():
         df_gsheet = pd.DataFrame(worksheet.get_all_records())
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
-            'Id', 'Coffee','Age(days)', 'Age(rdtofreeze)', 'Notes', 'Process', 'Profilroast', 
+            'id', 'Coffee','Age (days)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
             'Density']]
 
         #select row based on id 
