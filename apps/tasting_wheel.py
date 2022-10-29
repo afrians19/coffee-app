@@ -162,7 +162,7 @@ def app():
             'Density']]
 
         #select row based on id 
-        values_list = df_gsheet.loc[df_gsheet['Id'] == str(df['id'].iloc[0])]
+        values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
         return values_list
 
     def notesGsheet(df_gsheet):
