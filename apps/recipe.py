@@ -204,14 +204,15 @@ def app():
         coffee_water_ratio, 
         '( ', int(coffee_water_ratio*0.6), ')', 
         )
-    # Recipe 3 Joachim 
+    # Recipe 3 Joachim 5 Pour (single dose)
     st.write(
-        'Joachim :  \n \n ', 
+        '5 Pour 1 cup:  \n \n ', 
         coffee_water_ratio*0.15, ': \n \n ',
         coffee_water_ratio*0.35, ': \n \n ',
         coffee_water_ratio*0.55, ': \n \n ',
         coffee_water_ratio*0.8, ': \n \n ',
-        coffee_water_ratio, 
+        coffee_water_ratio,
+        '( -', (coffee_water_ratio-coffee_water_ratio*0.35), ')' 
         )        
 
     flavorNotes = notesGsheet(df_gsheet)
