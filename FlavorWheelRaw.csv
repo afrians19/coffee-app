@@ -1,5 +1,6 @@
 Parent,Child,Grandchild
 Floral,Floral,Chamomile
+Floral,Floral,Rose Hip
 Floral,Floral,Rose
 Floral,Floral,Jasmine
 Floral,Floral,Hibiscus
@@ -30,7 +31,8 @@ Fruity,Dried fruit,Dates
 Fruity,Other fruit,Coconut 
 Fruity,Sweet fruit,Golden Kiwi
 Fruity,Acidic fruit,Kiwi
-Fruity,Sweet fruit,Cherry 
+Fruity,Sweet fruit,Cherry
+Fruity,Sweet fruit,Ripe Strawberry
 Fruity,Sweet fruit,Lychee
 Fruity,Acidic fruit,Pomegranate
 Fruity,Acidic fruit,Pineapple
@@ -86,8 +88,8 @@ Sour,Fermented,Fermented
 Sour,Fermented,Overripe
 Sour,Fermented,Yoghurt
 Sour,Fermented,Port Wine
-Green/vegetative,Olive Oil,
-Green/vegetative,Raw,
+Green/vegetative,Olive Oil,Olive Oil
+Green/vegetative,Raw,Raw
 Green/vegetative,Green/vegetative,Under-ripe
 Green/vegetative,Green/vegetative,Peapod
 Green/vegetative,Green/vegetative,Fresh
@@ -97,16 +99,16 @@ Green/vegetative,Green/vegetative,Hay-like
 Green/vegetative,Green/vegetative,Herb-like
 Green/vegetative,Vegetative,Sweet Potato
 Green/vegetative,Herb,Lime Leaves
-Green/vegetative,Beany,
-Roasted,Pipe tobacco,
-Roasted,Tobacco,
+Green/vegetative,Beany,Beany
+Roasted,Pipe tobacco,Pipe tobacco
+Roasted,Tobacco,Tobacco
 Roasted,Burnt Acrid,Ashy
 Roasted,Burnt Acrid,Smoky
 Roasted,Burnt Acrid,Brown Roast
 Roasted,Cereal,Grain
 Roasted,Cereal,Malt
-Spices,Pungent,
-Spices,Pepper,
+Spices,Pungent,Pungent
+Spices,Pepper,Pepper
 Spices,Brown spice,Anise
 Spices,Brown spice,Nutmeg
 Spices,Brown spice,Cinnamon
@@ -139,20 +141,22 @@ Other,Chemical Bitter,Rubber
 Other,Unlisted,Sparkling
 Other,Unlisted,Cola
 Other,Unlisted,Banana Bread
+Other,Unlisted,Creamy
 Sweet,Brown sugar,Molasses
 Sweet,Brown sugar,Brown Sugar
 Sweet,Brown sugar,Sugarcane
 Sweet,Brown sugar,Maple Syrup
 Sweet,Brown sugar,Caramel
 Sweet,Brown sugar,Honey
+Sweet,Brown sugar,Panela
 Sweet,Brown sugar,Acacia Honey
 Sweet,Vanilla,Vanilla
 Sweet,Vanilla,Vanilla Biscuit
-Sweet,Vanillin,
+Sweet,Vanillin,Vanillin
 Sweet,Candy-like,Cotton Candy
 Sweet,Candy-like,Candy
 Sweet,Candy-like,Grape Candy
 Sweet,Candy-like,Peach Gummy
 Sweet,Candy-like,Fox Candy
-Sweet,Sweet aromatics,
+Sweet,Sweet aromatics,Sweet aromatics
 Sweet,Sweet aromatics,Sweet
