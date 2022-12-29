@@ -30,7 +30,7 @@ worksheet = sh.sheet1
 # flavor_df_list = 'FlavorWheelNotes.csv'
 base_df = 'base_df_input.csv'
 filename_RF = 'rf_model.sav'
-loaded_model_randomForest = pickle.load(open(filename_RF, 'rb')) # Load Model 
+# loaded_model_randomForest = pickle.load(open(filename_RF, 'rb')) # Load Model 
 
 def app():
 
