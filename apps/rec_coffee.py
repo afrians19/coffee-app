@@ -30,7 +30,6 @@ worksheet = sh.sheet1
 # flavor_df_list = 'FlavorWheelNotes.csv'
 base_df = 'base_df_input.csv'
 filename_RF = 'rf_model.sav'
-loaded_model_randomForest = pickle.load(open(filename_RF, "rb")) # Load Model 
         
 def app():
 
@@ -75,6 +74,7 @@ def app():
 
     # Predict
     if st.button("Press here to see specialty coffee that suits you"):
+        loaded_model_randomForest = pickle.load(open(filename_RF, "rb")) # Load Model error in cloud
         result = loaded_model_randomForest.predict(features_data)
         st.write('Great Choices! The coffee especially for you: ', result[0])
         df_gsheet = CoffeeGsheetList(worksheet, result[0])
