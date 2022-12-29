@@ -41,7 +41,7 @@ class MultiApp:
     def run(self):
         # app = st.sidebar.radio(
         app = st.selectbox(
-            'Select Scoresheet Form',
+            'Select Feature Below',
             self.apps,
             format_func=lambda app: app['title'])
 

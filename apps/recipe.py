@@ -27,7 +27,7 @@ flavor_df_list = 'FlavorWheelRaw.csv'
 
 def app():
     st.write("""
-    # Recipe
+    # Brewing Guide
     """)
 
     st.sidebar.header('Input Parameters')
@@ -57,7 +57,7 @@ def app():
         df_gsheet = pd.DataFrame(worksheet.get_all_records())
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
-            'id', 'Coffee','Notes', 'Age (rdtotoday)', 'Height', 'Process', 'Location', 'Density',
+            'id', 'Coffee','Notes', 'Age (rdtotoday)', 'Age (rdtofreeze)', 'Height', 'Process', 'Location', 'Density',
             'Recipe Manual Brew - Intense', 'Recipe Manual Brew - Fruity',
             ]]
 
@@ -164,22 +164,18 @@ def app():
     """)
     df_gsheet = dataGsheet(worksheet, df)
     st.write(df_gsheet)
-    st.write('Tasting Notes: ', df_gsheet['Notes'].iloc[0])
     st.write('Intense Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
     st.write('Fruity Recipe: ', df_gsheet['Recipe Manual Brew - Fruity'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
-    st.write("Density: ", int(density))
-    
     temp_brew = DensityToTemp(int(density))
-    st.write("Temperature: ", temp_brew)
-    
+    st.write("Density: ", int(density), " | Temperature: ", temp_brew)
+        
     process = df_gsheet['Process'].iloc[0]
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", grinder_setting / 13.5)
-    st.write("Grinder Setting C40: ", grinder_setting / 30, "Click")
+    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' | C40: ', int(grinder_setting / 30), "Click")
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
@@ -190,29 +186,37 @@ def app():
         "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
     )
 
-    # Recipe 1 Hoffman
-    st.write('6-4 :', dose*3, ':', int(coffee_water_ratio*0.6), ':', coffee_water_ratio, '( -', (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')')
-    
-    # Recipe 2 Tetsu
-    st.write(
-        'Tetsu 4-6 : \n \n', 
-        '(', coffee_water_ratio*0.4, ')', 
-        coffee_water_ratio*0.2, ':',
-        coffee_water_ratio*0.4, ' \n \n',
-        coffee_water_ratio*0.6, ':',
-        coffee_water_ratio*0.8, ':',
-        coffee_water_ratio, 
-        '( ', int(coffee_water_ratio*0.6), ')', 
+    if st.button("Recipe 1 Hoffman"):
+
+        # Recipe 1 Hoffman
+        st.write('6-4 :', dose*3, ':', int(coffee_water_ratio*0.6), ':', 
+        coffee_water_ratio, '( -',
+        (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')'        
+        )       
+
+    if st.button("Recipe 2 Tetsu"):
+        # Recipe 2 Tetsu
+        st.write(
+            'Tetsu 4-6 : \n \n', 
+            '(', coffee_water_ratio*0.4, ')', 
+            coffee_water_ratio*0.2, ':',
+            coffee_water_ratio*0.4, ' \n \n',
+            coffee_water_ratio*0.6, ':',
+            coffee_water_ratio*0.8, ':',
+            coffee_water_ratio, 
+            '( ', int(coffee_water_ratio*0.6), ')', 
         )
-    # Recipe 3 Joachim 5 Pour (single dose)
-    st.write(
-        '5 Pour 1 cup:  \n \n ', 
-        coffee_water_ratio*0.15, ': \n \n ',
-        coffee_water_ratio*0.35, ': \n \n ',
-        coffee_water_ratio*0.55, ': \n \n ',
-        coffee_water_ratio*0.8, ': \n \n ',
-        coffee_water_ratio,
-        '( -', (coffee_water_ratio-coffee_water_ratio*0.35), ')' 
+
+    if st.button("Recipe 3: 5 Pour 1 cup"):
+        # Recipe 3 Joachim 5 Pour (single dose)
+        st.write(
+            '5 Pour 1 cup:  \n \n ', 
+            coffee_water_ratio*0.15, ': \n \n ',
+            coffee_water_ratio*0.35, ': \n \n ',
+            coffee_water_ratio*0.55, ': \n \n ',
+            coffee_water_ratio*0.8, ': \n \n ',
+            coffee_water_ratio,
+            '( -', (coffee_water_ratio-coffee_water_ratio*0.35), ')' 
         )        
 
     flavorNotes = notesGsheet(df_gsheet)

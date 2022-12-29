@@ -4,6 +4,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.express as px
 
+def CoffeeGsheetList(worksheet, predictedData): #display rec. coffee
+    df_gsheet = pd.DataFrame(worksheet.get_all_records())
+    df_gsheet = df_gsheet.astype(str)
+    df_gsheet = df_gsheet[[
+        'id', 'Coffee', 'Notes', 'Card', 'Category', 'Price'            
+        ]]
+
+    #select row based on Category
+    df_gsheet = df_gsheet.loc[df_gsheet['Category'] == predictedData].loc[df_gsheet['Price'] != '']
+    display_df = df_gsheet[['Coffee', 'Notes', 'Price', 'Card']]
+
+    return display_df
+    
 def radar_chart(score, category, name): #(score taken from user input, category is label name of that score, name is coffee selected)
     label_loc = np.linspace(start=0, stop=2 * np.pi, num=len(score))
     plt.figure(figsize=(8, 8))
