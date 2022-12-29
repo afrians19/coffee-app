@@ -191,6 +191,7 @@ def app():
         df['date_time'] = df['date_time'].astype(str)
         dial_in_data = df.values.flatten().tolist()
         worksheet_dialin.append_row(dial_in_data, table_range='A1')
+        st.write('SCA form has been uploaded!')
 
     if st.button("Add new value"):
         # update dataframe state

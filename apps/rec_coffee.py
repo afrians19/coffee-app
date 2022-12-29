@@ -4,7 +4,6 @@ import base64
 import SessionState
 import gspread
 from google.oauth2.service_account import Credentials
-
 import pickle
 from my_method import CoffeeGsheetList
 
@@ -28,7 +27,7 @@ worksheet = sh.sheet1
 
 # data from gsheet <end>
 
-flavor_df_list = 'FlavorWheelNotes.csv'
+# flavor_df_list = 'FlavorWheelNotes.csv'
 base_df = 'base_df_input.csv'
 filename_RF = 'rf_model.sav'
 
@@ -53,16 +52,15 @@ def app():
         return features
 
     # MAIN APP #
-    st.sidebar.markdown('''
-    ---
-    Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
-    ''')    
+    # st.sidebar.markdown('''
+    # ---
+    # Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
+    # ''')    
     st.subheader("""
     We help you choose our tasty cup of coffee!
     """)
 
     base_ml_input = pd.read_csv(base_df)
-    loaded_model_randomForest = pickle.load(open(filename_RF, 'rb')) # Load Model 
 
     features_user = user_input_features()
     
@@ -76,6 +74,7 @@ def app():
 
     # Predict
     if st.button("Press here to see specialty coffee that suits you"):
+        loaded_model_randomForest = pickle.load(open(filename_RF, 'rb')) # Load Model 
         result = loaded_model_randomForest.predict(features_data)
         st.write('Great Choices! The coffee especially for you: ', result[0])
         df_gsheet = CoffeeGsheetList(worksheet, result[0])

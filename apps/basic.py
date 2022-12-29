@@ -170,6 +170,8 @@ def app():
         dial_in_data = df.values.flatten().tolist()
         # st.write(dial_in_data)
         worksheet_dialin.append_row(dial_in_data, table_range='A1')
+        st.write('Basic form has been uploaded!')
+
 
     if st.button("Add new value"):
         # update dataframe state
