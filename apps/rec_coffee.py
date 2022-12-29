@@ -75,28 +75,28 @@ def app():
     # Predict
     if st.button("Press here to see specialty coffee that suits you"):
         loaded_model_randomForest = pickle.load(open(filename_RF, 'rb')) # Load Model 
-        result = loaded_model_randomForest.predict(features_data)
-        st.write('Great Choices! The coffee especially for you: ', result[0])
-        df_gsheet = CoffeeGsheetList(worksheet, result[0])
+        # result = loaded_model_randomForest.predict(features_data)
+        # st.write('Great Choices! The coffee especially for you: ', result[0])
+        # df_gsheet = CoffeeGsheetList(worksheet, result[0])
         
-        link_list = []
+        # link_list = []
 
-        for i in df_gsheet.index:
+        # for i in df_gsheet.index:
 
-            link = df_gsheet['Card'][i]
-            df_temp = pd.DataFrame(
-                {
-                    "url": [
-                        f'<a target="_blank" href="{link}">Coffee Details</a>'
-                    ]
-                }
-            )            
-            link_list.append(df_temp['url'][0])
-            # df_link = df_link.append(df_temp, ignore_index = True)
+        #     link = df_gsheet['Card'][i]
+        #     df_temp = pd.DataFrame(
+        #         {
+        #             "url": [
+        #                 f'<a target="_blank" href="{link}">Coffee Details</a>'
+        #             ]
+        #         }
+        #     )            
+        #     link_list.append(df_temp['url'][0])
+        #     # df_link = df_link.append(df_temp, ignore_index = True)
 
-        df_gsheet['url'] = link_list
-        df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
-        st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
+        # df_gsheet['url'] = link_list
+        # df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
+        # st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     # if st.button("Press here to reveal coffee tasting wheel"):
     #     flavor_wheel_df = pd.read_csv(flavor_df_list)
