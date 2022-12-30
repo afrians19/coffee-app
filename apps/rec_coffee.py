@@ -5,7 +5,6 @@ import SessionState
 import gspread
 from google.oauth2.service_account import Credentials
 import pickle
-import joblib
 from my_method import CoffeeGsheetList
 
 # data from gsheet <start>
@@ -72,11 +71,13 @@ def app():
 
     # predictor / input variable
     features_data = features_base.tail(1)
-
+    
+    st.write(features_data)
+    
     # Predict
     if st.button("Press here to see specialty coffee that suits you"):
-        loaded_model_randomForest = joblib.load("./rf_model.joblib")
-        # loaded_model_randomForest = pickle.load(open(filename_RF, "rb")) # Load Model error in cloud
+
+        loaded_model_randomForest = pickle.load(open(filename_RF, "rb")) # Load Model error in cloud - tried library and python ver
         result = loaded_model_randomForest.predict(features_data)
         st.write('Great Choices! The coffee especially for you: ', result[0])
         df_gsheet = CoffeeGsheetList(worksheet, result[0])
