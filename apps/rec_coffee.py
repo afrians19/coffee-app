@@ -5,7 +5,6 @@ import SessionState
 import gspread
 from google.oauth2.service_account import Credentials
 import pickle
-import sklearn
 from my_method import CoffeeGsheetList
 
 # data from gsheet <start>

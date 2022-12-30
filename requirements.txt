@@ -4,3 +4,4 @@ pandas==1.2.0
 matplotlib==3.3.3
 gspread==5.2.0
 plotly==5.5.0
+scikit-learn
