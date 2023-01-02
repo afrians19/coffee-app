@@ -1,22 +1,14 @@
-# Coffee Dial-In Web App
+# Coffee Brewing App From Home 
 
-## Web app of score sheet form for dial-in coffee, useful for: record, upload, and download data, visualization, and flavor wheel
+## Web app to help you dial-in coffee, useful for: record, upload, visualize and download the data. Also include Brewing Guide and Coffee Recommendation
 
 ### Brief description of this app:
-Just like paper form when dial-in coffee but with this, a digital version **you can record, visualize and download** the data using your browser. The coffe data uploaded from my private google sheet using GCP API.
+Just like paper form when dial-in coffee but with this, a digital version **you can record, visualize and download** the data using your browser. The coffe data downloaded and uploaded from/to my private google sheet using GCP API. Coffee Recommendation using Random Forest Classifier.
 
-### Data visualization of basic form using radar chart:
-1. Fragrance/Aroma
-2. Flavor
-3. Aftertaste
-4. Acidity
-5. Body
-6. Uniformity
-7. Balance
-8. Clean Cup
-9. Sweetness
+### Main features:
+1. Brewing Guide - This will guide you in making filter coffee
+2. Basic Cupping Form - Take notes in digital form when you dial-in coffee in any brewing method
+3. SCA Cupping Form - Same as 2 in SCA form
+4. Coffee Recommendation - Reccomend coffee based on your preferred taste
 
-### Tasting notes flavor wheel visualization
-
-
-Here's the link to the app: [Sensory Scoresheet](https://share.streamlit.io/afrians19/coffee-app/main/app.py "Sensory Scoresheet")
+Here's the link to the app: [Coffee Brewing App](https://share.streamlit.io/afrians19/coffee-app/main/app.py "Coffee Brewing App")

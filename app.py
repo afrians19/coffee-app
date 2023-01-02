@@ -11,15 +11,11 @@ st.markdown("""
 
 st.subheader("""
 Main Feature
-1. Brewing Guide
-2. Basic Cupping Form
-3. SCA Cupping Form
-4. Coffee Recommendation
+1. Brewing Guide - This will guide you in making filter coffee
+2. Basic Cupping Form - Take notes in digital form when you dial-in coffee in any brewing method
+3. SCA Cupping Form - Same as 2 in SCA form
+4. Coffee Recommendation - Reccomend coffee based on your preferred taste
 """)
-
-st.markdown('1: This feature will guide you in making filter coffee')
-st.markdown('2 & 3: These features can help you take notes when you dial-in coffee in any brewing method')
-st.markdown('4: Coffee recommendation app')
 
 # Add all your application here
 app.add_app("Brewing Guide", recipe.app)
