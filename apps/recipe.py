@@ -189,21 +189,21 @@ def app():
     if st.button("Recipe 1 Hoffman"):
 
         # Recipe 1 Hoffman
-        st.write('6-4 :', dose*3, ':', int(coffee_water_ratio*0.6), ':', 
-        coffee_water_ratio, '( -',
-        (coffee_water_ratio - int(coffee_water_ratio*0.6)) , ')'        
+        st.write('6-4 :', int(dose*3), ':', int(coffee_water_ratio*0.6), ':', 
+        int(coffee_water_ratio), '( -',
+        (int(coffee_water_ratio) - int(coffee_water_ratio*0.6)) , ')'        
         )       
 
     if st.button("Recipe 2 Tetsu"):
         # Recipe 2 Tetsu
         st.write(
             'Tetsu 4-6 : \n \n', 
-            '(', coffee_water_ratio*0.4, ')', 
-            coffee_water_ratio*0.2, ':',
-            coffee_water_ratio*0.4, ' \n \n',
-            coffee_water_ratio*0.6, ':',
-            coffee_water_ratio*0.8, ':',
-            coffee_water_ratio, 
+            '(', int(coffee_water_ratio*0.4), ')', 
+            int(coffee_water_ratio*0.2), ':',
+            int(coffee_water_ratio*0.4), ' \n \n',
+            int(coffee_water_ratio*0.6), ':',
+            int(coffee_water_ratio*0.8), ':',
+            int(coffee_water_ratio), 
             '( ', int(coffee_water_ratio*0.6), ')', 
         )
 
@@ -211,12 +211,13 @@ def app():
         # Recipe 3 Joachim 5 Pour (single dose)
         st.write(
             '5 Pour 1 cup:  \n \n ', 
-            coffee_water_ratio*0.15, ': \n \n ',
-            coffee_water_ratio*0.35, ': \n \n ',
-            coffee_water_ratio*0.55, ': \n \n ',
-            coffee_water_ratio*0.8, ': \n \n ',
-            coffee_water_ratio,
-            '( -', (coffee_water_ratio-coffee_water_ratio*0.35), ')' 
+            int(coffee_water_ratio*0.15), ' \n \n ',
+            int(coffee_water_ratio*0.35), ' \n \n ',
+            '(after 2nd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.35)), ')',' \n \n ',
+            int(coffee_water_ratio*0.55), ' \n \n ',
+            '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',
+            int(coffee_water_ratio*0.8), ' \n \n ',
+            int(coffee_water_ratio), ' \n \n ',
         )        
 
     flavorNotes = notesGsheet(df_gsheet)

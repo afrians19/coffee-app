@@ -139,7 +139,7 @@ def app():
     #user input data
     st.sidebar.markdown('''
     ---
-    Created with ❤️ by [Data Professor](https://youtube.com/dataprofessor/).
+    Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
     ''')    
 
     st.subheader("""

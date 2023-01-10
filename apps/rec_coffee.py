@@ -35,12 +35,12 @@ def app():
 
     def user_input_features():       
         profile = st.radio(
-            "Which taste profile do you prefer?",
+            "Which taste profile do you prefer? \n \n",
             ('Sweet', 'Acidic')
             )
 
         flavor = st.radio(
-            "Which coffee flavor do you prefer?",
+            "Which coffee flavor do you prefer? \n \n",
             ('Chocolaty / Caramel', 'Bright / Citrusy', 'Fruity')
             )
 
@@ -52,13 +52,12 @@ def app():
         return features
 
     # MAIN APP #
-    # st.sidebar.markdown('''
-    # ---
-    # Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
-    # ''')    
+
     st.subheader("""
     We help you choose our tasty cup of coffee!
     """)
+
+    st.text('\n')
 
     base_ml_input = pd.read_csv(base_df)
 
@@ -97,6 +96,8 @@ def app():
         df_gsheet['url'] = link_list
         df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
         st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
+
+    st.write("Check out this: [Specialty Coffee Experience](https://sway.office.com/Lr2aWABAz1aCc9tC)")
 
     # if st.button("Press here to reveal coffee tasting wheel"):
     #     flavor_wheel_df = pd.read_csv(flavor_df_list)
