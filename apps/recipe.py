@@ -41,7 +41,7 @@ def app():
             'Select Coffee Strength ', 
                 (
                     '60g/L 16.67 Intense (L)', '65g/L 15.4 Intense (M)', '70g/L 14.3 Fruity (L / MD)',
-                    '80g/L 12.5 Fine Single Sweet', '100g/L 10 Bulletproof'
+                    '80g/L 12.5', '100g/L 10'
                 )
         )
 
