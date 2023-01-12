@@ -130,8 +130,8 @@ def app():
         return temp
 
     def CoffeeProcessCheck(process):
-        if process == 'Natural' or process == 'Wine' or process == 'Anaerobic Natural' or process == 'Carbonic Maceration Natural' or process == 'Anaerobic Washed' or process == 'Anaerobic Honey':
-            st.write("Process:", process, " - faster flow rate, no splash, faster brew time, ~90C for acidity")
+        if "Natural" in process:
+            st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
 
     def CoffeeWaterRatio(strength, dose):
 
@@ -144,10 +144,10 @@ def app():
         if strength == '70g/L 14.3 Fruity (L / MD)':
             water = dose * 14.3
 
-        if strength == '80g/L 12.5 Fine Single Sweet':
+        if strength == '80g/L 12.5':
             water = dose * 12.5
 
-        if strength == '100g/L 10 Bulletproof':
+        if strength == '100g/L 10':
             water = dose * 10
 
         return int(water)
@@ -197,7 +197,7 @@ def app():
     if st.button("Recipe 2 Tetsu"):
         # Recipe 2 Tetsu
         st.write(
-            'Tetsu 4-6 : \n \n', 
+            'Tetsu 4-6 : \n \n',
             '(', int(coffee_water_ratio*0.4), ')', 
             int(coffee_water_ratio*0.2), ':',
             int(coffee_water_ratio*0.4), ' \n \n',
