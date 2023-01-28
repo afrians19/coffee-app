@@ -21,6 +21,9 @@ sh = gc.open("Coffee Stock")
 #select Stock (first sheet)
 worksheet = sh.sheet1
 
+#select Stock (first sheet)
+worksheet2 = sh.worksheet("Dial-in Basic")
+
 # data from gsheet <end>
 
 flavor_df_list = 'FlavorWheelRaw.csv'
@@ -64,6 +67,43 @@ def app():
         #select row based on id 
         values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
         return values_list
+
+    def dataGsheet2Filter(worksheet2, df):
+        df_gsheet = pd.DataFrame(worksheet2.get_all_records())
+        df_gsheet = df_gsheet.astype(str)
+        df_gsheet[['rating', 'dose_g', 'yield_ml']] = df_gsheet[['rating', 'dose_g', 'yield_ml']].apply(pd.to_numeric)
+        df_gsheet = df_gsheet[[
+            'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
+            'yield_ml', 'time_s','temperature',
+            'brew_method', 'brew_tool', 'notes_recipe', 
+            ]]
+
+        #select row based on id 
+        # values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
+        df_gsheet["ratio"] = df_gsheet["yield_ml"] / df_gsheet["dose_g"]
+        df_id = str(df['id'].iloc[0])
+        values_list = df_gsheet.query("id == @df_id and rating >= 3.75").sort_values(by='rating', ascending=False)
+        value_list_filter = values_list[values_list['brew_method'].str.contains("Pour")]
+        return value_list_filter
+
+    def dataGsheet2Spro(worksheet2, df):
+        df_gsheet = pd.DataFrame(worksheet2.get_all_records())
+        df_gsheet = df_gsheet.astype(str)
+        df_gsheet["rating"] = pd.to_numeric(df_gsheet["rating"])
+
+        df_gsheet = df_gsheet[[
+            'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
+            'yield_ml', 'time_s', 
+            'temperature', 'brew_method', 'notes_recipe', 
+            ]]
+
+        #select row based on id 
+        # values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
+        df_id = str(df['id'].iloc[0])
+        values_list = df_gsheet.query("id == @df_id and rating >= 3.75 ").sort_values(by='rating', ascending=False)
+        value_list_MP = values_list[values_list['grinder'].str.contains("MP")]
+        value_list_spro = value_list_MP[value_list_MP['brew_method'].str.contains("Espresso")]
+        return value_list_spro
 
     def notesGsheet(df_gsheet):
         values_list_notes = df_gsheet['Notes']
@@ -163,14 +203,14 @@ def app():
     Coffee data
     """)
     df_gsheet = dataGsheet(worksheet, df)
+    
     st.write(df_gsheet)
     st.write('Intense Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
     st.write('Fruity Recipe: ', df_gsheet['Recipe Manual Brew - Fruity'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
     temp_brew = DensityToTemp(int(density))
-    st.write("Density: ", int(density), " | Temperature: ", temp_brew)
-        
+    st.write("Density: ", int(density), " | Temperature: ", temp_brew)    
     process = df_gsheet['Process'].iloc[0]
     CoffeeProcessCheck(process)
 
@@ -179,6 +219,14 @@ def app():
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
+
+    if st.button("Spro Recipe"):
+        df_gsheet2 = dataGsheet2Spro(worksheet2, df)
+        st.write(df_gsheet2)
+
+    if st.button("Filter Recipe"):
+        df_gsheet2 = dataGsheet2Filter(worksheet2, df)
+        st.write(df_gsheet2)
 
     # Brewing Recipe
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
