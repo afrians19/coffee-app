@@ -88,11 +88,8 @@ def app():
         notes_recipe = st.sidebar.text_input('Recipe Notes', '')
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
-                (
-                    'DF64', 'DF64 SSP MP', 
-                    'DF64 SSP LS','FGM600AD', 'FGM600AD SSP MP', 'FGM600AD SSP LS', 
-                    'FGM600AD SSP HU', 
-                    'C40',
+                (                     
+                    'DF64 SSP LS', 'FGM600AD SSP MP', 'C40'
                 )
         )
         grinder_setting = st.sidebar.number_input('Grinder Setting', 0,200,72)
