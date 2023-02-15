@@ -263,7 +263,7 @@ def app():
             int(coffee_water_ratio*0.35), ' \n \n ',
             '(after 2nd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.35)), ')',' \n \n ',
             int(coffee_water_ratio*0.55), ' \n \n ',
-            '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',
+            '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',' \n \n ',
             int(coffee_water_ratio*0.8), ' \n \n ',
             int(coffee_water_ratio), ' \n \n ',
         )        
