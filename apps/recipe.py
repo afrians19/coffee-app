@@ -61,7 +61,7 @@ def app():
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
             'id', 'Coffee','Notes', 'Age (rdtotoday)', 'Age (rdtofreeze)', 'Height', 'Process', 'Location', 'Density',
-            'Recipe Manual Brew - Intense', 'Recipe Manual Brew - Fruity',
+            'Recipe Manual Brew - Intense',
             ]]
 
         #select row based on id 
@@ -205,8 +205,7 @@ def app():
     df_gsheet = dataGsheet(worksheet, df)
     
     st.write(df_gsheet)
-    st.write('Intense Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
-    st.write('Fruity Recipe: ', df_gsheet['Recipe Manual Brew - Fruity'].iloc[0])
+    st.write('Filter Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
     temp_brew = DensityToTemp(int(density))
