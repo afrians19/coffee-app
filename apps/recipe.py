@@ -26,6 +26,7 @@ worksheet2 = sh.worksheet("Dial-in Basic")
 
 # data from gsheet <end>
 
+#full tasting notes database
 flavor_df_list = 'FlavorWheelRaw.csv'
 
 def app():
@@ -168,7 +169,62 @@ def app():
             temp = 96
         
         return temp
+    
+    def DensityCompass(density, dose, process):
 
+        if density <360:
+            temp = 88
+            bar = 6
+            Yield = 1.5 * dose
+            milk = (dose*14.3*0.85) - (Yield)
+            if dose >=14 and dose <19:
+                grinder = 14            
+            elif dose >=19 and dose <24:
+                grinder = 16
+            else:
+                grinder = 18
+
+        if density >= 360 and density <390:
+            temp = 91
+            bar = 7
+            Yield = 2 * dose
+            milk = (dose*15.4*0.85) - (Yield)
+            if dose >=14 and dose <19:
+                grinder = 12
+            elif dose >=19 and dose <24:
+                grinder = 14
+            else:
+                grinder = 17
+
+        if density >= 390 and density <430:
+            temp = 93
+            bar = 8
+            Yield = 2.5 * dose
+            milk = (dose*16*0.85) - (Yield)
+            if dose >=14 and dose <19:
+                grinder = 11
+            elif dose >=19 and dose <24:
+                grinder = 13
+            else:
+                grinder = 16
+
+        if density >= 430:
+            temp = 95
+            bar = 9
+            Yield = 3 * dose
+            milk = (dose*16.67*0.85) - (Yield)
+            if dose >=14 and dose <19:
+                grinder = 10
+            elif dose >=19 and dose <24:
+                grinder = 13
+            else:
+                grinder = 15
+
+        if 'ash' in process:
+            return temp+1, bar+1, grinder-2, Yield, milk
+        
+        return temp, bar, grinder, Yield, milk
+    
     def CoffeeProcessCheck(process):
         if "Natural" in process:
             st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
@@ -218,6 +274,14 @@ def app():
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
+
+    if st.button("Density Compass Spro"):
+        t,b,g,y,m  = DensityCompass(int(density),float(dose), process)
+        
+        st.write('Recipe :', t,'C', ' - ', b, ' b', ' - ', 
+        g, ' click', ' -', y, ' out', ' - ', m, ' milk/water'
+        )
+
 
     if st.button("Spro Recipe"):
         df_gsheet2 = dataGsheet2Spro(worksheet2, df)
