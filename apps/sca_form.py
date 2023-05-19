@@ -1,13 +1,10 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import base64
 import SessionState
 import datetime
 import gspread
 from google.oauth2.service_account import Credentials
-import plotly.express as px
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
 # data from gsheet <start>
