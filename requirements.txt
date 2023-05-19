@@ -1,5 +1,5 @@
 streamlit==0.80.0
-numpy==1.19.3
+numpy==1.23.1
 pandas==1.2.0
 matplotlib==3.3.3
 gspread==5.2.0
