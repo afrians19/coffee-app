@@ -169,17 +169,10 @@ def app():
 
     # Create an empty dataframe
     data = df
-    # st.text("Original dataframe")
-
-    # with every interaction, the script runs from top to bottom
-    # resulting in the empty dataframe
-    # st.dataframe(data) 
 
     # persist state of dataframe
     session_state = SessionState.get(df=data)
 
-    # random value to append; could be a num_input widget if you want
-    # random_value = np.random.randn()
 
     if st.button("Spreadsheet Upload SCA"):
         df['date_time'] = df['date_time'].astype(str)
