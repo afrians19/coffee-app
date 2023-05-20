@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import gspread
+import numpy as np
+np.bool = np.bool_
 from google.oauth2.service_account import Credentials
 import plotly.express as px
 # data from gsheet <start>

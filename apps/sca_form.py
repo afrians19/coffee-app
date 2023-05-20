@@ -4,6 +4,8 @@ import base64
 import SessionState
 import datetime
 import gspread
+import numpy as np
+np.bool = np.bool_
 from google.oauth2.service_account import Credentials
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 

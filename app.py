@@ -1,5 +1,7 @@
 import streamlit as st
 from multiapp import MultiApp
+import numpy as np
+np.bool = np.bool_
 from apps import basic, sca_form, rec_coffee,recipe # import your app modules here
 
 app = MultiApp()

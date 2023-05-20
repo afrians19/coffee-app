@@ -1,6 +1,8 @@
 """Frameworks for running multiple Streamlit applications as a single app.
 """
 import streamlit as st
+import numpy as np
+np.bool = np.bool_
 
 class MultiApp:
     """Framework for combining multiple streamlit applications.
