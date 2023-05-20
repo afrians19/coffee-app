@@ -170,7 +170,6 @@ def app():
 
     if st.button("Add new value"):
         # update dataframe state
-        input_df = pd.concat([input_df, notes_df], ignore_index=True)
         session_state.df = session_state.df.append(data, ignore_index=True)
         st.text("Updated dataframe")
         st.dataframe(session_state.df)
