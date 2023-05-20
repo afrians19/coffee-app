@@ -124,7 +124,7 @@ def app():
                 if i == row['Grandchild']:
                     input_data = {'Parent':[row['Parent']], 'Child':[row['Child']], 'Grandchild': [i]}
                     notes_df = pd.DataFrame(input_data)
-                    input_df = input_df.append(notes_df, ignore_index = True)
+                    input_df = pd.concat([input_df, notes_df], ignore_index=True)
         return input_df
 
     def flavorWheel(input_df):
