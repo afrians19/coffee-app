@@ -6,8 +6,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import pickle
 from my_method import CoffeeGsheetList
-import numpy as np
-np.bool = np.bool_
+
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
