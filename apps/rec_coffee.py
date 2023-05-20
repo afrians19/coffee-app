@@ -66,7 +66,8 @@ def app():
     # ML Features 
     features_base = base_ml_input[['Profile_Acidic','Profile_Sweet','Flavor_Bright / Citrusy','Flavor_Chocolaty / Caramel','Flavor_Fruity']]  
     features = pd.get_dummies(features_user)
-    features_base = features_base.append(features).fillna(0)
+    features_base = pd.concat([features_base, features], ignore_index=True).fillna(0)
+
 
     # predictor / input variable
     features_data = features_base.tail(1)
@@ -90,8 +91,7 @@ def app():
                     ]
                 }
             )            
-            link_list.append(df_temp['url'][0])
-            # df_link = df_link.append(df_temp, ignore_index = True)
+            pd.concat([link_list, df_temp['url'][0]], ignore_index=True)
 
         df_gsheet['url'] = link_list
         df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
