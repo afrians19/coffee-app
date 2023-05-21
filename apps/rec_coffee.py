@@ -79,7 +79,9 @@ def app():
         st.write('Great Choices! The coffee especially for you: ', result[0])
         df_gsheet = CoffeeGsheetList(worksheet, result[0])
         
-        link_list = []
+        header = [{'url':'temp'}]
+        link_list = pd.DataFrame(header)
+        link_list.drop(link_list.index, inplace=True)
 
         for i in df_gsheet.index:
 
@@ -90,10 +92,11 @@ def app():
                         f'<a target="_blank" href="{link}">Coffee Details</a>'
                     ]
                 }
-            )            
-            pd.concat([link_list, df_temp['url'][0]], ignore_index=True)
+            )
+            link_list = pd.concat([link_list, df_temp], ignore_index=True)
 
-        df_gsheet['url'] = link_list
+        # df_gsheet = pd.concat([df_gsheet, link_list], axis=1)
+        df_gsheet['url'] = link_list.values
         df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
         st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
 
