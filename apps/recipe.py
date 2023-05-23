@@ -337,11 +337,11 @@ def app():
         g, ' click', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
         )
 
-    if st.button("Spro Recipe"):
+    if st.button("Spro Dialed"):
         df_gsheet2 = dataGsheet2Spro(worksheet2, df)
         st.write(df_gsheet2)
 
-    if st.button("Filter Recipe"):
+    if st.button("Filter Dialed"):
         df_gsheet2 = dataGsheet2Filter(worksheet2, df)
         st.write(df_gsheet2)
 
