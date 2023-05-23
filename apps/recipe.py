@@ -235,9 +235,9 @@ def app():
     def DensityFilter(density, dose, taste_profile):
 
         if dose <=15:
-            grinder = 48            
+            grinder = 53            
         elif dose >=16 and dose <=20:
-            grinder = 57
+            grinder = 58
         elif dose >=21 and dose <=30:
             grinder = 62                
         else:
@@ -268,8 +268,11 @@ def app():
         else:
             dripper = 'Conical'
             recipe = 'Iced'
-            grinder = grinder - 5
+            grinder = grinder - 3
             ratio = ratio - 1 
+
+        if 'ash' in process:
+            return temp+2, ratio, grinder-5, dripper, recipe
         
         return temp, ratio, grinder, dripper, recipe
         
@@ -323,14 +326,14 @@ def app():
     dose = df['dose'].iloc[0]
     taste_profile = df['taste_profile'].iloc[0]
 
-    if st.button("Density Compass Spro"):
+    if st.button("Spro Recipe"):
         t,b,g,y,m  = DensityCompass(int(density),float(dose), process)
         
         st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
         g, ' click', ' | ', y, ' out', ' | ', m, ' milk/water'
         )
 
-    if st.button("Filter Compass"):
+    if st.button("Filter Recipe"):
         # temp, ratio, grinder, dripper, recipe
         t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile)
         st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
