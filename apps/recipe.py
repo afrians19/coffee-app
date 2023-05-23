@@ -309,7 +309,6 @@ def app():
     df_gsheet = dataGsheet(worksheet, df)
     
     st.write(df_gsheet)
-    st.write('Filter Recipe: ', df_gsheet['Recipe Manual Brew - Intense'].iloc[0])
     
     density = df_gsheet['Density'].iloc[0]
     temp_brew = DensityToTemp(int(density))
