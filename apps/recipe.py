@@ -270,9 +270,6 @@ def app():
             recipe = 'Iced'
             grinder = grinder - 3
             ratio = ratio - 1 
-
-        if 'ash' in process:
-            return temp+2, ratio, grinder-5, dripper, recipe
         
         return temp, ratio, grinder, dripper, recipe
         
