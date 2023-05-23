@@ -48,11 +48,18 @@ def app():
                     '80g/L 12.5', '100g/L 10'
                 )
         )
-
+        taste_profile = st.sidebar.selectbox(
+            'Select Taste Profile ', 
+                (
+                    'Sweetness', 'Acidity', 'Balanced', 'Iced',
+                )
+        )        
+        
         data = {'id': id,
                 'grinder_micron': grinder_micron,
                 'strength': strength,
                 'dose': dose,
+                'taste_profile': taste_profile,
                 }
         features = pd.DataFrame(data, index=[0])
         return features
@@ -124,7 +131,7 @@ def app():
                 if i == row['Grandchild']:
                     input_data = {'Parent':[row['Parent']], 'Child':[row['Child']], 'Grandchild': [i]}
                     notes_df = pd.DataFrame(input_data)
-                    input_df = pd.concat([input_df, notes_df], ignore_index=True)
+                    input_df = input_df.append(notes_df, ignore_index = True)
         return input_df
 
     def flavorWheel(input_df):
@@ -225,6 +232,47 @@ def app():
         
         return temp, bar, grinder, Yield, milk
     
+    def DensityFilter(density, dose, taste_profile):
+
+        if dose <=15:
+            grinder = 48            
+        elif dose >=16 and dose <=20:
+            grinder = 57
+        elif dose >=21 and dose <=30:
+            grinder = 62                
+        else:
+            grinder = 70
+
+        if density >=350 and density <=380:
+            ratio = 14.3
+            temp = 88
+        elif density >=381 and density <=420:
+            ratio = 15.4
+            temp = 92
+        elif density >420:
+            ratio = 16.67
+            temp = 95
+
+        if taste_profile == 'Sweetness':
+            dripper = 'Flat'
+            recipe = 'WWDT 2x Hoffman Gabi 6/4'
+            grinder = grinder + 5            
+        elif taste_profile == 'Acidity':
+            dripper = 'Conical'
+            recipe = 'WWDT 2x Tetsu'
+            grinder = grinder + 12
+            ratio = ratio - 1 
+        elif taste_profile == 'Balanced':
+            dripper = 'Conical'
+            recipe = '5 pour'
+        else:
+            dripper = 'Conical'
+            recipe = 'Iced'
+            grinder = grinder - 5
+            ratio = ratio - 1 
+        
+        return temp, ratio, grinder, dripper, recipe
+        
     def CoffeeProcessCheck(process):
         if "Natural" in process:
             st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
@@ -274,14 +322,21 @@ def app():
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
+    taste_profile = df['taste_profile'].iloc[0]
 
     if st.button("Density Compass Spro"):
         t,b,g,y,m  = DensityCompass(int(density),float(dose), process)
         
-        st.write('Recipe :', t,'C', ' - ', b, ' b', ' - ', 
-        g, ' click', ' -', y, ' out', ' - ', m, ' milk/water'
+        st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
+        g, ' click', ' | ', y, ' out', ' | ', m, ' milk/water'
         )
 
+    if st.button("Filter Compass"):
+        # temp, ratio, grinder, dripper, recipe
+        t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile)
+        st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
+        g, ' click', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
+        )
 
     if st.button("Spro Recipe"):
         df_gsheet2 = dataGsheet2Spro(worksheet2, df)
@@ -318,8 +373,8 @@ def app():
             '( ', int(coffee_water_ratio*0.6), ')', 
         )
 
-    if st.button("Recipe 3: 5 Pour 1 cup"):
-        # Recipe 3 Joachim 5 Pour (single dose)
+    if st.button("Recipe 3: 5 Pour"):
+        # Recipe 3 Joachim 5 Pour
         st.write(
             '5 Pour 1 cup:  \n \n ', 
             int(coffee_water_ratio*0.15), ' \n \n ',
@@ -329,7 +384,16 @@ def app():
             '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',' \n \n ',
             int(coffee_water_ratio*0.8), ' \n \n ',
             int(coffee_water_ratio), ' \n \n ',
-        )        
+        )
+
+    if st.button("Recipe 4: Iced"):
+        # 35% iced
+        st.write(
+            'Iced Coffee:  \n \n ', 
+            int(coffee_water_ratio*0.35), ' 35% iced', ' \n \n ',
+            int(coffee_water_ratio*0.65), ' \n \n ',
+            int(coffee_water_ratio*0.65/3), ' each 3x', ' \n \n ',
+        )
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
