@@ -177,7 +177,7 @@ def app():
         
         return temp
     
-    def DensityCompass(density, dose, process):
+    def DensityCompass(density, dose, process, location):
 
         if density <360:
             temp = 88
@@ -230,9 +230,12 @@ def app():
         if 'ash' in process:
             return temp+1, bar+1, grinder-2, Yield, milk
         
+        if 'opia' in location:
+            return temp, bar-1, grinder+2, Yield, milk
+        
         return temp, bar, grinder, Yield, milk
     
-    def DensityFilter(density, dose, taste_profile):
+    def DensityFilter(density, dose, taste_profile, process, location):
 
         if dose <=15:
             grinder = 53            
@@ -270,6 +273,12 @@ def app():
             recipe = 'Iced'
             grinder = grinder - 3
             ratio = ratio - 1 
+
+        if 'Mountain' in process:
+            return temp, ratio, grinder-10, dripper, recipe
+        
+        if 'opia' in location:
+            return temp, ratio, grinder-7, dripper, recipe
         
         return temp, ratio, grinder, dripper, recipe
         
@@ -314,6 +323,7 @@ def app():
     temp_brew = DensityToTemp(int(density))
     st.write("Density: ", int(density), " | Temperature: ", temp_brew)    
     process = df_gsheet['Process'].iloc[0]
+    location = df_gsheet['Location'].iloc[0]
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
@@ -324,7 +334,7 @@ def app():
     taste_profile = df['taste_profile'].iloc[0]
 
     if st.button("Spro Recipe"):
-        t,b,g,y,m  = DensityCompass(int(density),float(dose), process)
+        t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
         
         st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
         g, ' click', ' | ', y, ' out', ' | ', m, ' milk/water (', m/y, ')'
@@ -332,7 +342,7 @@ def app():
 
     if st.button("Filter Recipe"):
         # temp, ratio, grinder, dripper, recipe
-        t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile)
+        t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, location)
         st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
         g, ' click', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
         )
