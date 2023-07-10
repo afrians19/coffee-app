@@ -183,52 +183,47 @@ def app():
             temp = 88
             bar = 6
             Yield = 1.5 * dose
-            milk = (dose*14.3*0.85) - (Yield)
+            milk = (dose*15.4*0.85) - (Yield)
             if dose >=14 and dose <19:
-                grinder = 14            
+                grinder = 12            
             elif dose >=19 and dose <24:
-                grinder = 16
-            else:
-                grinder = 18
+                grinder = 15
 
         if density >= 360 and density <390:
             temp = 91
             bar = 7
             Yield = 2 * dose
-            milk = (dose*15.4*0.85) - (Yield)
-            if dose >=14 and dose <19:
-                grinder = 12
-            elif dose >=19 and dose <24:
-                grinder = 14
-            else:
-                grinder = 17
-
-        if density >= 390 and density <430:
-            temp = 93
-            bar = 8
-            Yield = 2.5 * dose
             milk = (dose*16*0.85) - (Yield)
             if dose >=14 and dose <19:
                 grinder = 11
             elif dose >=19 and dose <24:
                 grinder = 13
-            else:
-                grinder = 16
+
+        if density >= 390 and density <430:
+            temp = 93
+            bar = 8
+            Yield = 2.5 * dose
+            milk = (dose*16.67*0.85) - (Yield)
+            if dose >=14 and dose <19:
+                grinder = 10
+            elif dose >=19 and dose <24:
+                grinder = 12
 
         if density >= 430:
             temp = 95
             bar = 9
             Yield = 3 * dose
-            milk = (dose*16.67*0.85) - (Yield)
+            milk = (dose*17*0.85) - (Yield)
             if dose >=14 and dose <19:
-                grinder = 10
+                grinder = 9
             elif dose >=19 and dose <24:
-                grinder = 13
-            else:
-                grinder = 15
+                grinder = 10
 
         if 'ash' in process:
             return temp+1, bar+1, grinder-2, Yield, milk
+        
+        if 'tural' in process:
+            return temp-1, bar-1, grinder+3, Yield, milk
         
         if 'opia' in location:
             return temp, bar-1, grinder+2, Yield, milk
@@ -258,23 +253,24 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'WWDT 2x Hoffman Gabi 6/4'
+            recipe = 'Hoffman Gabi 6/4'
             grinder = grinder + 5            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
             recipe = 'WWDT 2x Tetsu'
-            grinder = grinder + 12
+            grinder = grinder + 40
             ratio = ratio - 1 
         elif taste_profile == 'Balanced':
             dripper = 'Conical'
-            recipe = '5 pour'
+            recipe = 'WWDT 2X 5 pour'
+            grinder = grinder + 20
         else:
             dripper = 'Conical'
             recipe = 'Iced'
             grinder = grinder - 3
             ratio = ratio - 1 
 
-        if 'Mountain' in process:
+        if 'Process' in process:
             return temp, ratio, grinder-10, dripper, recipe
         
         if 'opia' in location:
@@ -402,7 +398,7 @@ def app():
             int(coffee_water_ratio*0.35), ' 35% iced', ' \n \n ',
             int(coffee_water_ratio*0.65), ' \n \n ',
             int(coffee_water_ratio*0.65/3), ' each 3x', ' \n \n ',
-        )
+        )       
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
