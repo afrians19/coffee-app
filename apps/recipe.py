@@ -253,17 +253,17 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'Hoffman Gabi 6/4'
+            recipe = 'WWDT 1x Gabi Hoffman '
             grinder = grinder + 5            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
             recipe = 'WWDT 2x Tetsu'
-            grinder = grinder + 40
+            grinder = grinder + 30
             ratio = ratio - 1 
         elif taste_profile == 'Balanced':
             dripper = 'Conical'
             recipe = 'WWDT 2X 5 pour'
-            grinder = grinder + 20
+            grinder = grinder + 15
         else:
             dripper = 'Conical'
             recipe = 'Iced'
@@ -284,13 +284,13 @@ def app():
 
     def CoffeeWaterRatio(strength, dose):
 
-        if strength == '60g/L 16.67 Intense (L)':
+        if strength == '60g/L 16.67':
             water = dose * 16.67
              
-        if strength == '65g/L 15.4 Intense (M)':
+        if strength == '65g/L 15.4':
             water = dose * 15.4
 
-        if strength == '70g/L 14.3 Fruity (L / MD)':
+        if strength == '70g/L 14.3':
             water = dose * 14.3
 
         if strength == '80g/L 12.5':
