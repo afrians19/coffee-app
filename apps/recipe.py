@@ -44,7 +44,7 @@ def app():
         strength = st.sidebar.selectbox(
             'Select Coffee Strength ', 
                 (
-                    '60g/L 16.67', '65g/L', '70g/L',
+                    '60g/L 16.67', '65g/L 15.4', '70g/L 14.3',
                     '80g/L 12.5', '100g/L 10'
                 )
         )
