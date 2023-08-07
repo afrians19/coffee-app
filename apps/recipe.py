@@ -223,10 +223,10 @@ def app():
             return temp+1, bar+1, grinder-2, Yield, milk
         
         if 'tural' in process:
-            return temp-1, bar-1, grinder+3, Yield, milk
+            return temp-1, bar-1, grinder+2, Yield, milk
         
         if 'opia' in location:
-            return temp, bar-1, grinder+2, Yield, milk
+            return temp, bar-1, grinder+3, Yield, milk
         
         return temp, bar, grinder, Yield, milk
     
@@ -271,10 +271,10 @@ def app():
             ratio = ratio - 1 
 
         if 'Process' in process:
-            return temp, ratio, grinder-10, dripper, recipe
+            return temp, ratio, grinder-8, dripper, recipe
         
         if 'opia' in location:
-            return temp, ratio, grinder-7, dripper, recipe
+            return temp, ratio, grinder-5, dripper, recipe
         
         return temp, ratio, grinder, dripper, recipe
         
@@ -333,7 +333,7 @@ def app():
         t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
         
         st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-        g, ' click', ' | ', y, ' out', ' | ', m, ' milk/water (', m/y, ')'
+        g, ' click', ' | ', y, ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
         )
 
     if st.button("Filter Recipe"):
