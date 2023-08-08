@@ -348,7 +348,7 @@ def app():
         t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
         
         st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-        g, ' click', ' | ', round(y), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
+        g, ' click', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
         )
 
     if st.button("Filter Recipe"):
