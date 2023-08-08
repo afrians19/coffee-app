@@ -188,6 +188,10 @@ def app():
                 grinder = 12            
             elif dose >=19 and dose <24:
                 grinder = 15
+            elif dose <14:
+                grinder = 10
+            else:
+                grinder = 16           
 
         if density >= 360 and density <390:
             temp = 91
@@ -198,6 +202,10 @@ def app():
                 grinder = 11
             elif dose >=19 and dose <24:
                 grinder = 13
+            elif dose <14:
+                grinder = 9
+            else:
+                grinder = 14
 
         if density >= 390 and density <430:
             temp = 93
@@ -208,7 +216,10 @@ def app():
                 grinder = 10
             elif dose >=19 and dose <24:
                 grinder = 12
-
+            elif dose <14:
+                grinder = 8
+            else:
+                grinder = 13
         if density >= 430:
             temp = 95
             bar = 9
@@ -218,6 +229,10 @@ def app():
                 grinder = 9
             elif dose >=19 and dose <24:
                 grinder = 10
+            elif dose <14:
+                grinder = 7
+            else:
+                grinder = 11
 
         if 'ash' in process:
             return temp+1, bar+1, grinder-2, Yield, milk
@@ -333,7 +348,7 @@ def app():
         t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
         
         st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-        g, ' click', ' | ', y, ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
+        g, ' click', ' | ', round(y), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
         )
 
     if st.button("Filter Recipe"):
