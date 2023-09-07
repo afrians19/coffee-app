@@ -259,12 +259,14 @@ def app():
         if density >=350 and density <=380:
             ratio = 14.3
             temp = 88
+            grinder = grinder + 5
         elif density >=381 and density <=420:
             ratio = 15.4
             temp = 92
         elif density >420:
             ratio = 16.67
             temp = 95
+            grinder = grinder - 5
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
@@ -272,12 +274,12 @@ def app():
             grinder = grinder + 5            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
-            recipe = 'WWDT 2x Tetsu'
-            grinder = grinder + 30
+            recipe = 'Tetsu'
+            grinder = grinder + 25
             ratio = ratio - 1 
         elif taste_profile == 'Balanced':
             dripper = 'Conical'
-            recipe = 'WWDT 2X 5 pour'
+            recipe = '5 pour'
             grinder = grinder + 15
         else:
             dripper = 'Conical'
