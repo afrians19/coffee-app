@@ -29,7 +29,7 @@ worksheet = sh.sheet1
 
 # flavor_df_list = 'FlavorWheelNotes.csv'
 base_df = 'base_df_input.csv'
-filename_RF = 'rf_model.sav'
+filename_RF = 'rf_model_solve_error.sav'
         
 def app():
 
