@@ -96,8 +96,8 @@ def app():
             link_list = pd.concat([link_list, df_temp], ignore_index=True)
 
         # df_gsheet = pd.concat([df_gsheet, link_list], axis=1)
-        df_gsheet['url'] = link_list.values
-        df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price', 'url']].sort_values(by='Price')
+        # df_gsheet['url'] = link_list.values
+        df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price']].sort_values(by='Price')
         st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
 
     st.write("Check out this: [Specialty Coffee Experience](https://sway.office.com/Lr2aWABAz1aCc9tC)")
