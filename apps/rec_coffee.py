@@ -79,24 +79,29 @@ def app():
         st.write('Great Choices! The coffee especially for you: ', result[0])
         df_gsheet = CoffeeGsheetList(worksheet, result[0])
         
-        header = [{'url':'temp'}]
-        link_list = pd.DataFrame(header)
-        link_list.drop(link_list.index, inplace=True)
+        
+        # error outputing url clickable, code from here 
+        # header = [{'url':'temp'}]
+        # link_list = pd.DataFrame(header)
+        # link_list.drop(link_list.index, inplace=True)
 
-        for i in df_gsheet.index:
+        # for i in df_gsheet.index:
 
-            link = df_gsheet['Card'][i]
-            df_temp = pd.DataFrame(
-                {
-                    "url": [
-                        f'<a target="_blank" href="{link}">Coffee Details</a>'
-                    ]
-                }
-            )
-            link_list = pd.concat([link_list, df_temp], ignore_index=True)
+        #     link = df_gsheet['Card'][i]
+        #     df_temp = pd.DataFrame(
+        #         {
+        #             "url": [
+        #                 f'<a target="_blank" href="{link}">Coffee Details</a>'
+        #             ]
+        #         }
+        #     )
+        #     link_list = pd.concat([link_list, df_temp], ignore_index=True)
 
         # df_gsheet = pd.concat([df_gsheet, link_list], axis=1)
         # df_gsheet['url'] = link_list.values
+
+        # til here
+
         df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price']].sort_values(by='Price')
         st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
 

@@ -69,7 +69,6 @@ def app():
         df_gsheet = df_gsheet.astype(str)
         df_gsheet = df_gsheet[[
             'id', 'Coffee','Notes', 'Age (rdtotoday)', 'Age (rdtofreeze)', 'Height', 'Process', 'Location', 'Density',
-            'Recipe Manual Brew - Intense',
             ]]
 
         #select row based on id 
@@ -102,7 +101,7 @@ def app():
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
             'yield_ml', 'time_s', 
-            'temperature', 'brew_method', 'notes_recipe', 
+            'temperature', 'brew_method', 'notes_recipe','notes', 
             ]]
 
         #select row based on id 
@@ -270,7 +269,7 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'WWDT 1x Gabi Hoffman '
+            recipe = 'Gabi Hoffman '
             grinder = grinder + 5            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
@@ -415,7 +414,15 @@ def app():
             int(coffee_water_ratio*0.35), ' 35% iced', ' \n \n ',
             int(coffee_water_ratio*0.65), ' \n \n ',
             int(coffee_water_ratio*0.65/3), ' each 3x', ' \n \n ',
-        )       
+        )
+
+    if st.button("Recipe 5: Cold Immersion"):
+        # 35% iced
+        st.write(
+            'Iced Coffee:  \n \n ', 
+            int(coffee_water_ratio*0.35), ' 35% iced', ' \n \n ',
+            int(coffee_water_ratio*0.65), ' \n \n ',
+        )
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)

@@ -19,15 +19,23 @@ def CoffeeGsheetList(worksheet, predictedData): #display rec. coffee
     
 def radar_chart(score, category, name): #(score taken from user input, category is label name of that score, name is coffee selected)
     label_loc = np.linspace(start=0, stop=2 * np.pi, num=len(score))
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(6, 6))
     plt.subplot(polar=True)
+    ax = plt.subplot(polar=True)
     # change the label below to coffee x
-    plt.plot(label_loc, score)
-    # plt.plot(label_loc, score2, label='score 2')
-    # plt.plot(label_loc, score3, label='score 3')
     title = f"Coffee: {name} "
     plt.title(title, size=20, y=1.05)
-    lines, labels = plt.thetagrids(np.degrees(label_loc), labels=category)
+
+    plt.plot(label_loc, score, color='green', linewidth=1)
+    plt.fill(label_loc, score, color='green', alpha=0.25)
+    font = {
+        'family' : 'normal',
+        'size'   : 10}
+    plt.rc('font', **font)
+    title = f"Coffee: {name} "
+    plt.title(title, size=20, y=1.05)
+    plt.thetagrids(np.degrees(label_loc), labels=category)
+
     plt.rgrids([1, 2, 3, 4, 5])
     plt.legend()
     plt.show()
@@ -37,7 +45,7 @@ def dataGsheet(worksheet, df): # (worksheet is 1st Gsheet, df is user input form
     df_gsheet = pd.DataFrame(worksheet.get_all_records())
     df_gsheet = df_gsheet.astype(str)
     df_gsheet = df_gsheet[[
-        'id', 'Coffee','Age (days)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
+        'id', 'Coffee','Age (rdtotoday)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
         'Density']]
 
     #select row based on id 
