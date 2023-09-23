@@ -154,7 +154,7 @@ def app():
     fig = flavorWheel(input_df)
     st.plotly_chart(fig)
 
-    categories = ['Fragrance/Aroma', 'Flavor', 'Aftertaste', 'Acidity', 'Body', 'Uniformity', 
+    categories = ['Aroma', 'Flavor', 'Aftertaste', 'Acidity', 'Body', 'Uniformity', 
                 'Balance', 'Clean Cup', 'Sweetness']
     categories = [*categories, categories[0]]
 
