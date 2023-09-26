@@ -45,7 +45,7 @@ def app():
             'Select Coffee Strength ', 
                 (
                     '60g/L 16.67', '65g/L 15.4', '70g/L 14.3',
-                    '80g/L 12.5', '100g/L 10'
+                    '75g/L 13.3', '80g/L 12.5', '100g/L 10'
                 )
         )
         taste_profile = st.sidebar.selectbox(
@@ -82,7 +82,7 @@ def app():
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
             'yield_ml', 'time_s','temperature',
-            'brew_method', 'brew_tool', 'notes_recipe', 
+            'brew_method', 'brew_tool', 'notes_recipe', 'notes', 
             ]]
 
         #select row based on id 
@@ -308,6 +308,9 @@ def app():
 
         if strength == '70g/L 14.3':
             water = dose * 14.3
+
+        if strength == '75g/L 13.3':
+            water = dose * 13.3
 
         if strength == '80g/L 12.5':
             water = dose * 12.5
