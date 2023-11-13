@@ -12,9 +12,9 @@ Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/)
 
 st.subheader("""
 Main Feature
-1. Brewing Guide - Guidance to brew filter coffee
+1. Brewing Guide - Guidance to brew coffee
 2. Basic Cupping Form - Take notes in digital form when dial-in coffee for any brewing method
-3. SCA Cupping Form - Same as 2 in SCA form
+3. SCA Cupping Form - SCA form
 4. Coffee Recommendation - Reccomend coffee based on your preferred taste
 """)
 

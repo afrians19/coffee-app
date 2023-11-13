@@ -211,6 +211,7 @@ def app():
             bar = 8
             Yield = 2.5 * dose
             milk = (dose*16.67*0.85) - (Yield)
+            
             if dose >=14 and dose <19:
                 grinder = 10
             elif dose >=19 and dose <24:
@@ -269,7 +270,7 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'Gabi Hoffman '
+            recipe = 'Hoffman '
             grinder = grinder + 5            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
@@ -342,7 +343,7 @@ def app():
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' | C40: ', int(grinder_setting / 30), "Click")
+    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' DF64 SSP | C40: ', int(grinder_setting / 30), "Click")
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
@@ -353,15 +354,15 @@ def app():
         if st.button("Spro Recipe"):
             t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
             
-            st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-            g, ' click', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
+            st.write('Parameter: ', t,'C', ' | ', b, ' b', ' | ', 
+            g, ' DF64 SSP', ' | ', round(y,2), ' out', ' | ', round(m,2), ' add milk/water ( *', round((m/y),2), 'spro:milk ratio)'
             )
 
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
             t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, location)
-            st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
-            g, ' click', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
+            st.write('Parameter : ', t,'C', ' | ', r, ' ratio', ' | ', 
+            g, ' DF64 SSP / ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
 
         if st.button("Spro Dialed"):
@@ -403,7 +404,7 @@ def app():
         if st.button("Recipe 3: 5 Pour"):
             # Recipe 3 Joachim 5 Pour
             st.write(
-                '5 Pour 1 cup:  \n \n ', 
+                '5 Pour:  \n \n ', 
                 int(coffee_water_ratio*0.15), ' \n \n ',
                 int(coffee_water_ratio*0.35),'(after 2nd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.35)), ')',' \n \n ',                
                 int(coffee_water_ratio*0.55), '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',' \n \n ',
