@@ -41,6 +41,42 @@ def radar_chart(score, category, name): #(score taken from user input, category 
     plt.show()
     st.pyplot(plt)
 
+def radar_chart_compare(score, category, name): #(score taken from user input, category is label name of that score, name is coffee selected)
+    label_loc = np.linspace(start=0, stop=2 * np.pi, num=len(score))
+    plt.figure(figsize=(6, 6))
+    plt.subplot(polar=True)
+    ax = plt.subplot(polar=True)
+    # change the label below to coffee x
+    title = f"Coffee: {name} "
+    plt.title(title, size=20, y=1.05)
+
+    plt.plot(label_loc, score, color='green', linewidth=1)
+    plt.fill(label_loc, score, color='green', alpha=0.25)
+
+    #start - additional code for multiple graph
+    score2 = score
+
+    for i in range(len(score2)):
+        score2[i] += 1 
+ 
+    plt.plot(label_loc, score2, color='green', linewidth=1)
+    plt.fill(label_loc, score2, color='green', alpha=0.25)
+    
+    #end - additional code for multiple graph
+    
+    font = {
+        'family' : 'normal',
+        'size'   : 10}
+    plt.rc('font', **font)
+    title = f"Coffee: {name} "
+    plt.title(title, size=20, y=1.05)
+    plt.thetagrids(np.degrees(label_loc), labels=category)
+
+    plt.rgrids([1, 2, 3, 4, 5])
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+    plt.show()
+    st.pyplot(plt)
+
 def dataGsheet(worksheet, df): # (worksheet is 1st Gsheet, df is user input form)
     df_gsheet = pd.DataFrame(worksheet.get_all_records())
     df_gsheet = df_gsheet.astype(str)
@@ -48,7 +84,7 @@ def dataGsheet(worksheet, df): # (worksheet is 1st Gsheet, df is user input form
         'id', 'Coffee','Age (rdtotoday)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
         'Density']]
 
-    #select row based on id 
+    #select row based on id
     values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
     return values_list #return pandas df
 
