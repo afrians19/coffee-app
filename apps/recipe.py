@@ -355,7 +355,7 @@ def app():
     with st.expander("Auto Recipe"):
         
         if st.button("Spro Recipe"):
-            t,b,g,y,m  = DensityCompass(int(density),float(dose), process, height)
+            t,b,g,y,m  = DensityCompass(int(density),float(dose), process, int(height))
             
             st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
             g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
