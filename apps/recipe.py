@@ -363,7 +363,7 @@ def app():
 
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
-            t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, height)
+            t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, int(height))
             st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
             g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
