@@ -27,10 +27,10 @@ gc = gspread.authorize(credentials)
 #Gsheet file name
 sh = gc.open("Coffee Stock") 
 
-#select Stock (1st sheet)
-worksheet = sh.sheet1
+#select Stock
+worksheet = sh.worksheet("Stock")
 
-#select Dial-in Basic (2nd sheet)
+#select Dial-in Basic 
 worksheet_dialin = sh.worksheet("Dial-in Basic")
 
 # data from gsheet <end>
