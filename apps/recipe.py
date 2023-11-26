@@ -19,7 +19,7 @@ gc = gspread.authorize(credentials)
 sh = gc.open("Coffee Stock")
 
 #select Stock
-worksheet = sh.worksheet("Stock")
+worksheet = sh.sheet1
 
 #select Dial-in Basic 
 worksheet_dialin = sh.worksheet("Dial-in Basic")
