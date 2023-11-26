@@ -176,7 +176,7 @@ def app():
         
         return temp
     
-    def DensityCompass(density, dose, process, location):
+    def DensityCompass(density, dose, process, height):
 
         if density <360:
             temp = 88
@@ -233,6 +233,9 @@ def app():
                 grinder = 7
             else:
                 grinder = 11
+        
+        if height>1900:
+            return temp, bar-1, grinder+2, Yield, milk
 
         if 'ash' in process:
             return temp+1, bar+1, grinder-2, Yield, milk
@@ -240,18 +243,15 @@ def app():
         if 'tural' in process:
             return temp-1, bar-1, grinder+2, Yield, milk
         
-        if 'opia' in location:
-            return temp, bar-1, grinder+3, Yield, milk
-        
         return temp, bar, grinder, Yield, milk
     
-    def DensityFilter(density, dose, taste_profile, process, location):
+    def DensityFilter(density, dose, taste_profile, process, height):
 
         if dose <=15:
             grinder = 53            
-        elif dose >=16 and dose <=20:
-            grinder = 58
-        elif dose >=21 and dose <=30:
+        elif dose >15 and dose <=20:
+            grinder = 59
+        elif dose >20 and dose <=30:
             grinder = 62                
         else:
             grinder = 70
@@ -270,33 +270,34 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'Hoffman '
-            grinder = grinder + 5            
+            recipe = 'Gabi Hoffman '
+            grinder = grinder + 6            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
             recipe = 'Tetsu'
-            grinder = grinder + 25
+            grinder = grinder + 20
             ratio = ratio - 1 
-        elif taste_profile == 'Balanced':
+        elif taste_profile == 'Balanced': 
             dripper = 'Conical'
             recipe = '5 pour'
-            grinder = grinder + 15
+            grinder = grinder
         else:
             dripper = 'Conical'
             recipe = 'Iced'
-            grinder = grinder - 3
+            grinder = grinder - 5
             ratio = ratio - 1 
 
+        # for decaf
         if 'Process' in process:
             return temp, ratio, grinder-8, dripper, recipe
         
-        if 'opia' in location:
-            return temp, ratio, grinder-5, dripper, recipe
+        if height>1900:
+            return temp, ratio, grinder+5, dripper, recipe
         
         return temp, ratio, grinder, dripper, recipe
         
     def CoffeeProcessCheck(process):
-        if "Natural" in process:
+        if "tural" in process:
             st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
 
     def CoffeeWaterRatio(strength, dose):
@@ -334,16 +335,18 @@ def app():
     df_gsheet = dataGsheet(worksheet, df)
     
     st.write(df_gsheet)
-    
+    if st.button("Density reference id"):
+        st.write("Density 350 - id 4 \n \n Density 360 - id 26 \n \n Density 370 - id 27 \n \n Density 380 - id 3 \n \n Density 390 - id 8 \n \n Density 400 - id 9 \n \n Density 410 - id 20 \n \n Density 430 - id 38 \n \n Density 450 - id 53 \n \n Density 500 - id 56 \n \n ")
+        
     density = df_gsheet['Density'].iloc[0]
     temp_brew = DensityToTemp(int(density))
     st.write("Density: ", int(density), " | Temperature: ", temp_brew)    
     process = df_gsheet['Process'].iloc[0]
-    location = df_gsheet['Location'].iloc[0]
+    height = df_gsheet['Height'].iloc[0]
     CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' DF64 SSP | C40: ', int(grinder_setting / 30), "Click")
+    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' | C40: ', int(grinder_setting / 30), "Click")
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
@@ -352,17 +355,17 @@ def app():
     with st.expander("Auto Recipe"):
         
         if st.button("Spro Recipe"):
-            t,b,g,y,m  = DensityCompass(int(density),float(dose), process, location)
+            t,b,g,y,m  = DensityCompass(int(density),float(dose), process, int(height))
             
-            st.write('Parameter: ', t,'C', ' | ', b, ' b', ' | ', 
-            g, ' DF64 SSP', ' | ', round(y,2), ' out', ' | ', round(m,2), ' add milk/water ( *', round((m/y),2), 'spro:milk ratio)'
+            st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
+            g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
             )
 
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
-            t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, location)
-            st.write('Parameter : ', t,'C', ' | ', r, ' ratio', ' | ', 
-            g, ' DF64 SSP / ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
+            t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, int(height))
+            st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
+            g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
 
         if st.button("Spro Dialed"):
@@ -404,7 +407,7 @@ def app():
         if st.button("Recipe 3: 5 Pour"):
             # Recipe 3 Joachim 5 Pour
             st.write(
-                '5 Pour:  \n \n ', 
+                '5 Pour 1 cup:  \n \n ', 
                 int(coffee_water_ratio*0.15), ' \n \n ',
                 int(coffee_water_ratio*0.35),'(after 2nd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.35)), ')',' \n \n ',                
                 int(coffee_water_ratio*0.55), '(after 3rd pour: -', (int(coffee_water_ratio-coffee_water_ratio*0.55)), ')',' \n \n ',
