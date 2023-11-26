@@ -22,10 +22,10 @@ gc = gspread.authorize(credentials)
 
 sh = gc.open("Coffee Stock")
 
-#select Stock (first sheet)
-worksheet = sh.sheet1
+#select Stock
+worksheet = sh.worksheet("Stock")
 
-#select Dial-in SCA (3rd sheet)
+#select Dial-in SCA
 worksheet_dialin = sh.worksheet("Dial-in SCA")
 
 # data from gsheet <end>
