@@ -369,11 +369,11 @@ def app():
             )
 
         if st.button("Spro Dialed"):
-            df_gsheet2 = dataGsheet2Spro(worksheet2, df)
+            df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
             st.write(df_gsheet2.head())
 
         if st.button("Filter Dialed"):
-            df_gsheet2 = dataGsheet2Filter(worksheet2, df)
+            df_gsheet2 = dataGsheet2Filter(worksheet_dialin, df)
             st.write(df_gsheet2.head())
 
     # Brewing Recipe
