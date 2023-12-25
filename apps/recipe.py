@@ -89,7 +89,7 @@ def app():
         # values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
         df_gsheet["ratio"] = df_gsheet["yield_ml"] / df_gsheet["dose_g"]
         df_id = str(df['id'].iloc[0])
-        values_list = df_gsheet.query("id == @df_id and rating >= 3.75").sort_values(by='rating', ascending=False)
+        values_list = df_gsheet.query("id == @df_id and rating >= 2.00").sort_values(by='rating', ascending=False)
         value_list_filter = values_list[values_list['brew_method'].str.contains("Pour")]
         return value_list_filter
 
@@ -107,7 +107,7 @@ def app():
         #select row based on id 
         # values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
         df_id = str(df['id'].iloc[0])
-        values_list = df_gsheet.query("id == @df_id and rating >= 3.75 ").sort_values(by='rating', ascending=False)
+        values_list = df_gsheet.query("id == @df_id and rating >= 2.00 ").sort_values(by='rating', ascending=False)
         value_list_MP = values_list[values_list['grinder'].str.contains("MP")]
         value_list_spro = value_list_MP[value_list_MP['brew_method'].str.contains("Espresso")]
         return value_list_spro
