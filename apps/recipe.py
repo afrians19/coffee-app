@@ -370,11 +370,11 @@ def app():
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
-            st.write(df_gsheet2.head())
+            st.write(df_gsheet2)
 
         if st.button("Filter Dialed"):
             df_gsheet2 = dataGsheet2Filter(worksheet_dialin, df)
-            st.write(df_gsheet2.head())
+            st.write(df_gsheet2)
 
     # Brewing Recipe
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
