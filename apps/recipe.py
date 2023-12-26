@@ -82,7 +82,8 @@ def app():
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
             'yield_ml', 'time_s','temperature',
-            'brew_method', 'brew_tool', 'notes_recipe', 'notes', 
+            'brew_method', 'brew_tool', 'notes_recipe', 'notes','fragrance_aroma',
+            'aftertaste', 'acidity', 'sweetness', 'flavor',
             ]]
 
         #select row based on id 
@@ -101,7 +102,8 @@ def app():
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
             'yield_ml', 'time_s', 
-            'temperature', 'brew_method', 'notes_recipe','notes', 
+            'temperature', 'brew_method', 'notes_recipe','notes','fragrance_aroma',
+            'aftertaste', 'acidity', 'sweetness', 'flavor',
             ]]
 
         #select row based on id 
