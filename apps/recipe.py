@@ -360,7 +360,8 @@ def app():
             t,b,g,y,m  = DensityCompass(int(density),float(dose), process, int(height))
             
             st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-            g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')'
+            g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')',
+            ' ratio 0.5 step 1.5-3 : ', dose*1.5, dose*2, dose*2.5, dose*3,
             )
 
         if st.button("Filter Recipe"):
