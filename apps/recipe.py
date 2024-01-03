@@ -361,8 +361,8 @@ def app():
             
             st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
             g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')  |  ',
-            'Ratio: ', '1.5-', float(dose)*1.5,'2-', float(dose)*2,'2.5-', float(dose)*2.5, '3-', float(dose)*3,
-            '5-', float(dose)*5,
+            'Ratio: ', '1.5 -', float(dose)*1.5,'2 -', float(dose)*2,'2.5 -', float(dose)*2.5, '3 -', float(dose)*3,
+            '5 -', float(dose)*5,
             )
 
         if st.button("Filter Recipe"):

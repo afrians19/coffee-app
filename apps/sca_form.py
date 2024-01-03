@@ -48,7 +48,7 @@ def app():
         brew_method = st.sidebar.selectbox(
             'Select Brew Method', 
                 (
-                    'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 'Espresso Over (Sprover)', 'Espresso Custom', 'Espresso Manual', 'Aeropress', 
+                    'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 'Espresso Over (Sprover)', 'Espresso Custom', 'Aeropress', 
                     'French press','Tubruk', 'Pour Over', 'Hybrid Percolation Immersion', 'Cupping'
                 )
         )
@@ -56,16 +56,16 @@ def app():
             'Select Brew Tool', 
                 (
                     'Espresso Machine', 'Nomad Espresso', 'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 'V60 Switch Hybird', 'April Plastic',
-                    'Suji Wave', 'Mokapot','Vietnam Drip',
+                    'Suji Wave', 'Mokapot','Vietnam Drip', 'Cupping Bowl',
                 )
-        )
+        )        
         roast_profile = st.sidebar.selectbox(
             'Select roast profile', 
                 (
-                    'Cinnamon (Ultra Light)', 'New England Roast (Light)', 
-                    'American (Medium)','City (Medium)', 'Full City (Medium Dark)', 'Espresso (Dark)', 'French (Dark)', 'Viennese (Dark)', 
-                    'Italian (Dark)'
-                ))
+                    'Ultra-Light', 'Light', 
+                    'Medium-Light','Medium', 'Medium-Dark', 'Dark',
+                )
+        )
         roasted_days = st.sidebar.number_input('roasted_days', 0,100,5)
         temperature = st.sidebar.slider('Temperature', 80,100,93)
         fragrance_aroma = st.sidebar.slider('Fragrance/Aroma', 0.0,5.0,3.0)
