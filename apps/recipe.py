@@ -388,18 +388,18 @@ def app():
             g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
 
-            data = {'temp': t,
-                'DF64 SSP MP': g,
-                # 'C40': g*13.5,
-                # 'grind size micron': g*13.5/30,
-                'ratio': r,
-                'dripper': d,
-                # 'recipe': rec,
-                }
+            # data = {'temp': t,
+            #     'DF64 SSP MP': g,
+            #     'C40': g*13.5,
+            #     'grind size micron': g*13.5/30,
+            #     'ratio': r,
+            #     'dripper': d,
+            #     'recipe': rec,
+            #     }
             
-            data_table_og = pd.DataFrame(data, index=[0])
-            data_table_transpose = data_table_og.T
-            st.write(data_table_transpose)
+            # data_table_og = pd.DataFrame(data, index=[0])
+            # data_table_transpose = data_table_og.T
+            # st.write(data_table_transpose)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
