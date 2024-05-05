@@ -388,7 +388,7 @@ def app():
             g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
 
-            data = {'temp': t,
+            dataF = {'temp': t,
                 'grinder DF64 SSP MP': g,
                 'grinder C40': g*13.5/30,
                 'grinder size micron': g*13.5,
@@ -397,7 +397,7 @@ def app():
                 'recipe': rec,
                 }
             
-            data_table_ogF = pd.DataFrame(data, index=[0])
+            data_table_ogF = pd.DataFrame(dataF, index=[0])
             data_table_transposeF = data_table_ogF.T
             st.write(data_table_transposeF)
 
