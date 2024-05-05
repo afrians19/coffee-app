@@ -370,7 +370,7 @@ def app():
                 'pressure bar': b,
                 'dose': dose,            
                 'yield': y,
-                'ratio': y/d,
+                'ratio': y/dose,
                 'milk/water': m,
                 'milk/water ratio': round((m/y),2),
                 }
