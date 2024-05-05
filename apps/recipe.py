@@ -394,7 +394,7 @@ def app():
                 # 'grind size micron': g*13.5/30,
                 'ratio': r,
                 'dripper': d,
-                'recipe': rec,
+                # 'recipe': rec,
                 }
             
             data_table_og = pd.DataFrame(data, index=[0])
