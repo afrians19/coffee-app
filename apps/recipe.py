@@ -358,19 +358,22 @@ def app():
         
         if st.button("Spro Recipe"):
             t,b,g,y,m  = DensityCompass(int(density),float(dose), process, int(height))
-            
-            data = {'temp': t,
-                'bar': b,
-                'grinder': g,
-                'yield': y,
-                'milk': m,
-                }
-            
+                    
             st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
             g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')  |  ',
             'Ratio: ', '1.5 -', float(dose)*1.5,'2 -', float(dose)*2,'2.5 -', float(dose)*2.5, '3 -', float(dose)*3,
             '5 -', float(dose)*5,
             )
+            
+            data = {'temp': t,
+                'DF64 SSP MP': g,
+                'pressure bar': b,
+                'dose': dose,            
+                'yield': y,
+                'ratio': y/d,
+                'milk/water': m,
+                'milk/water ratio': round((m/y),2),
+                }
             
             data_table_og = pd.DataFrame(data, index=[0])
             data_table_transpose = data_table_og.T
@@ -380,9 +383,23 @@ def app():
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
             t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, int(height))
+            
             st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
             g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             )
+
+            data = {'temp': t,
+                'grinder DF64 SSP MP': g,
+                'grinder C40': g*13.5/30,
+                'grinder size micron': g*13.5,
+                'ratio': r,
+                'dripper': d,
+                'recipe': r,
+                }
+            
+            data_table_og = pd.DataFrame(data, index=[0])
+            data_table_transpose = data_table_og.T
+            st.write(data_table_transpose)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
