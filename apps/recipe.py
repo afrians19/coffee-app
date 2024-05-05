@@ -397,9 +397,9 @@ def app():
                 'recipe': rec,
                 }
             
-            data_table_og = pd.DataFrame(data, index=[0])
-            data_table_transpose = data_table_og.T
-            st.write(data_table_transpose)
+            data_table_ogF = pd.DataFrame(data, index=[0])
+            data_table_transposeF = data_table_ogF.T
+            st.write(data_table_transposeF)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
