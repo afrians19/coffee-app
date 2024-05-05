@@ -389,9 +389,9 @@ def app():
             )
 
             dataF = {'temp': t,
-                'grinder DF64 SSP MP': g,
-                'grinder C40': g*13.5/30,
-                'grinder size micron': g*13.5,
+                'DF64 SSP MP': g,
+                'C40': g*13.5,
+                'grind size micron': int(g*13.5/30),
                 'ratio': r,
                 'dripper': d,
                 'recipe': rec,
