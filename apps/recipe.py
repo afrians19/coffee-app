@@ -390,7 +390,7 @@ def app():
 
             dataF = {'temp': t,
                 'DF64 SSP MP': g,
-                'C40': g*13.5,
+                'C40': int(g*13.5),
                 'grind size micron': int(g*13.5/30),
                 'ratio': r,
                 'dripper': d,
