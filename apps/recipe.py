@@ -399,7 +399,6 @@ def app():
             
             data_table_og = pd.DataFrame(data, index=[0])
             data_table_transpose = data_table_og.T
-            data_table_transpose = data_table_transpose.astype(int)
             st.write(data_table_transpose)
 
         if st.button("Spro Dialed"):
