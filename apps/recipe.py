@@ -272,7 +272,7 @@ def app():
 
         if taste_profile == 'Sweetness':
             dripper = 'Flat'
-            recipe = 'Gabi Hoffman '
+            recipe = 'Hoffman'
             grinder = grinder + 6            
         elif taste_profile == 'Acidity':
             dripper = 'Conical'
@@ -298,9 +298,9 @@ def app():
         
         return temp, ratio, grinder, dripper, recipe
         
-    def CoffeeProcessCheck(process):
-        if "tural" in process:
-            st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
+    # def CoffeeProcessCheck(process):
+    #     if "tural" in process:
+    #         st.write("Process:", process, " - Careful! Prone to overextract ( 3 pour <93C )")
 
     def CoffeeWaterRatio(strength, dose):
 
@@ -345,10 +345,10 @@ def app():
     st.write("Density: ", int(density), " | Temperature: ", temp_brew)    
     process = df_gsheet['Process'].iloc[0]
     height = df_gsheet['Height'].iloc[0]
-    CoffeeProcessCheck(process)
+    # CoffeeProcessCheck(process)
 
     grinder_setting =  df['grinder_micron'].iloc[0]
-    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' | C40: ', int(grinder_setting / 30), "Click")
+    st.write("Grinder Setting: ", int(grinder_setting / 13.5), ' | C40: ', int(grinder_setting / 30), "Click", ' | ', grinder_setting, ' micron')
 
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
@@ -392,8 +392,8 @@ def app():
 
             data = {'Temperature': t,
                 'DF64 SSP MP': g,
-                'C40': g*13.5,
-                'grind size micron': g*13.5/30,
+                'C40': g*13.5/30,
+                'Grind size micron': g*13.5,
                 'Ratio': r,
                 # error when transpose different data type on a single column
                 # 'Dripper': d,
