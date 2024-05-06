@@ -398,9 +398,9 @@ def app():
                 }
             
             data_tab_og = pd.DataFrame(data_tab, index=[0])
-            # data_tab_transpose = data_tab_og.T
-            # st.write(data_tab_transpose)
-            st.write(data_tab_og)
+            data_tab_transpose = data_tab_og.transpose(copy=True)
+            st.write(data_tab_transpose)
+            # st.write(data_tab_og)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
