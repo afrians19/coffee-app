@@ -393,8 +393,8 @@ def app():
                 'C40': g*13.5,
                 'grind size micron': g*13.5/30,
                 'ratio': r,
-                # 'dripper': d,
-                # 'recipe': rec,
+                'dripper': d,
+                'recipe': rec,
                 }
             
             data_tab_og = pd.DataFrame(data_tab, index=[0])
