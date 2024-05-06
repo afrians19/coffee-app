@@ -394,8 +394,8 @@ def app():
                 'C40': c40_grind_size,
                 'grind size micron': grind_size_micron,
                 'Ratio': r,
-                'Dripper': d,
-                'Recipe': rec,
+                # 'Dripper': d,
+                # 'Recipe': rec,
                 }
             
             data_table_og = pd.DataFrame(data, index=['estimate'])
