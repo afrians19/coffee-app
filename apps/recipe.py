@@ -393,12 +393,12 @@ def app():
                 'C40': g*13.5,
                 'grind size micron': g*13.5/30,
                 'ratio': r,
-                'dripper': d,
-                'recipe': rec,
+                # 'dripper': d,
+                # 'recipe': rec,
                 }
             
             data_tab_og = pd.DataFrame(data_tab, index=[0])
-            data_tab_transpose = data_tab_og.transpose(copy=True)
+            data_tab_transpose = data_tab_og.transpose()
             st.write(data_tab_transpose)
             # st.write(data_tab_og)
 
