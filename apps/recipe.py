@@ -389,17 +389,18 @@ def app():
             )
 
             data_tab = {'temp': t,
-                'DF64 SSP MP': g,
-                'C40': g*13.5,
-                'grind size micron': g*13.5/30,
-                'ratio': r,
-                'dripper': d,
-                'recipe': rec,
+                # 'DF64 SSP MP': g,
+                # 'C40': g*13.5,
+                # 'grind size micron': g*13.5/30,
+                # 'ratio': r,
+                # 'dripper': d,
+                # 'recipe': rec,
                 }
             
             data_tab_og = pd.DataFrame(data_tab, index=[0])
-            data_tab_transpose = data_tab_og.T
-            st.write(data_tab_transpose)
+            # data_tab_transpose = data_tab_og.T
+            # st.write(data_tab_transpose)
+            st.write(data_tab_og)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
