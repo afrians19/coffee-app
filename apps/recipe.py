@@ -383,17 +383,19 @@ def app():
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
             t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, int(height))
-            c40_grind_size = g*13.5
-            grind_size_micron = g*13.5/30
+          
             # st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
             # g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
             # )
 
+            st.write('Recommended: ', d, ' dripper', ' | ', rec, ' recipe')
+
             data = {'Temperature': t,
                 'DF64 SSP MP': g,
-                'C40': c40_grind_size,
-                'grind size micron': grind_size_micron,
+                'C40': g*13.5,
+                'grind size micron': g*13.5/30,
                 'Ratio': r,
+                # error when transpose different data type on a single column
                 # 'Dripper': d,
                 # 'Recipe': rec,
                 }
