@@ -359,23 +359,23 @@ def app():
         if st.button("Spro Recipe"):
             t,b,g,y,m  = DensityCompass(int(density),float(dose), process, int(height))
                     
-            st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
-            g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')  |  ',
-            'Ratio: ', '1.5 -', float(dose)*1.5,'2 -', float(dose)*2,'2.5 -', float(dose)*2.5, '3 -', float(dose)*3,
-            '5 -', float(dose)*5,
-            )
+            # st.write('Recipe :', t,'C', ' | ', b, ' b', ' | ', 
+            # g, ' DF64 SSP ', ' | ', round(y,2), ' out', ' | ', round(m,2), ' milk/water (', round((m/y),2), ')  |  ',
+            # 'Ratio: ', '1.5 -', float(dose)*1.5,'2 -', float(dose)*2,'2.5 -', float(dose)*2.5, '3 -', float(dose)*3,
+            # '5 -', float(dose)*5,
+            # )
             
-            data = {'temp': t,
+            data = {'Temperature': t,
                 'DF64 SSP MP': g,
-                'pressure bar': b,
-                'dose': dose,            
-                'yield': y,
-                'ratio': y/dose,
+                'Pressure bar': b,
+                'Dose': dose,            
+                'Yield': y,
+                'Ratio': y/dose,
                 'milk/water': m,
                 'milk/water ratio': round((m/y),2),
                 }
             
-            data_table_og = pd.DataFrame(data, index=[0])
+            data_table_og = pd.DataFrame(data, index=['estimate'])
             data_table_transpose = data_table_og.T
             st.write(data_table_transpose)
         
@@ -383,24 +383,24 @@ def app():
         if st.button("Filter Recipe"):
             # temp, ratio, grinder, dripper, recipe
             t,r,g,d,rec  = DensityFilter(int(density),float(dose), taste_profile, process, int(height))
-            
-            st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
-            g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
-            )
+            c40_grind_size = g*13.5
+            grind_size_micron = g*13.5/30
+            # st.write('Recipe :', t,'C', ' | ', r, ' ratio', ' | ', 
+            # g, ' DF64 SSP (', g*13.5, 'micron) ', int(g*13.5/30), ' click C40', ' | ', d, ' dripper', ' | ', rec, ' recipe'
+            # )
 
-            data_tab = {'temp': t,
+            data = {'Temperature': t,
                 'DF64 SSP MP': g,
-                'C40': g*13.5,
-                'grind size micron': g*13.5/30,
-                'ratio': r,
-                # 'dripper': d,
-                # 'recipe': rec,
+                'C40': c40_grind_size,
+                'grind size micron': grind_size_micron,
+                'Ratio': r,
+                'Dripper': d,
+                'Recipe': rec,
                 }
             
-            data_tab_og = pd.DataFrame(data_tab, index=[0])
-            data_tab_transpose = data_tab_og.transpose()
-            st.write(data_tab_transpose)
-            # st.write(data_tab_og)
+            data_table_og = pd.DataFrame(data, index=['estimate'])
+            data_table_transpose = data_table_og.transpose()
+            st.write(data_table_transpose)
 
         if st.button("Spro Dialed"):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
