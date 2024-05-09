@@ -127,10 +127,8 @@ def app():
     
     # User input data
     df = user_input_features()
-    df_pre_transpose = df.astype('str').dtypes
-    df_transpose = df_pre_transpose.T
     if st.button("Display Your Input"):
-        st.write(df_transpose)
+        st.write(df)
     
     # Gsheet data
     st.subheader("""
