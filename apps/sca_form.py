@@ -136,8 +136,9 @@ def app():
     Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
     ''')    
 
+    df = user_input_features()
+    
     if st.button("Display Your Input"):
-        df = user_input_features()
         st.write(df.T)
     
     #ghseet data
