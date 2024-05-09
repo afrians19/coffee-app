@@ -128,7 +128,7 @@ def app():
     # User input data
     df = user_input_features()
     if st.button("Display Your Input"):
-        st.write(df.T)
+        st.write(df)
     
     # Gsheet data
     st.subheader("""
