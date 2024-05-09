@@ -336,7 +336,7 @@ def app():
     """)
     df_gsheet = dataGsheet(worksheet, df)
     
-    st.write(df_gsheet)
+    st.write(df_gsheet.T)
     if st.button("Density reference id"):
         st.write("Density 350 - id 4 \n \n Density 360 - id 26 \n \n Density 370 - id 27 \n \n Density 380 - id 3 \n \n Density 390 - id 8 \n \n Density 400 - id 9 \n \n Density 410 - id 20 \n \n Density 430 - id 38 \n \n Density 450 - id 53 \n \n Density 500 - id 56 \n \n ")
         
