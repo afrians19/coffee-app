@@ -81,8 +81,8 @@ def dataGsheet(worksheet, df): # (worksheet is 1st Gsheet, df is user input form
     df_gsheet = pd.DataFrame(worksheet.get_all_records())
     df_gsheet = df_gsheet.astype(str)
     df_gsheet = df_gsheet[[
-        'id', 'Coffee','Age (rdtotoday)', 'Age (rdtofreeze)', 'Notes', 'Process', 'Roast Profile', 
-        'Density']]
+        'id', 'Coffee', 'Notes', 'Process', 'Roast Profile', 'Age (rdtotoday)', 'Age (rdtofreeze)','Density'
+        ]]
 
     #select row based on id
     values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]

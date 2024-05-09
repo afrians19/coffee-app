@@ -125,18 +125,16 @@ def app():
     Created with ❤️ by [Airkopi Café](https://lynk.id/airkopi/).
     ''')
     # User input data
-    st.subheader("""
-    Your input
-    """)
-    df = user_input_features()
-    st.write(df)
+    if st.button("Display Your Input"):
+        df = user_input_features()
+        st.write(df.T)
     
     # Gsheet data
     st.subheader("""
     Coffee data
     """)
     df_gsheet = dataGsheet(worksheet, df)
-    st.write(df_gsheet)
+    st.write(df_gsheet.T)
 
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
