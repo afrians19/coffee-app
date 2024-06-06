@@ -21,6 +21,7 @@ Fruity,Berry,Strawberry
 Fruity,Berry,Cranberry
 Fruity,Berry,Red Berry
 Fruity,Berry,Berries
+Fruity,Berry,Wild Dark Berries
 Fruity,Dried fruit,Raisin
 Fruity,Dried fruit,Golden Raisin
 Fruity,Dried fruit,Dried Berries
@@ -73,6 +74,7 @@ Fruity,Citrus fruit,Orange Peel
 Fruity,Citrus fruit,Orange Zest
 Fruity,Citrus fruit,Lemon Zest
 Fruity,Citrus fruit,Citrus
+Fruity,Citrus fruit,Tangerine
 Sour,Sour,Sour Aromatics
 Sour,Sour,Tartaric Acid
 Sour,Sour,Acetic Acid
@@ -91,6 +93,7 @@ Sour,Fermented,Port Wine
 Sour,Fermented,Peach Yogurt
 Sour,Fermented,Funk
 Sour,Fermented,Macerated Grape
+Sour,Fermented,Cherry Liqueur
 Green/vegetative,Olive Oil,Olive Oil
 Green/vegetative,Raw,Raw
 Green/vegetative,Green/vegetative,Under-ripe
@@ -117,14 +120,18 @@ Spices,Brown spice,Anise
 Spices,Brown spice,Nutmeg
 Spices,Brown spice,Cinnamon
 Spices,Brown spice,Clove
-Spices,Brown spice,Ginger
+Spices,Brown spice,Ginger 
+Spices,Brown spice, Spices
 Nutty/Cocoa,Nutty,Peanuts
 Nutty/Cocoa,Nutty,Hazelnut
 Nutty/Cocoa,Nutty,Almond
 Nutty/Cocoa,Nutty,Cashew
+Nutty/Cocoa,Nutty,Roasted Peanut
+Nutty/Cocoa,Nutty,Peanut Butter
 Nutty/Cocoa,Cocoa,Chocolate
 Nutty/Cocoa,Cocoa,Dark Chocolate
 Nutty/Cocoa,Cocoa,Milk Chocolate
+Nutty/Cocoa,Cocoa, Fruity Chocolate
 Nutty/Cocoa,Cocoa,Cocoa
 Nutty/Cocoa,Cocoa,Cacao Nibs
 Nutty/Cocoa,Cocoa,Almond Choco Ball
@@ -145,7 +152,6 @@ Other,Chemical Bitter,Skunky
 Other,Chemical Bitter,Rubber
 Other,Unlisted,Sparkling
 Other,Unlisted,Cola
-Other,Unlisted,Banana Bread
 Other,Unlisted,Creamy
 Sweet,Brown sugar,Molasses
 Sweet,Brown sugar,Brown Sugar
@@ -156,7 +162,6 @@ Sweet,Brown sugar,Honey
 Sweet,Brown sugar,Panela
 Sweet,Brown sugar,Acacia Honey
 Sweet,Vanilla,Vanilla
-Sweet,Vanilla,Vanilla Biscuit
 Sweet,Vanillin,Vanillin
 Sweet,Candy-like,Cotton Candy
 Sweet,Candy-like,Maraschino Cherry
@@ -167,3 +172,7 @@ Sweet,Candy-like,Peanut Candy
 Sweet,Candy-like,Fox Candy
 Sweet,Sweet aromatics,Sweet aromatics
 Sweet,Sweet aromatics,Sweet
+Sweet,Sweets, Black Forrest
+Sweet,Sweets, Banana Bread
+Sweet,Sweets, Vanilla Biscuit
+

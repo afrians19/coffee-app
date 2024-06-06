@@ -51,7 +51,7 @@ def app():
         taste_profile = st.sidebar.selectbox(
             'Select Taste Profile ', 
                 (
-                    'Sweetness', 'Acidity', 'Balanced', 'Iced',
+                    'Sweetness', 'Acidity', 'Balanced', 'Iced', 'Clarity'
                 )
         )        
         
@@ -283,6 +283,10 @@ def app():
             dripper = 'Conical'
             recipe = '5 pour'
             grinder = grinder
+        elif taste_profile == 'Clarity': 
+            dripper = 'Puck'
+            recipe = '1-2-1 Gabi'
+            grinder = grinder - 10    
         else:
             dripper = 'Conical'
             recipe = 'Iced'
@@ -422,9 +426,10 @@ def app():
         if st.button("Recipe 1 Hoffman"):
 
             # Recipe 1 Hoffman
-            st.write('6-4 :', int(dose*3), ':', int(coffee_water_ratio*0.6), ':', 
-            int(coffee_water_ratio), '( after 2nd pour: -',
-            (int(coffee_water_ratio) - int(coffee_water_ratio*0.6)) , ')'        
+            st.write(
+                '6-4 :', int(dose*3), ':', int(coffee_water_ratio*0.6), ':', 
+                int(coffee_water_ratio), '( after 2nd pour: -',
+                (int(coffee_water_ratio) - int(coffee_water_ratio*0.6)) , ')'        
             )       
 
         if st.button("Recipe 2 Tetsu"):
@@ -466,6 +471,11 @@ def app():
                 'Iced Coffee:  \n \n ', 
                 int(coffee_water_ratio*0.35), ' 35% iced', ' \n \n ',
                 int(coffee_water_ratio*0.65), ' \n \n ',
+            )
+        if st.button("Recipe 6: 1-2-1 Gabi"):
+            # lance 1-2-1 puck screen gabi / no bypass hack
+            st.write(
+                '1-2-1 :', int(dose*4), ':', int((coffee_water_ratio-(dose*4))),
             )
 
     flavorNotes = notesGsheet(df_gsheet)
