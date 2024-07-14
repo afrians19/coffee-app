@@ -475,7 +475,7 @@ def app():
         if st.button("Recipe 6: 1-2-1 Gabi"):
             # lance 1-2-1 puck screen gabi / no bypass hack
             st.write(
-                '1-2-1 :', int(dose*4), ':', int((coffee_water_ratio-(dose*4))),
+                '1-2-1 :', int(dose*4),':', coffee_water_ratio, ' ( -', int((coffee_water_ratio-(dose*4))), ') after 1st pour',
             )
 
     flavorNotes = notesGsheet(df_gsheet)
