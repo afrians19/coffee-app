@@ -55,7 +55,8 @@ def app():
         brew_tool = st.sidebar.selectbox(
             'Select Brew Tool', 
                 (
-                    'Espresso Machine', 'Nomad Espresso', 'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 'V60 Switch Hybird', 'April Plastic',
+                    'Espresso Machine', 'Nomad Espresso','Origami Plastic 01 - Conical', 'Origami Plastic 01 - Flat',
+                    'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 'V60 Switch Hybird', 'April Plastic',
                     'Suji Wave', 'Mokapot','Vietnam Drip', 'Cupping Bowl',
                 )
         )        
