@@ -110,8 +110,12 @@ def app():
         # values_list = df_gsheet.loc[df_gsheet['id'] == str(df['id'].iloc[0])]
         df_id = str(df['id'].iloc[0])
         values_list = df_gsheet.query("id == @df_id").sort_values(by='rating', ascending=False)
-        value_list_MP = values_list[values_list['grinder'].str.contains("MP|LS", na=False)]
-        value_list_spro = value_list_MP[value_list_MP['brew_method'].str.contains("Espresso")]
+        value_list_spro = values_list[values_list['brew_method'].str.contains("Espresso")]
+
+        # For SSP MP / LS grinder only
+        # value_list_MP = values_list[values_list['grinder'].str.contains("MP|LS", na=False)]
+        # value_list_spro = value_list_MP[value_list_MP['brew_method'].str.contains("Espresso")]
+        
         return value_list_spro
 
     def notesGsheet(df_gsheet):
