@@ -65,7 +65,7 @@ def app():
                 (
                     'Espresso Machine', 'Nomad Espresso', 'Origami Plastic 01 - Conical', 'Origami Plastic 01 - Flat',
                     'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 
-                    'V60 Switch Hybird', 'April Plastic', 'Pulsar'
+                    'V60 Switch Hybird', 'April Plastic', 'Pulsar', 'Mugen Switch',
                     'Suji Wave', 'Mokapot','Vietnam Drip', 'Cupping Bowl',
                 )
         )        
