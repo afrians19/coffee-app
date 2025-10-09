@@ -56,7 +56,7 @@ def app():
                 (
                     'Pour Over', 'Aeropress', 'French Press', 'Tubruk', 'Hybrid Percolation Immersion', 'Cupping',
                     'Espresso', 'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 
-                    'Espresso Over (Sprover)', "Espresso Extractamundo Dos!", 'Espresso Milk', 'Espresso Adaptive (Medium)',
+                    'Espresso Over (Sprover)', "Espresso Extractamundo Dos!", 'Espresso Milk', 'Espresso Adaptive (Medium)', 'SOUP', 
                     
                 )
         )
