@@ -78,7 +78,13 @@ def app():
     def dataGsheet2Filter(worksheet2, df):
         df_gsheet = pd.DataFrame(worksheet2.get_all_records())
         df_gsheet = df_gsheet.astype(str)
-        df_gsheet[['rating', 'dose_g', 'yield_ml']] = df_gsheet[['rating', 'dose_g', 'yield_ml']].apply(pd.to_numeric)
+        numeric_columns = [
+            'rating', 'dose_g', 'yield_ml', 'time_s', 'temperature',
+            'fragrance_aroma', 'aftertaste', 'acidity', 'sweetness', 'flavor',
+        ]
+        df_gsheet[numeric_columns] = df_gsheet[numeric_columns].apply(
+            pd.to_numeric, errors='coerce'
+        )
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
             'yield_ml', 'time_s','temperature',
@@ -97,7 +103,13 @@ def app():
     def dataGsheet2Spro(worksheet2, df):
         df_gsheet = pd.DataFrame(worksheet2.get_all_records())
         df_gsheet = df_gsheet.astype(str)
-        df_gsheet["rating"] = pd.to_numeric(df_gsheet["rating"])
+        numeric_columns = [
+            'rating', 'dose_g', 'yield_ml', 'time_s', 'temperature',
+            'fragrance_aroma', 'aftertaste', 'acidity', 'sweetness', 'flavor',
+        ]
+        df_gsheet[numeric_columns] = df_gsheet[numeric_columns].apply(
+            pd.to_numeric, errors='coerce'
+        )
 
         df_gsheet = df_gsheet[[
             'id', 'rating', 'grinder', 'grinder_setting', 'dose_g',
@@ -117,6 +129,26 @@ def app():
         # value_list_spro = value_list_MP[value_list_MP['brew_method'].str.contains("Espresso")]
         
         return value_list_spro
+
+    def apply_numeric_operator_filter(df_filter, column_name, operator, value):
+        if operator == '>':
+            return df_filter[df_filter[column_name] > value]
+        if operator == '<':
+            return df_filter[df_filter[column_name] < value]
+        if operator == '>=':
+            return df_filter[df_filter[column_name] >= value]
+        if operator == '<=':
+            return df_filter[df_filter[column_name] <= value]
+        if operator == '==':
+            return df_filter[df_filter[column_name] == value]
+        if operator == '!=':
+            return df_filter[df_filter[column_name] != value]
+        return df_filter
+
+    def apply_exact_value_filter(df_filter, column_name, selected_values):
+        if not selected_values:
+            return df_filter
+        return df_filter[df_filter[column_name].isin(selected_values)]
 
     def notesGsheet(df_gsheet):
         values_list_notes = df_gsheet['Notes']
@@ -413,12 +445,181 @@ def app():
             st.write(data_table_transpose)
 
         if st.button("Spro Dialed"):
+            st.session_state.spro_dialed = True
+        
+        if st.session_state.get('spro_dialed', False):
             df_gsheet2 = dataGsheet2Spro(worksheet_dialin, df)
-            st.write(df_gsheet2)
+            enable_filter = st.checkbox('Enable filter')
+            if enable_filter:
+                spro_numeric_filter_columns = [
+                    'rating', 'dose_g', 'yield_ml', 'time_s',
+                    'temperature', 'fragrance_aroma', 'aftertaste', 'acidity',
+                    'sweetness', 'flavor',
+                ]
+                spro_text_filter_columns = [
+                    'grinder', 'grinder_setting', 'brew_method',
+                    'notes_recipe', 'notes',
+                ]
+
+                selected_numeric_filter_columns = st.multiselect(
+                    'Numeric filter columns',
+                    spro_numeric_filter_columns,
+                    default=[],
+                    key='selected_numeric_filter_columns_spro',
+                )
+
+                for filter_column in selected_numeric_filter_columns:
+                    valid_values = df_gsheet2[filter_column].dropna()
+                    default_value = float(valid_values.iloc[0]) if not valid_values.empty else 0.0
+                    min_value = float(valid_values.min()) if not valid_values.empty else 0.0
+                    max_value = float(valid_values.max()) if not valid_values.empty else 0.0
+
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.write(filter_column)
+                    with col2:
+                        operator = st.selectbox(
+                            f'Operator for {filter_column}',
+                            ['>', '<', '>=', '<=', '==', '!='],
+                            key=f'op_{filter_column}',
+                        )
+                    with col3:
+                        value = st.number_input(
+                            f'Value for {filter_column}',
+                            min_value=min_value,
+                            max_value=max_value,
+                            value=default_value,
+                            key=f'val_{filter_column}',
+                        )
+
+                    df_gsheet2 = apply_numeric_operator_filter(
+                        df_gsheet2, filter_column, operator, value
+                    )
+
+                selected_text_filter_columns = st.multiselect(
+                    'Text filter columns',
+                    spro_text_filter_columns,
+                    default=[],
+                    key='selected_text_filter_columns_spro',
+                )
+
+                for filter_column in selected_text_filter_columns:
+                    unique_values = sorted(
+                        df_gsheet2[filter_column]
+                        .dropna()
+                        .astype(str)
+                        .loc[lambda values: values.str.strip() != '']
+                        .unique()
+                        .tolist()
+                    )
+
+                    selected_values = st.multiselect(
+                        f'Values for {filter_column}',
+                        unique_values,
+                        default=[],
+                        key=f'selected_values_{filter_column}',
+                    )
+
+                    df_gsheet2 = apply_exact_value_filter(
+                        df_gsheet2, filter_column, selected_values
+                    )
+            
+            if 'selected_columns_spro' not in st.session_state:
+                st.session_state.selected_columns_spro = df_gsheet2.columns.tolist()
+            columns = st.multiselect('Select columns to display', df_gsheet2.columns.tolist(), default=st.session_state.selected_columns_spro)
+            st.session_state.selected_columns_spro = columns
+            st.write(df_gsheet2[columns])
 
         if st.button("Filter Dialed"):
-            df_gsheet2 = dataGsheet2Filter(worksheet_dialin, df)
-            st.write(df_gsheet2)
+            st.session_state.filter_dialed = True
+
+        if st.session_state.get('filter_dialed', False):
+            df_gsheet2_filter = dataGsheet2Filter(worksheet_dialin, df)
+            enable_filter_dialed = st.checkbox('Enable filter', key='enable_filter_dialed')
+            if enable_filter_dialed:
+                filter_numeric_filter_columns = [
+                    'rating', 'dose_g', 'yield_ml', 'time_s',
+                    'temperature', 'fragrance_aroma', 'aftertaste', 'acidity',
+                    'sweetness', 'flavor', 'ratio',
+                ]
+                filter_text_filter_columns = [
+                    'grinder', 'grinder_setting', 'brew_method',
+                    'brew_tool', 'notes_recipe', 'notes',
+                ]
+
+                selected_numeric_filter_columns = st.multiselect(
+                    'Numeric filter columns',
+                    filter_numeric_filter_columns,
+                    default=[],
+                    key='selected_numeric_filter_columns_filter',
+                )
+
+                for filter_column in selected_numeric_filter_columns:
+                    valid_values = df_gsheet2_filter[filter_column].dropna()
+                    default_value = float(valid_values.iloc[0]) if not valid_values.empty else 0.0
+                    min_value = float(valid_values.min()) if not valid_values.empty else 0.0
+                    max_value = float(valid_values.max()) if not valid_values.empty else 0.0
+
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.write(filter_column)
+                    with col2:
+                        operator = st.selectbox(
+                            f'Operator for {filter_column}',
+                            ['>', '<', '>=', '<=', '==', '!='],
+                            key=f'filter_op_{filter_column}',
+                        )
+                    with col3:
+                        value = st.number_input(
+                            f'Value for {filter_column}',
+                            min_value=min_value,
+                            max_value=max_value,
+                            value=default_value,
+                            key=f'filter_val_{filter_column}',
+                        )
+
+                    df_gsheet2_filter = apply_numeric_operator_filter(
+                        df_gsheet2_filter, filter_column, operator, value
+                    )
+
+                selected_text_filter_columns = st.multiselect(
+                    'Text filter columns',
+                    filter_text_filter_columns,
+                    default=[],
+                    key='selected_text_filter_columns_filter',
+                )
+
+                for filter_column in selected_text_filter_columns:
+                    unique_values = sorted(
+                        df_gsheet2_filter[filter_column]
+                        .dropna()
+                        .astype(str)
+                        .loc[lambda values: values.str.strip() != '']
+                        .unique()
+                        .tolist()
+                    )
+
+                    selected_values = st.multiselect(
+                        f'Values for {filter_column}',
+                        unique_values,
+                        default=[],
+                        key=f'filter_selected_values_{filter_column}',
+                    )
+
+                    df_gsheet2_filter = apply_exact_value_filter(
+                        df_gsheet2_filter, filter_column, selected_values
+                    )
+
+            if 'selected_columns_filter' not in st.session_state:
+                st.session_state.selected_columns_filter = df_gsheet2_filter.columns.tolist()
+            columns_filter = st.multiselect(
+                'Select columns to display',
+                df_gsheet2_filter.columns.tolist(),
+                default=st.session_state.selected_columns_filter,
+                key='selected_columns_filter_multiselect',
+            )
+            st.session_state.selected_columns_filter = columns_filter
+            st.write(df_gsheet2_filter[columns_filter])
 
     # Brewing Recipe
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
