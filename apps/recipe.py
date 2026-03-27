@@ -145,10 +145,14 @@ def app():
             return df_filter[df_filter[column_name] != value]
         return df_filter
 
-    def apply_exact_value_filter(df_filter, column_name, selected_values):
-        if not selected_values:
+    def apply_contains_text_filter(df_filter, column_name, search_text):
+        if not search_text:
             return df_filter
-        return df_filter[df_filter[column_name].isin(selected_values)]
+        return df_filter[
+            df_filter[column_name].astype(str).str.contains(
+                search_text, na=False, case=False
+            )
+        ]
 
     def notesGsheet(df_gsheet):
         values_list_notes = df_gsheet['Notes']
@@ -504,24 +508,13 @@ def app():
                 )
 
                 for filter_column in selected_text_filter_columns:
-                    unique_values = sorted(
-                        df_gsheet2[filter_column]
-                        .dropna()
-                        .astype(str)
-                        .loc[lambda values: values.str.strip() != '']
-                        .unique()
-                        .tolist()
+                    search_text = st.text_input(
+                        f'Type text for {filter_column}',
+                        key=f'search_text_{filter_column}',
                     )
 
-                    selected_values = st.multiselect(
-                        f'Values for {filter_column}',
-                        unique_values,
-                        default=[],
-                        key=f'selected_values_{filter_column}',
-                    )
-
-                    df_gsheet2 = apply_exact_value_filter(
-                        df_gsheet2, filter_column, selected_values
+                    df_gsheet2 = apply_contains_text_filter(
+                        df_gsheet2, filter_column, search_text
                     )
             
             if 'selected_columns_spro' not in st.session_state:
@@ -590,24 +583,13 @@ def app():
                 )
 
                 for filter_column in selected_text_filter_columns:
-                    unique_values = sorted(
-                        df_gsheet2_filter[filter_column]
-                        .dropna()
-                        .astype(str)
-                        .loc[lambda values: values.str.strip() != '']
-                        .unique()
-                        .tolist()
+                    search_text = st.text_input(
+                        f'Type text for {filter_column}',
+                        key=f'filter_search_text_{filter_column}',
                     )
 
-                    selected_values = st.multiselect(
-                        f'Values for {filter_column}',
-                        unique_values,
-                        default=[],
-                        key=f'filter_selected_values_{filter_column}',
-                    )
-
-                    df_gsheet2_filter = apply_exact_value_filter(
-                        df_gsheet2_filter, filter_column, selected_values
+                    df_gsheet2_filter = apply_contains_text_filter(
+                        df_gsheet2_filter, filter_column, search_text
                     )
 
             if 'selected_columns_filter' not in st.session_state:
