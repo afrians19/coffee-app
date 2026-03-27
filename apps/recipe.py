@@ -519,8 +519,20 @@ def app():
             
             if 'selected_columns_spro' not in st.session_state:
                 st.session_state.selected_columns_spro = df_gsheet2.columns.tolist()
-            columns = st.multiselect('Select columns to display', df_gsheet2.columns.tolist(), default=st.session_state.selected_columns_spro)
-            st.session_state.selected_columns_spro = columns
+            enable_remove_columns_spro = st.checkbox(
+                'Enable remove columns',
+                key='enable_remove_columns_spro',
+            )
+            if enable_remove_columns_spro:
+                columns = st.multiselect(
+                    'Select columns to display',
+                    df_gsheet2.columns.tolist(),
+                    default=st.session_state.selected_columns_spro,
+                    key='selected_columns_spro_multiselect',
+                )
+                st.session_state.selected_columns_spro = columns
+            else:
+                columns = df_gsheet2.columns.tolist()
             st.write(df_gsheet2[columns])
 
         if st.button("Filter Dialed"):
@@ -594,13 +606,20 @@ def app():
 
             if 'selected_columns_filter' not in st.session_state:
                 st.session_state.selected_columns_filter = df_gsheet2_filter.columns.tolist()
-            columns_filter = st.multiselect(
-                'Select columns to display',
-                df_gsheet2_filter.columns.tolist(),
-                default=st.session_state.selected_columns_filter,
-                key='selected_columns_filter_multiselect',
+            enable_remove_columns_filter = st.checkbox(
+                'Enable remove columns',
+                key='enable_remove_columns_filter',
             )
-            st.session_state.selected_columns_filter = columns_filter
+            if enable_remove_columns_filter:
+                columns_filter = st.multiselect(
+                    'Select columns to display',
+                    df_gsheet2_filter.columns.tolist(),
+                    default=st.session_state.selected_columns_filter,
+                    key='selected_columns_filter_multiselect',
+                )
+                st.session_state.selected_columns_filter = columns_filter
+            else:
+                columns_filter = df_gsheet2_filter.columns.tolist()
             st.write(df_gsheet2_filter[columns_filter])
 
     # Brewing Recipe
