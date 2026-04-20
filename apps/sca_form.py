@@ -93,7 +93,7 @@ def app():
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
                 (                     
-                    'DF64 SSP LS', 'FGM600AD SSP MP', 'C40', 'FGM AF74'
+                    'DF64 SSP LS', 'FGM600AD SSP MP', 'C40', 'FGM AF74', 'GR 74'
                 )
         )
         grinder_setting = st.sidebar.number_input('Grinder Setting', 0,200,72)

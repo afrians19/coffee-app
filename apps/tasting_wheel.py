@@ -95,7 +95,7 @@ def app():
                 (
                     'DF64', 'DF64 SSP MP', 
                     'DF64 SSP LS','FGM600AD', 'FGM600AD SSP MP', 'FGM600AD SSP LS', 
-                    'FGM600AD SSP HU', 
+                    'FGM600AD SSP HU', 'GR 74'
                     'C40',
                 )
         )
