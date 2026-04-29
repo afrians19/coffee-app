@@ -1,9 +1,10 @@
 import streamlit as st
 from multiapp import MultiApp
-from apps import basic, sca_form, rec_coffee,recipe # import your app modules here
 
 app = MultiApp()
 st.set_page_config(page_title='Airkopi Barista App')
+
+from apps import basic, sca_form, rec_coffee,recipe # import your app modules here
 
 st.markdown("""
 # Coffee Brewing App
