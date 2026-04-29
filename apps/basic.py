@@ -56,14 +56,11 @@ def sidebar_voice_text_input(label, state_key, default_value=''):
         st.sidebar.caption('Mic unavailable: install `streamlit-mic-recorder` and restart the app.')
         return st.session_state[input_key]
 
-    input_col, mic_col = st.sidebar.columns([6, 1])
-
-    with mic_col:
-        st.write('')
+    with st.sidebar:
         transcript = speech_to_text(
             language='en',
-            start_prompt='🎤',
-            stop_prompt='⏹️',
+            start_prompt=f'🎤 {label}',
+            stop_prompt=f'⏹️ {label}',
             just_once=True,
             use_container_width=True,
             key=mic_key,
@@ -76,8 +73,7 @@ def sidebar_voice_text_input(label, state_key, default_value=''):
         )
         st.session_state[handled_key] = transcript
 
-    with input_col:
-        st.text_input(label, key=input_key)
+    st.sidebar.text_input(label, key=input_key)
 
     return st.session_state[input_key]
 
