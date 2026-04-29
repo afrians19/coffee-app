@@ -176,9 +176,36 @@ def app():
         return input_df
 
     def flavorWheel(input_df):
-        fig = px.sunburst(input_df, path=['Parent', 'Child', 'Grandchild'])
+        flavor_palette = {
+            'Floral': '#7C3AED',
+            'Fruity': '#2563EB',
+            'Green/vegetative': '#2F855A',
+            'Nutty/Cocoa': '#92400E',
+            'Other': '#475569',
+            'Roasted': '#9A3412',
+            'Sour': '#D97706',
+            'Spices': '#B91C1C',
+            'Sweet': '#DB2777',
+        }
+        fig = px.sunburst(
+            input_df,
+            path=['Parent', 'Child', 'Grandchild'],
+            color='Parent',
+            color_discrete_map=flavor_palette,
+        )
+        fig.update_traces(
+            textfont=dict(color='#FFF7ED', size=16),
+            insidetextorientation='auto',
+            hovertemplate='<b>%{label}</b><br>Group: %{parent}<extra></extra>',
+            marker=dict(line=dict(color='#F5E6D3', width=1.2)),
+        )
         fig.update_layout(
-            width=400,
+            autosize=True,
+            height=520,
+            template='plotly_white',
+            paper_bgcolor='#FFF9F0',
+            plot_bgcolor='#FFF9F0',
+            margin=dict(t=70, l=10, r=10, b=10),
             title={
                 'text': "Coffee Tasting Notes",
                 'y':0.95,
@@ -186,11 +213,19 @@ def app():
                 'xanchor': 'center',
                 'yanchor': 'top'
                 },
-
             font=dict(
                 family="eczar semibold",
                 size=18,
-                )
+                color='#2B2118',
+                ),
+            hoverlabel=dict(
+                bgcolor='#FFFDF8',
+                font=dict(color='#2B2118', size=14),
+            ),
+            uniformtext=dict(
+                minsize=10,
+                mode='hide',
+            ),
             )
         return fig
 
@@ -687,4 +722,4 @@ def app():
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
     fig = flavorWheel(input_df)
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, theme=None, use_container_width=True)

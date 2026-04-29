@@ -88,9 +88,9 @@ def app():
         brew_method = st.sidebar.selectbox(
             'Select Brew Method', 
                 (
-                    'Pour Over', 'Aeropress', 'French Press', 'Tubruk', 'Hybrid Percolation Immersion', 'Cupping',
+                    'Pour Over', 'Aeropress', 'French Press', 'Tubruk', 'Hybrid Percolation Immersion', 'Cupping','No Bypass'
                     'Espresso', 'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 
-                    'Espresso Over (Sprover)', "Espresso Extractamundo Dos!", 'Espresso Milk', 'Espresso Adaptive (Medium)',
+                    'Espresso Over (Sprover)', "Espresso Extractamundo Dos!", 'Espresso Milk', 'Espresso Adaptive (Medium)', 'SOUP', 
                     
                 )
         )
@@ -98,8 +98,8 @@ def app():
             'Select Brew Tool', 
                 (
                     'Espresso Machine', 'Nomad Espresso', 'Origami Plastic 01 - Conical', 'Origami Plastic 01 - Flat',
-                    'V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 
-                    'V60 Switch Hybird', 'April Plastic','Pulsar', 'Mugen Switch',
+                    'V60 01 RAN','V60 01 Plastic', 'V60 01 Ceramic', 'V60 02 Plastic', 'V60 Glass 03', 
+                    'V60 Switch', 'April Plastic', 'Pulsar', 'Mugen Switch','Mugen',
                     'Suji Wave', 'Mokapot','Vietnam Drip', 'Cupping Bowl',
                 )
         )        
@@ -195,7 +195,7 @@ def app():
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
     fig = flavorWheel(input_df)
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, theme=None, use_container_width=True)
 
     categories = ['Aroma', 'Flavor', 'Aftertaste', 'Acidity', 'Body', 'Uniformity', 
                 'Balance', 'Clean Cup', 'Sweetness']

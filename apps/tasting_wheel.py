@@ -209,7 +209,7 @@ def app():
     flavorNotes = notesGsheet(df_gsheet)
     input_df = initDF(flavorNotes, flavor_df_list)
     fig = flavorWheel(input_df)
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, theme=None, use_container_width=True)
 
     # Magic commands implicitly `st.write()`
     # ''' _This_ is some __Markdown__ '''
