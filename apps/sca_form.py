@@ -3,6 +3,7 @@ import pandas as pd
 import base64
 import SessionState
 import datetime
+import os
 import gspread
 from google.oauth2.service_account import Credentials
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
@@ -38,6 +39,13 @@ worksheet_dialin = sh.worksheet("Dial-in SCA")
 flavor_df_list = 'FlavorWheelRaw.csv'
 
 
+def mic_input_enabled():
+    mic_toggle = os.getenv('ENABLE_MIC_INPUT')
+    if mic_toggle is not None:
+        return mic_toggle.lower() == 'true'
+    return os.getenv('PORT') is None
+
+
 def sidebar_voice_text_input(label, state_key, default_value=''):
     input_key = f'{state_key}_input'
     mic_key = f'{state_key}_mic'
@@ -46,9 +54,12 @@ def sidebar_voice_text_input(label, state_key, default_value=''):
     if input_key not in st.session_state:
         st.session_state[input_key] = default_value
 
-    if speech_to_text is None:
+    if speech_to_text is None or not mic_input_enabled():
         st.sidebar.text_input(label, key=input_key)
-        st.sidebar.caption('Mic unavailable: install `streamlit-mic-recorder` and restart the app.')
+        if speech_to_text is None:
+            st.sidebar.caption('Mic unavailable: install `streamlit-mic-recorder` and restart the app.')
+        else:
+            st.sidebar.caption('Mic is disabled in this web deployment for stability.')
         return st.session_state[input_key]
 
     with st.sidebar:
