@@ -7,6 +7,11 @@ import gspread
 from google.oauth2.service_account import Credentials
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
+try:
+    from streamlit_mic_recorder import speech_to_text
+except ImportError:
+    speech_to_text = None
+
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -31,6 +36,45 @@ worksheet_dialin = sh.worksheet("Dial-in SCA")
 # data from gsheet <end>
 
 flavor_df_list = 'FlavorWheelRaw.csv'
+
+
+def sidebar_voice_text_input(label, state_key, default_value=''):
+    input_key = f'{state_key}_input'
+    mic_key = f'{state_key}_mic'
+    handled_key = f'{state_key}_mic_handled'
+
+    if input_key not in st.session_state:
+        st.session_state[input_key] = default_value
+
+    if speech_to_text is None:
+        st.sidebar.text_input(label, key=input_key)
+        st.sidebar.caption('Mic unavailable: install `streamlit-mic-recorder` and restart the app.')
+        return st.session_state[input_key]
+
+    input_col, mic_col = st.sidebar.columns([6, 1])
+
+    with mic_col:
+        st.write('')
+        transcript = speech_to_text(
+            language='en',
+            start_prompt='🎤',
+            stop_prompt='⏹️',
+            just_once=True,
+            use_container_width=True,
+            key=mic_key,
+        )
+
+    if transcript and st.session_state.get(handled_key) != transcript:
+        existing_text = st.session_state.get(input_key, '').strip()
+        st.session_state[input_key] = (
+            f'{existing_text} {transcript}'.strip() if existing_text else transcript
+        )
+        st.session_state[handled_key] = transcript
+
+    with input_col:
+        st.text_input(label, key=input_key)
+
+    return st.session_state[input_key]
 
 def app():
     st.write("""
@@ -74,11 +118,11 @@ def app():
         temperature = st.sidebar.slider('Temperature', 80,100,93)
         fragrance_aroma = st.sidebar.slider('Fragrance/Aroma', 0.0,5.0,3.0)
         dry = st.sidebar.slider('Dry', 0,5,3)
-        qualities_dry = st.sidebar.text_input('Qualities Dry', '')
+        qualities_dry = sidebar_voice_text_input('Qualities Dry', 'sca_qualities_dry')
         break_ = st.sidebar.slider('Break', 0,5,3)
-        qualities_break = st.sidebar.text_input('Qualities Break', '')
+        qualities_break = sidebar_voice_text_input('Qualities Break', 'sca_qualities_break')
         flavor = st.sidebar.slider('Flavor', 0.0,5.0,3.0)
-        notes = st.sidebar.text_input('Notes', '')
+        notes = sidebar_voice_text_input('Notes', 'sca_notes')
         aftertaste = st.sidebar.slider('Aftertaste', 0.0,5.0,3.0)
         acidity = st.sidebar.slider('Acidity', 0.0,5.0,3.0)
         acidity_intensity = st.sidebar.slider('Acidity Intensity', 0,5,3)
@@ -89,7 +133,7 @@ def app():
         clean_cup = st.sidebar.slider('Clean cup', 0,5,3)
         sweetness = st.sidebar.slider('Sweetness', 0,5,3)
         rating = st.sidebar.slider('Rating', 0.0,5.0,3.0)
-        notes_recipe = st.sidebar.text_input('', '')
+        notes_recipe = sidebar_voice_text_input('Recipe Notes', 'sca_notes_recipe')
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
                 (                     
