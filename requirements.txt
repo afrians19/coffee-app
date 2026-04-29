@@ -8,3 +8,4 @@ plotly==5.14.1
 scikit-learn==1.2.2
 protobuf==3.20.*
 altair<5
+streamlit-mic-recorder==0.0.8
