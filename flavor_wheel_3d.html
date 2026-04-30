@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Flavor Wheel Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+  :root {
+    --bg-main: #f0f4f8;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-highlight: rgba(255, 255, 255, 1);
+    --accent: #0284c7;
+    --accent-glow: rgba(2, 132, 199, 0.2);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background-color: var(--bg-main);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Abstract 3D glowing background */
+  .bg-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    z-index: -1;
+    opacity: 0.7;
+    pointer-events: none;
+    animation: drift 20s infinite alternate ease-in-out;
+  }
+  .bg-glow-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #e0f2fe; }
+  .bg-glow-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #fae8ff; }
+  .bg-glow-3 { top: 40%; left: 40%; width: 40vw; height: 40vw; background: #ffedd5; animation-delay: -10s; }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(5%, 5%) scale(1.1); }
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  header { text-align: center; margin-bottom: 10px; }
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: linear-gradient(to right, #0284c7, #4f46e5, #9333ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 30px;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05), inset 0 1px 0 var(--glass-highlight);
+    position: relative;
+    overflow: hidden;
+  }
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent);
+    transform: skewX(-20deg);
+    transition: 0.5s;
+    pointer-events: none;
+  }
+  .glass-card:hover::before { left: 200%; }
+
+  .card-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 4px;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+
+  /* Input Section */
+  .input-wrapper { display: flex; gap: 16px; margin-bottom: 20px; }
+  textarea {
+    flex: 1;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    resize: none;
+    outline: none;
+    height: 60px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  }
+  textarea:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px var(--accent-glow); }
+  .btn {
+    background: linear-gradient(135deg, #0284c7, #4f46e5);
+    border: none;
+    color: #fff;
+    padding: 0 32px;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(79, 70, 229, 0.3);
+    background: linear-gradient(135deg, #0369a1, #4338ca);
+  }
+
+  .tags-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .tag {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  }
+  .tag.matched { color: #16a34a; border-color: rgba(22,163,74,0.3); background: #f0fdf4; }
+  .tag.unmatched { color: #e11d48; border-color: rgba(225,29,72,0.3); background: #fff1f2; }
+  .tag .rm { cursor: pointer; color: inherit; opacity: 0.5; font-weight: bold; }
+  .tag .rm:hover { opacity: 1; }
+
+  .stats-row { display: flex; gap: 16px; }
+  .stat-card {
+    flex: 1;
+    background: rgba(255,255,255,0.6);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  }
+  .stat-card .val { font-size: 1.8rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+  .stat-card .lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* Layout Grids */
+  .section-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+  }
+  .section-grid.reverse {
+    grid-template-columns: 1fr 2fr;
+  }
+  @media (max-width: 1024px) {
+    .section-grid, .section-grid.reverse { grid-template-columns: 1fr; }
+  }
+
+  /* Sliders */
+  .sliders-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  .sliders-wrapper::-webkit-scrollbar { width: 6px; }
+  .sliders-wrapper::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+  .slider-item {
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(0,0,0,0.05);
+    padding: 16px;
+    border-radius: 12px;
+    transition: all 0.2s;
+  }
+  .slider-item:hover { border-color: rgba(0,0,0,0.15); background: #fff; }
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .slider-name { font-weight: 500; color: var(--text-main); font-size: 1rem; }
+  .slider-val { font-weight: 700; color: var(--accent); font-size: 1.1rem; }
+  .styled-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 2px;
+    outline: none;
+  }
+  .styled-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    box-shadow: 0 0 10px var(--accent-glow);
+    transition: transform 0.1s;
+  }
+  .styled-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+  
+  .no-notes-text {
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+
+  #chart { width: 100%; height: 500px; }
+
+  /* Interactive Canvas */
+  .canvas-container {
+    width: 100%;
+    height: 500px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.02);
+    background-image: 
+      linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  
+  .node-bubble {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    cursor: grab;
+    user-select: none;
+    padding: 10px;
+    line-height: 1.2;
+    transition: transform 0.2s ease;
+    box-shadow: 
+      inset -15px -15px 25px rgba(0,0,0,0.3), 
+      inset 10px 10px 20px rgba(255,255,255,0.6),
+      0 10px 20px rgba(0,0,0,0.15);
+  }
+  .node-bubble:active {
+    cursor: grabbing;
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 
+      inset -15px -15px 25px rgba(0,0,0,0.3), 
+      inset 10px 10px 20px rgba(255,255,255,0.6),
+      0 20px 30px rgba(0,0,0,0.2);
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+<div class="bg-glow bg-glow-3"></div>
+
+<div class="container">
+  <header>
+    <h1>Coffee Flavor Pro</h1>
+    <p class="subtitle">Next-Gen Interactive Visualizer</p>
+  </header>
+
+  <div class="glass-card">
+    <div class="card-title">Data Input</div>
+    <div class="input-wrapper">
+      <textarea id="noteInput" placeholder="Enter tasting notes... e.g. Banana, Cotton Candy, Honey, Chocolate, Orange"></textarea>
+      <button class="btn" onclick="processInput()">Visualize</button>
+    </div>
+    <div class="tags-row" id="tagsRow"></div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="val" id="matchCount">0</div>
+        <div class="lbl">Matched Notes</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="categoryCount">0</div>
+        <div class="lbl">Categories</div>
+      </div>
+      <div class="stat-card">
+        <div class="val" id="parentCount">0</div>
+        <div class="lbl">Parent Groups</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-grid">
+    <div class="glass-card">
+      <div class="card-title">3D Sunburst Hierarchy</div>
+      <div id="chart"></div>
+    </div>
+    <div class="glass-card">
+      <div class="card-title">Sunburst Opacity</div>
+      <div class="sliders-wrapper" id="sunburstSliders"></div>
+    </div>
+  </div>
+
+  <div class="section-grid reverse">
+    <div class="glass-card">
+      <div class="card-title">Node Opacity</div>
+      <div class="sliders-wrapper" id="circleSliders"></div>
+    </div>
+    <div class="glass-card" style="padding:0;">
+      <div class="card-title" style="padding: 30px 30px 0 30px;">Interactive Sandbox</div>
+      <div class="canvas-container" id="drag-area"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW_DATA = [
+  ["Floral","Floral","Chamomile"],["Floral","Floral","Rose Hip"],["Floral","Floral","Rose"],
+  ["Floral","Floral","Jasmine"],["Floral","Floral","Hibiscus"],["Floral","Floral","Pandan"],
+  ["Floral","Floral","Clementine"],["Floral","Floral","Chrysanthemum"],["Floral","Floral","Elderflower"],
+  ["Floral","Floral","Blossoms"],["Floral","Floral","Floral"],["Floral","Floral","Lavender"],
+  ["Floral","Black tea","Black Tea"],["Floral","Black tea","Tea"],["Floral","Black tea","Earl Grey"],
+  ["Floral","Black tea","White tea"],
+  ["Fruity","Berry","Blackberry"],["Fruity","Berry","Raspberry"],["Fruity","Berry","Blueberry"],
+  ["Fruity","Berry","Blueberry Jam"],["Fruity","Berry","Strawberry"],["Fruity","Berry","Cranberry"],
+  ["Fruity","Berry","Red Berry"],["Fruity","Berry","Berries"],["Fruity","Berry","Wild Dark Berries"],
+  ["Fruity","Dried fruit","Raisin"],["Fruity","Dried fruit","Golden Raisin"],["Fruity","Dried fruit","Dried Berries"],
+  ["Fruity","Dried fruit","Dried Apricot"],["Fruity","Dried fruit","Dried Strawberry"],["Fruity","Dried fruit","Prune"],
+  ["Fruity","Dried fruit","Dates"],["Fruity","Other fruit","Coconut"],["Fruity","Other fruit","Red Fruits"],
+  ["Fruity","Sweet fruit","Golden Kiwi"],["Fruity","Acidic fruit","Kiwi"],["Fruity","Sweet fruit","Cherry"],
+  ["Fruity","Sweet fruit","Ripe Strawberry"],["Fruity","Sweet fruit","Lychee"],["Fruity","Acidic fruit","Pomegranate"],
+  ["Fruity","Acidic fruit","Pineapple"],["Fruity","Acidic fruit","Starfruit"],["Fruity","Sweet fruit","Apricot"],
+  ["Fruity","Sweet fruit","Red Grape"],["Fruity","Acidic fruit","White Grape"],["Fruity","Sweet fruit","Grape"],
+  ["Fruity","Sweet fruit","Muscat Grape"],["Fruity","Sweet fruit","Ripe Fruits"],["Fruity","Sweet fruit","Apple"],
+  ["Fruity","Sweet fruit","Red Apple"],["Fruity","Acidic fruit","Green Apple"],["Fruity","Sweet fruit","Apple Juice"],
+  ["Fruity","Acidic fruit","Blackcurrant"],["Fruity","Sweet fruit","Peach"],["Fruity","Sweet fruit","Pear"],
+  ["Fruity","Sweet fruit","Poached Pear"],["Fruity","Sweet fruit","Banana"],["Fruity","Sweet fruit","Mango"],
+  ["Fruity","Acidic fruit","Mangosteen"],["Fruity","Acidic fruit","Tamarind"],["Fruity","Sweet fruit","Guava"],
+  ["Fruity","Sweet fruit","Tropical Fruits"],["Fruity","Sweet fruit","Honeydew"],["Fruity","Sweet fruit","Stone Fruits"],
+  ["Fruity","Sweet fruit","Plum"],["Fruity","Sweet fruit","Passion Fruit"],
+  ["Fruity","Citrus fruit","Grapefruit"],["Fruity","Citrus fruit","Orange"],["Fruity","Citrus fruit","Lemon"],
+  ["Fruity","Citrus fruit","Lime"],["Fruity","Citrus fruit","Lime Juice"],["Fruity","Citrus fruit","Bergamot"],
+  ["Fruity","Citrus fruit","Blood Orange"],["Fruity","Citrus fruit","Mandarin Orange"],["Fruity","Citrus fruit","Orange Peel"],
+  ["Fruity","Citrus fruit","Orange Zest"],["Fruity","Citrus fruit","Lemon Zest"],["Fruity","Citrus fruit","Citrus"],
+  ["Fruity","Citrus fruit","Tangerine"],
+  ["Sour","Sour","Sour Aromatics"],["Sour","Sour","Tartaric Acid"],["Sour","Sour","Acetic Acid"],
+  ["Sour","Sour","Butyric Acid"],["Sour","Sour","Iso-valeric Acid"],["Sour","Sour","Citric Acid"],
+  ["Sour","Sour","Malic Acid"],["Sour","Fermented","Winey"],["Sour","Fermented","Red Wine"],
+  ["Sour","Fermented","Chocolate Liqueur"],["Sour","Fermented","Whiskey"],["Sour","Fermented","Fermented"],
+  ["Sour","Fermented","Overripe"],["Sour","Fermented","Yogurt"],["Sour","Fermented","Port Wine"],
+  ["Sour","Fermented","Peach Yogurt"],["Sour","Fermented","Funk"],["Sour","Fermented","Macerated Grape"],
+  ["Sour","Fermented","Cherry Liqueur"],
+  ["Green/vegetative","Olive Oil","Olive Oil"],["Green/vegetative","Raw","Raw"],
+  ["Green/vegetative","Green/vegetative","Under-ripe"],["Green/vegetative","Green/vegetative","Peapod"],
+  ["Green/vegetative","Green/vegetative","Fresh"],["Green/vegetative","Green/vegetative","Dark Green"],
+  ["Green/vegetative","Green/vegetative","Vegetative"],["Green/vegetative","Green/vegetative","Hay-like"],
+  ["Green/vegetative","Green/vegetative","Herb-like"],["Green/vegetative","Vegetative","Sweet Potato"],
+  ["Green/vegetative","Herb","Lime Leaves"],["Green/vegetative","Beany","Beany"],
+  ["Roasted","Pipe tobacco","Pipe tobacco"],["Roasted","Tobacco","Tobacco"],
+  ["Roasted","Burnt Acrid","Ashy"],["Roasted","Burnt Acrid","Smoky"],["Roasted","Burnt Acrid","Brown Roast"],
+  ["Roasted","Cereal","Grain"],["Roasted","Cereal","Malt"],["Roasted","Cereal","Granolas"],
+  ["Spices","Pungent","Pungent"],["Spices","Pepper","Pepper"],["Spices","Brown spice","Anise"],
+  ["Spices","Brown spice","Nutmeg"],["Spices","Brown spice","Cinnamon"],["Spices","Brown spice","Clove"],
+  ["Spices","Brown spice","Ginger"],["Spices","Brown spice","Spices"],
+  ["Nutty/Cocoa","Nutty","Peanuts"],["Nutty/Cocoa","Nutty","Hazelnut"],["Nutty/Cocoa","Nutty","Almond"],
+  ["Nutty/Cocoa","Nutty","Cashew"],["Nutty/Cocoa","Nutty","Roasted Peanut"],["Nutty/Cocoa","Nutty","Peanut Butter"],
+  ["Nutty/Cocoa","Cocoa","Chocolate"],["Nutty/Cocoa","Cocoa","Dark Chocolate"],["Nutty/Cocoa","Cocoa","Milk Chocolate"],
+  ["Nutty/Cocoa","Cocoa","Fruity Chocolate"],["Nutty/Cocoa","Cocoa","Cocoa"],["Nutty/Cocoa","Cocoa","Cacao Nibs"],
+  ["Nutty/Cocoa","Cocoa","Almond Choco Ball"],
+  ["Other","Papery/musty","Stale"],["Other","Papery/musty","Cardboard"],["Other","Papery/musty","Papery"],
+  ["Other","Papery/musty","Woody"],["Other","Papery/musty","Moldy/damp"],["Other","Papery/musty","Musty/dusty"],
+  ["Other","Papery/musty","Musty/earthy"],["Other","Papery/musty","Animalic"],["Other","Papery/musty","Meaty brothy"],
+  ["Other","Papery/musty","Phenolic"],["Other","Chemical Bitter","Salty"],["Other","Chemical Bitter","Medicinal"],
+  ["Other","Chemical Bitter","Petroleum"],["Other","Chemical Bitter","Skunky"],["Other","Chemical Bitter","Rubber"],
+  ["Other","Unlisted","Sparkling"],["Other","Unlisted","Cola"],["Other","Unlisted","Creamy"],
+  ["Sweet","Brown sugar","Molasses"],["Sweet","Brown sugar","Brown Sugar"],["Sweet","Brown sugar","Sugarcane"],
+  ["Sweet","Brown sugar","Maple Syrup"],["Sweet","Brown sugar","Caramel"],["Sweet","Brown sugar","Honey"],
+  ["Sweet","Brown sugar","Panela"],["Sweet","Brown sugar","Acacia Honey"],
+  ["Sweet","Vanilla","Vanilla"],["Sweet","Vanillin","Vanillin"],
+  ["Sweet","Candy-like","Cotton Candy"],["Sweet","Candy-like","Maraschino Cherry"],["Sweet","Candy-like","Candy"],
+  ["Sweet","Candy-like","Grape Candy"],["Sweet","Candy-like","Peach Gummy"],["Sweet","Candy-like","Peanut Candy"],
+  ["Sweet","Candy-like","Fox Candy"],["Sweet","Candy-like","Purple Candy"],["Sweet","Candy-like","Lemon Candy"],
+  ["Sweet","Sweet aromatics","Sweet aromatics"],["Sweet","Sweet aromatics","Sweet"],
+  ["Sweet","Sweets","Black Forrest"],["Sweet","Sweets","Banana Bread"],["Sweet","Sweets","Vanilla Biscuit"]
+];
+
+const PALETTE = {
+  "Floral":           { base: "#e879f9", mid: "#c026d3", outer: "#a21caf" },
+  "Fruity":           { base: "#38bdf8", mid: "#0284c7", outer: "#075985" },
+  "Sour":             { base: "#facc15", mid: "#d97706", outer: "#b45309" },
+  "Green/vegetative": { base: "#4ade80", mid: "#16a34a", outer: "#166534" },
+  "Roasted":          { base: "#f97316", mid: "#c2410c", outer: "#9a3412" },
+  "Spices":           { base: "#fb923c", mid: "#ea580c", outer: "#c2410c" },
+  "Nutty/Cocoa":      { base: "#a16207", mid: "#92400e", outer: "#78350f" },
+  "Other":            { base: "#94a3b8", mid: "#475569", outer: "#334155" },
+  "Sweet":            { base: "#f472b6", mid: "#db2777", outer: "#be185d" }
+};
+
+function normalizeStr(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function hexToRgba(hex, alpha) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+let activeItems = [];
+
+function findMatch(note) {
+  const norm = normalizeStr(note);
+  return RAW_DATA.find(row => normalizeStr(row[2]) === norm);
+}
+
+function processInput() {
+  const raw = document.getElementById('noteInput').value;
+  const notes = raw.split(',').map(s => s.trim()).filter(Boolean);
+  
+  notes.forEach(n => {
+    const match = findMatch(n);
+    const id = match ? match[2].trim() : n;
+    
+    if (!activeItems.find(item => item.id.toLowerCase() === id.toLowerCase() || item.inputStr.toLowerCase() === n.toLowerCase())) {
+      activeItems.push({
+        id: id,
+        inputStr: n,
+        row: match,
+        sunburstVal: 5,
+        circleVal: 5,
+        x: null, 
+        y: null
+      });
+    }
+  });
+  
+  document.getElementById('noteInput').value = '';
+  updateUI();
+}
+
+document.getElementById('noteInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); processInput(); }
+});
+
+function removeNote(id) {
+  activeItems = activeItems.filter(item => item.id !== id);
+  updateUI();
+}
+
+function updateUI() {
+  renderTags();
+  renderSliders('sunburst');
+  renderSliders('circle');
+  renderCircles();
+  buildChart();
+}
+
+function renderTags() {
+  const row = document.getElementById('tagsRow');
+  row.innerHTML = '';
+  activeItems.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'tag ' + (item.row ? 'matched' : 'unmatched');
+    div.innerHTML = `${item.row ? '✓' : '✗'} ${item.inputStr} <span class="rm" onclick="removeNote('${item.id.replace(/'/g,"\\'")}')">×</span>`;
+    row.appendChild(div);
+  });
+}
+
+function renderSliders(type) {
+  const containerId = type === 'sunburst' ? 'sunburstSliders' : 'circleSliders';
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  
+  const matchedItems = activeItems.filter(i => i.row);
+  if (matchedItems.length === 0) {
+    container.innerHTML = '<div class="no-notes-text">No notes added yet.</div>';
+    return;
+  }
+  
+  matchedItems.forEach(item => {
+    const valKey = type === 'sunburst' ? 'sunburstVal' : 'circleVal';
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'slider-item';
+    
+    const header = document.createElement('div');
+    header.className = 'slider-header';
+    header.innerHTML = `<span class="slider-name">${item.id}</span><span class="slider-val" id="val-${type}-${normalizeStr(item.id)}">${item[valKey]}</span>`;
+    
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.className = 'styled-slider';
+    input.min = '1';
+    input.max = '5';
+    input.value = item[valKey];
+    
+    input.oninput = (e) => {
+      const v = parseInt(e.target.value);
+      item[valKey] = v;
+      document.getElementById(`val-${type}-${normalizeStr(item.id)}`).innerText = v;
+      
+      if (type === 'sunburst') {
+        buildChart();
+      } else {
+        updateCirclesOpacity();
+      }
+    };
+    
+    wrapper.appendChild(header);
+    wrapper.appendChild(input);
+    container.appendChild(wrapper);
+  });
+}
+
+function updateCirclesOpacity() {
+  activeItems.forEach(item => {
+    const circle = document.getElementById('circle-' + normalizeStr(item.id));
+    if (circle) {
+      circle.style.opacity = Math.max(0.15, item.circleVal / 5);
+    }
+  });
+}
+
+function renderCircles() {
+  const area = document.getElementById('drag-area');
+  area.innerHTML = '';
+  
+  const maxX = area.clientWidth - 100;
+  const maxY = area.clientHeight - 100;
+  
+  activeItems.filter(i => i.row).forEach(item => {
+    if (item.x === null) item.x = Math.max(0, Math.random() * maxX);
+    if (item.y === null) item.y = Math.max(0, Math.random() * maxY);
+    
+    const circle = document.createElement('div');
+    circle.id = 'circle-' + normalizeStr(item.id);
+    circle.className = 'node-bubble';
+    
+    const parent = item.row[0].trim();
+    const baseColor = PALETTE[parent] ? PALETTE[parent].mid : '#64748b';
+    
+    circle.style.background = `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent 40%), ${baseColor}`;
+    circle.style.left = item.x + 'px';
+    circle.style.top = item.y + 'px';
+    circle.style.opacity = Math.max(0.15, item.circleVal / 5);
+    circle.innerText = item.id;
+    
+    circle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startDrag(item, circle, e.clientX, e.clientY);
+    });
+    
+    circle.addEventListener('touchstart', e => {
+      startDrag(item, circle, e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive: true});
+    
+    area.appendChild(circle);
+  });
+}
+
+function buildChart() {
+  const matchedItems = activeItems.filter(i => i.row);
+  
+  if (matchedItems.length === 0) {
+    Plotly.purge('chart');
+    document.getElementById('matchCount').textContent = 0;
+    document.getElementById('categoryCount').textContent = 0;
+    document.getElementById('parentCount').textContent = 0;
+    return;
+  }
+
+  const activeGrandchildren = new Set();
+  const activeChildren = new Set();
+  const activeParents = new Set();
+
+  matchedItems.forEach(item => {
+    const parent = item.row[0].trim();
+    const child = item.row[1].trim();
+    const grandchild = item.row[2].trim();
+    activeGrandchildren.add(grandchild);
+    activeChildren.add(parent + "|" + child);
+    activeParents.add(parent);
+  });
+
+  const ids = [], labels = [], parents = [], values = [], colors = [], customdata = [];
+
+  ids.push("__root__");
+  labels.push("☕");
+  parents.push("");
+  values.push(0);
+  colors.push("rgba(0,0,0,0.05)");
+  customdata.push("Coffee Flavor Wheel");
+
+  // Averages calculation for smooth parent fading
+  const childOpacities = {};
+  const parentOpacities = {};
+  
+  matchedItems.forEach(item => {
+    const p = item.row[0].trim();
+    const c = item.row[1].trim();
+    const key = p + "|" + c;
+    const op = item.sunburstVal / 5;
+    if (!childOpacities[key]) childOpacities[key] = [];
+    childOpacities[key].push(op);
+    if (!parentOpacities[p]) parentOpacities[p] = [];
+    parentOpacities[p].push(op);
+  });
+  
+  const getAvg = (arr) => arr.reduce((a,b)=>a+b,0) / arr.length;
+
+  activeParents.forEach(p => {
+    const pal = PALETTE[p] || { base: "#64748b", mid: "#475569", outer: "#334155" };
+    ids.push("p__" + p);
+    labels.push(p);
+    parents.push("__root__");
+    values.push(0);
+    const avgOp = parentOpacities[p] ? getAvg(parentOpacities[p]) : 1;
+    colors.push(hexToRgba(pal.base, Math.max(0.15, avgOp * 0.9)));
+    customdata.push(p);
+  });
+
+  activeChildren.forEach(key => {
+    const [p, c] = key.split("|");
+    const pal = PALETTE[p] || { base: "#64748b", mid: "#475569", outer: "#334155" };
+    ids.push("c__" + p + "__" + c);
+    labels.push(c);
+    parents.push("p__" + p);
+    values.push(0);
+    const avgOp = childOpacities[key] ? getAvg(childOpacities[key]) : 1;
+    colors.push(hexToRgba(pal.mid, Math.max(0.15, avgOp * 0.95)));
+    customdata.push(p + " › " + c);
+  });
+
+  matchedItems.forEach(item => {
+    const p = item.row[0].trim(), c = item.row[1].trim(), g = item.row[2].trim();
+    const pal = PALETTE[p] || { base: "#64748b", mid: "#475569", outer: "#334155" };
+    ids.push("g__" + p + "__" + c + "__" + g);
+    labels.push(g);
+    parents.push("c__" + p + "__" + c);
+    values.push(1);
+    const op = Math.max(0.15, item.sunburstVal / 5);
+    colors.push(hexToRgba(pal.outer, op));
+    customdata.push(p + " › " + c + " › " + g);
+  });
+
+  const trace = {
+    type: 'sunburst',
+    ids, labels, parents, values, customdata,
+    hovertemplate: '<b>%{label}</b><br><span style="opacity:0.6">%{customdata}</span><extra></extra>',
+    marker: {
+      colors,
+      line: { color: 'rgba(255,255,255,0.8)', width: 1.5 }
+    },
+    leaf: { opacity: 1 },
+    insidetextorientation: 'horizontal',
+    textfont: { family: 'Outfit', size: 14 } // Let Plotly auto-contrast the text color
+  };
+
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    margin: { t: 10, b: 10, l: 10, r: 10 },
+    height: 500,
+    showlegend: false,
+  };
+
+  Plotly.react('chart', [trace], layout, { displayModeBar: false, responsive: true });
+
+  document.getElementById('matchCount').textContent = matchedItems.length;
+  document.getElementById('categoryCount').textContent = activeChildren.size;
+  document.getElementById('parentCount').textContent = activeParents.size;
+}
+
+// Global Drag Logic
+let draggedItem = null;
+let draggedElement = null;
+let startX, startY, initialX, initialY;
+let dragAreaEl = null;
+
+function startDrag(item, element, cx, cy) {
+  draggedItem = item;
+  draggedElement = element;
+  startX = cx;
+  startY = cy;
+  initialX = item.x;
+  initialY = item.y;
+  element.style.zIndex = 1000;
+  element.style.cursor = 'grabbing';
+}
+
+function handleDragMove(cx, cy) {
+  if (!draggedItem || !draggedElement) return;
+  if (!dragAreaEl) dragAreaEl = document.getElementById('drag-area');
+  
+  const dx = cx - startX;
+  const dy = cy - startY;
+  let newX = initialX + dx;
+  let newY = initialY + dy;
+  
+  newX = Math.max(0, Math.min(newX, dragAreaEl.clientWidth - 100));
+  newY = Math.max(0, Math.min(newY, dragAreaEl.clientHeight - 100));
+  
+  draggedItem.x = newX;
+  draggedItem.y = newY;
+  draggedElement.style.left = newX + 'px';
+  draggedElement.style.top = newY + 'px';
+}
+
+function handleDragEnd() {
+  if (draggedElement) {
+    draggedElement.style.zIndex = '';
+    draggedElement.style.cursor = 'grab';
+  }
+  draggedItem = null;
+  draggedElement = null;
+}
+
+window.addEventListener('mousemove', e => handleDragMove(e.clientX, e.clientY));
+window.addEventListener('touchmove', e => {
+  if (draggedItem) { e.preventDefault(); handleDragMove(e.touches[0].clientX, e.touches[0].clientY); }
+}, {passive: false});
+
+window.addEventListener('mouseup', handleDragEnd);
+window.addEventListener('touchend', handleDragEnd);
+
+// Resize observer to ensure circles stay in bounds
+window.addEventListener('resize', () => {
+  if(activeItems.length) {
+    const area = document.getElementById('drag-area');
+    if(area) {
+      const maxX = area.clientWidth - 100;
+      const maxY = area.clientHeight - 100;
+      activeItems.forEach(item => {
+        if(item.x > maxX) item.x = Math.max(0, maxX);
+        if(item.y > maxY) item.y = Math.max(0, maxY);
+        const circle = document.getElementById('circle-' + normalizeStr(item.id));
+        if(circle) {
+          circle.style.left = item.x + 'px';
+          circle.style.top = item.y + 'px';
+        }
+      });
+    }
+  }
+});
+
+// Load with a sample on start
+window.onload = () => {
+  document.getElementById('noteInput').value = 'Banana, Cotton Candy, Honey, Chocolate, Orange';
+  processInput();
+};
+</script>
+</body>
+</html>

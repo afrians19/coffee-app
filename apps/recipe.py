@@ -3,6 +3,7 @@ import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 import plotly.express as px
+import plotly.graph_objects as go
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
@@ -35,6 +36,12 @@ def app():
     """)
 
     st.sidebar.header('Input Parameters')
+    radar_metrics = ['fragrance_aroma', 'acidity', 'sweetness', 'flavor', 'aftertaste']
+    radar_labels = ['Aroma', 'Acidity', 'Sweetness', 'Flavor', 'After Taste']
+    parallel_dimensions = [
+        'dose_g', 'yield_ml', 'time_s', 'temperature', 'grinder_setting',
+        'fragrance_aroma', 'acidity', 'sweetness', 'flavor', 'aftertaste', 'rating',
+    ]
     
     def user_input_features():
         # 1st: min | 2nd: max | 3rd: default value
@@ -228,6 +235,124 @@ def app():
             ),
             )
         return fig
+
+    def recipe_radar_chart(selected_df, chart_title):
+        fig = go.Figure()
+        color_cycle = px.colors.qualitative.Bold
+
+        for position, (row_index, selected_row) in enumerate(selected_df.iterrows()):
+            score_values = [selected_row.get(column, 0) for column in radar_metrics]
+            score_values = [value if pd.notna(value) else 0 for value in score_values]
+            closed_scores = score_values + [score_values[0]]
+            closed_labels = radar_labels + [radar_labels[0]]
+            line_color = color_cycle[position % len(color_cycle)]
+            trace_name = (
+                f"idx {row_index} | id {selected_row.get('id', '')} | "
+                f"rating {selected_row.get('rating', '')}"
+            )
+
+            fig.add_trace(
+                go.Scatterpolar(
+                    r=closed_scores,
+                    theta=closed_labels,
+                    fill='toself',
+                    mode='lines+markers',
+                    line=dict(color=line_color, width=3),
+                    marker=dict(size=7, color=line_color, line=dict(color='#FFF7ED', width=1.2)),
+                    fillcolor=line_color,
+                    opacity=0.28,
+                    hovertemplate='%{theta}: %{r}<extra>' + trace_name + '</extra>',
+                    name=trace_name,
+                )
+            )
+        
+        fig.update_layout(
+            title=dict(
+                text=chart_title,
+                x=0.5,
+                xanchor='center',
+                font=dict(size=24, color='#2B2118'),
+            ),
+            template='plotly_white',
+            paper_bgcolor='#FFF9F0',
+            plot_bgcolor='#FFF9F0',
+            margin=dict(t=80, l=40, r=40, b=40),
+            height=520,
+            showlegend=True,
+            legend=dict(
+                orientation='h',
+                yanchor='bottom',
+                y=1.08,
+                xanchor='center',
+                x=0.5,
+            ),
+            polar=dict(
+                bgcolor='#FFF9F0',
+                radialaxis=dict(
+                    range=[0, 5],
+                    tickvals=[1, 2, 3, 4, 5],
+                    tickfont=dict(size=12, color='#6B5B4D'),
+                    gridcolor='#E8D9C8',
+                    gridwidth=1,
+                    linecolor='#D8C3A5',
+                    angle=90,
+                ),
+                angularaxis=dict(
+                    tickfont=dict(size=16, color='#2B2118'),
+                    gridcolor='#E8D9C8',
+                    linecolor='#D8C3A5',
+                    direction='clockwise',
+                    rotation=90,
+                ),
+            ),
+            hoverlabel=dict(
+                bgcolor='#FFFDF8',
+                font=dict(color='#2B2118', size=14),
+            ),
+        )
+        st.plotly_chart(fig, theme=None, use_container_width=True)
+
+    def render_selected_recipe_dialin_visual(selected_df, chart_title_prefix):
+        if selected_df.empty:
+            st.info('no selected data to show')
+            return
+
+        # chart_title = f'{chart_title_prefix} Comparison'
+        chart_title = ''
+        recipe_radar_chart(selected_df, chart_title)
+
+    def render_recipe_dialin_selector(history_df, selector_key, chart_title_prefix):
+        if history_df.empty:
+            st.info('no selected data to show')
+            return
+
+        selectable_df = history_df.copy()
+        display_columns = [
+            'rating', 'grinder', 'grinder_setting', 'dose_g',
+            'yield_ml', 'time_s', 'temperature', 'brew_method', 'brew_tool',
+            'notes_recipe', 'notes', 'fragrance_aroma', 'aftertaste',
+            'acidity', 'sweetness', 'flavor',
+        ]
+        display_columns = [column for column in display_columns if column in selectable_df.columns]
+
+        try:
+            st.dataframe(selectable_df[display_columns], use_container_width=True)
+        except TypeError:
+            st.dataframe(selectable_df[display_columns])
+
+        selected_index = st.multiselect(
+            'Select index rows',
+            options=selectable_df.index.tolist(),
+            format_func=lambda idx: f'Index {idx}',
+            key=f'{selector_key}_dialin_multiselect',
+        )
+
+        if not selected_index:
+            st.info('no selected data to show')
+            return
+
+        selected_full_df = history_df.loc[selected_index].copy()
+        render_selected_recipe_dialin_visual(selected_full_df, chart_title_prefix)
 
     def DensityToTemp (density):
         if density >= 350 and density <360:
@@ -569,6 +694,8 @@ def app():
             else:
                 columns = df_gsheet2.columns.tolist()
             st.write(df_gsheet2[columns])
+            st.markdown('#### Espresso Dial-in Visualizer')
+            render_recipe_dialin_selector(df_gsheet2.reset_index(drop=True), 'recipe_espresso', 'Espresso Dial-in')
 
         if st.button("Filter Dialed"):
             st.session_state.filter_dialed = True
@@ -656,6 +783,8 @@ def app():
             else:
                 columns_filter = df_gsheet2_filter.columns.tolist()
             st.write(df_gsheet2_filter[columns_filter])
+            st.markdown('#### Filter Dial-in Visualizer')
+            render_recipe_dialin_selector(df_gsheet2_filter.reset_index(drop=True), 'recipe_filter', 'Filter Dial-in')
 
     # Brewing Recipe
     coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))

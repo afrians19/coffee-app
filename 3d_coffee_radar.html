@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Coffee Profile Visualization</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1e293b, #020617);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+
+        .glass-panel {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .glass-panel h2 {
+            margin-top: 0;
+            font-size: 1.6rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .slider-group {
+            margin-bottom: 20px;
+        }
+
+        .slider-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            font-weight: 300;
+        }
+
+        .slider-group span {
+            font-weight: 600;
+            color: #38bdf8;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            margin-top: -7px;
+            box-shadow: 0 0 12px #38bdf8;
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            padding: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: rgba(56, 189, 248, 0.25);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #labels-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .axis-label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            color: #f8fafc;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+            background: rgba(15, 23, 42, 0.6);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: opacity 0.2s;
+        }
+
+        #value-labels-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        .value-label {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.75rem;
+            font-weight: 300;
+            pointer-events: none;
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            font-weight: 300;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            backdrop-filter: blur(4px);
+        }
+
+        @media (max-width: 768px) {
+            .glass-panel {
+                width: calc(100% - 40px);
+                left: 20px;
+                top: auto;
+                bottom: 20px;
+                padding: 20px;
+            }
+
+            .instruction {
+                top: 20px;
+                bottom: auto;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glass-panel">
+        <h2>3D Flavor Profile</h2>
+
+        <div class="slider-group">
+            <label>Fragrance / Aroma <span id="val-aroma">3.0</span></label>
+            <input type="range" id="aroma" min="1" max="5" step="0.1" value="3.0">
+        </div>
+        <div class="slider-group">
+            <label>Aftertaste <span id="val-aftertaste">3.0</span></label>
+            <input type="range" id="aftertaste" min="1" max="5" step="0.1" value="3.0">
+        </div>
+        <div class="slider-group">
+            <label>Acidity <span id="val-acidity">3.0</span></label>
+            <input type="range" id="acidity" min="1" max="5" step="0.1" value="3.0">
+        </div>
+        <div class="slider-group">
+            <label>Sweetness <span id="val-sweetness">3.0</span></label>
+            <input type="range" id="sweetness" min="1" max="5" step="0.1" value="3.0">
+        </div>
+        <div class="slider-group">
+            <label>Flavor <span id="val-flavor">3.0</span></label>
+            <input type="range" id="flavor" min="1" max="5" step="0.1" value="3.0">
+        </div>
+        <div class="slider-group">
+            <label>Body <span id="val-body">3.0</span></label>
+            <input type="range" id="body" min="1" max="5" step="0.1" value="3.0">
+        </div>
+
+        <div class="button-group">
+            <button id="btn-toggle-rotate">Stop Rotate</button>
+            <button id="btn-toggle-2d">2D View</button>
+            <button id="btn-toggle-drop">Remove Drop</button>
+        </div>
+        <div class="button-group" style="margin-top: 12px;">
+            <button id="btn-random">Randomize</button>
+            <button id="btn-reset">Reset</button>
+        </div>
+    </div>
+
+    <div id="canvas-container"></div>
+    <div id="labels-container"></div>
+    <div id="value-labels-container"></div>
+
+    <div class="instruction">Left Click: Rotate &bull; Scroll: Zoom &bull; Right Click: Pan</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Init variables
+        const sliderIds = ['aroma', 'aftertaste', 'acidity', 'sweetness', 'flavor', 'body'];
+        const labelTexts = ['Fragrance / Aroma', 'Aftertaste', 'Acidity', 'Sweetness', 'Flavor', 'Body'];
+        const targetValues = [3, 3, 3, 3, 3, 3];
+        const currentValues = [3, 3, 3, 3, 3, 3];
+
+        let autoRotate = true;
+        let is2DView = false;
+        let showDrop = true;
+        let targetYDrop = 2;
+        let currentYDrop = 2;
+
+        // Three.js Setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x020617, 0.02);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(8, 6, 10);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 5;
+        controls.maxDistance = 25;
+        controls.maxPolarAngle = Math.PI / 2 + 0.1;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(10, 15, 10);
+        scene.add(dirLight);
+
+        const fillLight = new THREE.DirectionalLight(0x0ea5e9, 0.5);
+        fillLight.position.set(-10, -10, -10);
+        scene.add(fillLight);
+
+        const centerLight = new THREE.PointLight(0x38bdf8, 2, 10);
+        scene.add(centerLight);
+
+        // Data Geometry (Bipyramid)
+        const geometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array(8 * 3);
+        vertices[0] = 0; vertices[1] = 2; vertices[2] = 0; // Top
+        vertices[3] = 0; vertices[4] = -2; vertices[5] = 0; // Bottom
+
+        const indices = [
+            0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 7, 0, 7, 2,
+            1, 3, 2, 1, 4, 3, 1, 5, 4, 1, 6, 5, 1, 7, 6, 1, 2, 7
+        ];
+        geometry.setIndex(indices);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x0284c7,
+            emissive: 0x0ea5e9,
+            emissiveIntensity: 0.3,
+            roughness: 0.2,
+            metalness: 0.8,
+            transparent: true,
+            opacity: 0.7,
+            side: THREE.DoubleSide,
+            depthWrite: false
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+
+        // Wireframe Overlay
+        let wireframe;
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x7dd3fc, linewidth: 2, transparent: true, opacity: 0.8 });
+
+        function updateGeometry() {
+            const positions = geometry.attributes.position.array;
+
+            positions[1] = currentYDrop;
+            positions[4] = -currentYDrop;
+
+            for (let i = 0; i < 6; i++) {
+                const angle = i * Math.PI / 3;
+                const radius = currentValues[i];
+                const idx = (2 + i) * 3;
+                positions[idx] = Math.cos(angle) * radius;
+                positions[idx + 1] = 0;
+                positions[idx + 2] = Math.sin(angle) * radius;
+            }
+            geometry.attributes.position.needsUpdate = true;
+            geometry.computeVertexNormals();
+
+            if (wireframe) {
+                scene.remove(wireframe);
+                wireframe.geometry.dispose();
+            }
+            const edges = new THREE.EdgesGeometry(geometry);
+            wireframe = new THREE.LineSegments(edges, lineMaterial);
+            scene.add(wireframe);
+        }
+
+        // Radar Grids
+        const gridGroup = new THREE.Group();
+        const gridMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.15 });
+        for (let r = 1; r <= 5; r++) {
+            const pts = [];
+            for (let i = 0; i <= 6; i++) {
+                const angle = i * Math.PI / 3;
+                pts.push(new THREE.Vector3(Math.cos(angle) * r, -0.01, Math.sin(angle) * r));
+            }
+            const geom = new THREE.BufferGeometry().setFromPoints(pts);
+            const line = new THREE.Line(geom, gridMaterial);
+            gridGroup.add(line);
+        }
+
+        // Axes Lines
+        const axisMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+        for (let i = 0; i < 6; i++) {
+            const angle = i * Math.PI / 3;
+            const pts = [
+                new THREE.Vector3(0, -0.01, 0),
+                new THREE.Vector3(Math.cos(angle) * 5.2, -0.01, Math.sin(angle) * 5.2)
+            ];
+            const geom = new THREE.BufferGeometry().setFromPoints(pts);
+            const line = new THREE.Line(geom, axisMaterial);
+            gridGroup.add(line);
+        }
+        scene.add(gridGroup);
+
+        // Labels Setup
+        const labelsContainer = document.getElementById('labels-container');
+        const labelElements = [];
+        labelTexts.forEach(text => {
+            const el = document.createElement('div');
+            el.className = 'axis-label';
+            el.innerText = text;
+            labelsContainer.appendChild(el);
+            labelElements.push(el);
+        });
+
+        // Value Labels Setup (Along first axis)
+        const valueLabelsContainer = document.getElementById('value-labels-container');
+        const valueLabels = [];
+        for (let v = 1; v <= 5; v++) {
+            const el = document.createElement('div');
+            el.className = 'value-label';
+            el.innerText = v;
+            valueLabelsContainer.appendChild(el);
+            valueLabels.push({ el, val: v });
+        }
+
+        // Initialize Geometry
+        updateGeometry();
+
+        // Event Listeners
+        sliderIds.forEach((id, i) => {
+            const slider = document.getElementById(id);
+            const label = document.getElementById(`val-${id}`);
+            slider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                targetValues[i] = val;
+                label.innerText = val.toFixed(1);
+            });
+        });
+
+        document.getElementById('btn-random').addEventListener('click', () => {
+            sliderIds.forEach((id, i) => {
+                const val = (Math.random() * 4 + 1).toFixed(1);
+                document.getElementById(id).value = val;
+                document.getElementById(`val-${id}`).innerText = val;
+                targetValues[i] = parseFloat(val);
+            });
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            sliderIds.forEach((id, i) => {
+                const val = "3.0";
+                document.getElementById(id).value = val;
+                document.getElementById(`val-${id}`).innerText = val;
+                targetValues[i] = parseFloat(val);
+            });
+        });
+
+        document.getElementById('btn-toggle-rotate').addEventListener('click', (e) => {
+            autoRotate = !autoRotate;
+            e.target.innerText = autoRotate ? "Stop Rotate" : "Start Rotate";
+        });
+
+        document.getElementById('btn-toggle-2d').addEventListener('click', (e) => {
+            is2DView = !is2DView;
+            e.target.innerText = is2DView ? "3D View" : "2D View";
+            if (is2DView) {
+                // Go to 2D
+                camera.position.set(0, 15, 0);
+                controls.maxPolarAngle = 0;
+                controls.minPolarAngle = 0;
+                scene.rotation.y = 0;
+                autoRotate = false;
+                document.getElementById('btn-toggle-rotate').innerText = "Start Rotate";
+            } else {
+                // Back to 3D
+                camera.position.set(8, 6, 10);
+                controls.maxPolarAngle = Math.PI / 2 + 0.1;
+                controls.minPolarAngle = 0;
+            }
+            controls.update();
+        });
+
+        document.getElementById('btn-toggle-drop').addEventListener('click', (e) => {
+            showDrop = !showDrop;
+            e.target.innerText = showDrop ? "Remove Drop" : "Show Drop";
+            targetYDrop = showDrop ? 2 : 0;
+            centerLight.visible = showDrop;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Animation Loop
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = clock.getElapsedTime();
+
+            // Smooth Interpolation
+            let needsUpdate = false;
+            for (let i = 0; i < 6; i++) {
+                if (Math.abs(currentValues[i] - targetValues[i]) > 0.005) {
+                    currentValues[i] += (targetValues[i] - currentValues[i]) * 0.15;
+                    needsUpdate = true;
+                }
+            }
+            if (Math.abs(currentYDrop - targetYDrop) > 0.005) {
+                currentYDrop += (targetYDrop - currentYDrop) * 0.15;
+                needsUpdate = true;
+            }
+
+            if (needsUpdate) {
+                updateGeometry();
+            }
+
+            // Pulsing center light
+            centerLight.intensity = 1.5 + Math.sin(time * 3) * 0.5;
+
+            // Auto-rotation
+            if (autoRotate) {
+                scene.rotation.y += 0.001;
+            }
+
+            controls.update();
+
+            // Update Labels
+            const labelRadius = 5.8;
+            for (let i = 0; i < 6; i++) {
+                const angle = i * Math.PI / 3;
+                const pos = new THREE.Vector3(
+                    Math.cos(angle) * labelRadius,
+                    0,
+                    Math.sin(angle) * labelRadius
+                );
+                pos.applyMatrix4(scene.matrixWorld);
+                pos.project(camera);
+
+                if (pos.z < 1) {
+                    const xScreen = (pos.x * .5 + .5) * window.innerWidth;
+                    const yScreen = (pos.y * -.5 + .5) * window.innerHeight;
+                    labelElements[i].style.left = `${xScreen}px`;
+                    labelElements[i].style.top = `${yScreen}px`;
+                    labelElements[i].style.opacity = '1';
+                } else {
+                    labelElements[i].style.opacity = '0';
+                }
+            }
+
+            // Update Value Labels
+            valueLabels.forEach(item => {
+                const angle = 0; // Along the first axis
+                const pos = new THREE.Vector3(
+                    Math.cos(angle) * item.val,
+                    0,
+                    Math.sin(angle) * item.val
+                );
+                pos.applyMatrix4(scene.matrixWorld);
+                pos.project(camera);
+
+                if (pos.z < 1) {
+                    const xScreen = (pos.x * .5 + .5) * window.innerWidth;
+                    const yScreen = (pos.y * -.5 + .5) * window.innerHeight;
+                    item.el.style.left = `${xScreen}px`;
+                    item.el.style.top = `${yScreen}px`;
+                    item.el.style.display = 'block';
+                } else {
+                    item.el.style.display = 'none';
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>
