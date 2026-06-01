@@ -105,7 +105,7 @@ def app():
         brew_method = st.sidebar.selectbox(
             'Select Brew Method', 
                 (
-                    'Pour Over', 'Aeropress', 'French Press', 'Tubruk', 'Hybrid Percolation Immersion', 'Cupping','No Bypass'
+                    'Pour Over', 'Aeropress', 'French Press', 'Tubruk', 'Hybrid Percolation Immersion', 'Cupping','No Bypass',
                     'Espresso', 'Espresso Modern', 'Espresso Turbo', 'Espresso Allonge', 'Espresso Londinium', 'Espresso Blooming', 
                     'Espresso Over (Sprover)', "Espresso Extractamundo Dos!", 'Espresso Milk', 'Espresso Adaptive (Medium)', 'SOUP', 
                     

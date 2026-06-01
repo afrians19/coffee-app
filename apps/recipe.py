@@ -694,8 +694,17 @@ def app():
             else:
                 columns = df_gsheet2.columns.tolist()
             st.write(df_gsheet2[columns])
-            st.markdown('#### Espresso Dial-in Visualizer')
-            render_recipe_dialin_selector(df_gsheet2.reset_index(drop=True), 'recipe_espresso', 'Espresso Dial-in')
+            enable_espresso_visualizer = st.checkbox(
+                'Enable Espresso Dial-in Visualizer',
+                key='enable_espresso_dialin_visualizer',
+            )
+            if enable_espresso_visualizer:
+                st.markdown('#### Espresso Dial-in Visualizer')
+                render_recipe_dialin_selector(
+                    df_gsheet2.reset_index(drop=True),
+                    'recipe_espresso',
+                    'Espresso Dial-in',
+                )
 
         if st.button("Filter Dialed"):
             st.session_state.filter_dialed = True
