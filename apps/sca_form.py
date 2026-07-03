@@ -121,7 +121,7 @@ def app():
                     'Medium-Light','Medium', 'Medium-Dark', 'Dark',
                 )
         )
-        roasted_days = st.sidebar.number_input('roasted_days', 0,100,5)
+        roasted_days = st.sidebar.number_input('roasted_days', 0,2000,14)
         temperature = st.sidebar.slider('Temperature', 80,100,93)
         fragrance_aroma = st.sidebar.slider('Fragrance/Aroma', 0.0,5.0,3.0)
         dry = st.sidebar.slider('Dry', 0,5,3)

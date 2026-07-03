@@ -119,7 +119,7 @@ def app():
                 )
         )
         
-        roasted_days = st.sidebar.number_input('roasted_days', 0,100,5)
+        roasted_days = st.sidebar.number_input('roasted_days', 0,2000,14)
         temperature = st.sidebar.slider('Temperature', 80,100,93)
         sweetness = st.sidebar.slider('Sweetness', 0.0,5.0,3.0)
         acidity = st.sidebar.slider('Acidity', 0.0,5.0,3.0)
