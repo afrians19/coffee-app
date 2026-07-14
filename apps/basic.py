@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import base64
 import SessionState
@@ -9,10 +11,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
-try:
-    from streamlit_mic_recorder import speech_to_text
-except ImportError:
-    speech_to_text = None
+speech_to_text = None
 
 # data from gsheet <start>
 
@@ -52,12 +51,19 @@ def mic_input_enabled():
 
 
 def sidebar_voice_text_input(label, state_key, default_value=''):
+    global speech_to_text
     input_key = f'{state_key}_input'
     mic_key = f'{state_key}_mic'
     handled_key = f'{state_key}_mic_handled'
 
     if input_key not in st.session_state:
         st.session_state[input_key] = default_value
+
+    if mic_input_enabled() and speech_to_text is None:
+        try:
+            from streamlit_mic_recorder import speech_to_text
+        except ImportError:
+            pass
 
     if speech_to_text is None or not mic_input_enabled():
         st.sidebar.text_input(label, key=input_key)
