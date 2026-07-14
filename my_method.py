@@ -255,3 +255,126 @@ def flavorWheel(input_df): # input in FlavorWheelRaw.csv format
         ),
         )
     return fig
+
+def inject_custom_css():
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+        /* Apply modern clean fonts globally */
+        html, body, [class*="css"], [class*="st-"] {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+        }
+
+        /* Styling titles and headers with elegant serif */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif !important;
+            color: #2D2219 !important;
+            font-weight: 700 !important;
+        }
+
+        /* Premium background texture */
+        [data-testid="stAppViewContainer"] {
+            background-color: #FAF7F2 !important;
+            background-image: radial-gradient(#F3EDE2 1.5px, transparent 1.5px) !important;
+            background-size: 24px 24px !important;
+        }
+
+        /* Sidebar Styling */
+        [data-testid="stSidebar"] {
+            background-color: #F3EDE2 !important;
+            border-right: 1px solid #E6DCD0 !important;
+        }
+
+        /* Styled Card wrapper */
+        .coffee-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E6DCD0;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(45, 34, 25, 0.03);
+            margin-bottom: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .coffee-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(45, 34, 25, 0.08);
+            border-color: #d97706;
+        }
+
+        /* Elegant Gradient Header */
+        .header-container {
+            background: linear-gradient(135deg, #2D2219 0%, #4E3629 100%);
+            color: #FAF7F2 !important;
+            padding: 36px 28px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(45, 34, 25, 0.15);
+        }
+        .header-container h1 {
+            color: #FAF7F2 !important;
+            margin: 0 0 8px 0 !important;
+            font-size: 2.5rem !important;
+        }
+        .header-container p {
+            color: #FAF7F2 !important;
+            font-size: 1.1rem !important;
+            opacity: 0.9;
+            margin: 0 !important;
+        }
+
+        /* Smooth inputs and selects */
+        div[data-baseweb="select"] > div {
+            border-radius: 8px !important;
+            border-color: #E6DCD0 !important;
+        }
+        
+        /* Modern Streamlit Buttons */
+        div[data-testid="stButton"] button {
+            background-color: #FAF7F2 !important;
+            color: #d97706 !important;
+            border: 2px solid #d97706 !important;
+            border-radius: 24px !important;
+            padding: 8px 24px !important;
+            font-weight: 600 !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 2px 4px rgba(45, 34, 25, 0.03) !important;
+            width: auto !important;
+        }
+        div[data-testid="stButton"] button:hover {
+            background-color: #d97706 !important;
+            color: #FAF7F2 !important;
+            box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3) !important;
+            transform: translateY(-1px) !important;
+            border-color: #d97706 !important;
+        }
+        div[data-testid="stButton"] button:active {
+            transform: translateY(1px) !important;
+        }
+
+        /* Forms, inputs and text areas styling */
+        div[data-testid="stForm"] {
+            background-color: #FFFFFF !important;
+            border: 1px solid #E6DCD0 !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 4px 20px rgba(45, 34, 25, 0.04) !important;
+        }
+
+        /* Styled links */
+        a {
+            color: #d97706 !important;
+            text-decoration: none !important;
+            font-weight: 500 !important;
+            transition: color 0.2s ease !important;
+        }
+        a:hover {
+            color: #b45309 !important;
+            text-decoration: underline !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+

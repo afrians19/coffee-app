@@ -1,6 +1,7 @@
 """Frameworks for running multiple Streamlit applications as a single app.
 """
 import streamlit as st
+from my_method import inject_custom_css
 
 class MultiApp:
     """Framework for combining multiple streamlit applications.
@@ -39,6 +40,7 @@ class MultiApp:
         })
 
     def run(self):
+        inject_custom_css()
         # app = st.sidebar.radio(
         app = st.selectbox(
             'Select Feature Below',

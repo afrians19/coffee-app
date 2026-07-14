@@ -1,0 +1,9 @@
+[theme]
+primaryColor = "#d97706"
+backgroundColor = "#FAF7F2"
+secondaryBackgroundColor = "#F3EDE2"
+textColor = "#2D2219"
+font = "sans serif"
+
+[server]
+enableWebsocketCompression = false
