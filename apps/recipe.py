@@ -352,6 +352,16 @@ def app():
             return
 
         selected_full_df = history_df.loc[selected_index].copy()
+        
+        csv_data = selected_full_df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label='Download selected data (.csv)',
+            data=csv_data,
+            file_name=f'{selector_key}_selected_data.csv',
+            mime='text/csv',
+            key=f'{selector_key}_download_selected_csv',
+        )
+
         render_selected_recipe_dialin_visual(selected_full_df, chart_title_prefix)
 
     def DensityToTemp (density):
@@ -541,7 +551,13 @@ def app():
     df_gsheet = dataGsheet(worksheet, df)
     
     st.write(df_gsheet.T)
-    if st.button("Density reference id"):
+    with st.expander("Coffee Tasting Notes"):
+        flavorNotes = notesGsheet(df_gsheet)
+        input_df = initDF(flavorNotes, flavor_df_list)
+        fig = flavorWheel(input_df)
+        st.plotly_chart(fig, theme=None, use_container_width=True)
+
+    with st.expander("Density reference id"):
         st.write("Density 350 - id 4 \n \n Density 360 - id 26 \n \n Density 370 - id 27 \n \n Density 380 - id 3 \n \n Density 390 - id 8 \n \n Density 400 - id 9 \n \n Density 410 - id 20 \n \n Density 430 - id 38 \n \n Density 450 - id 53 \n \n Density 500 - id 56 \n \n ")
         
     density = df_gsheet['Density'].iloc[0]
@@ -557,6 +573,12 @@ def app():
     strength =  df['strength'].iloc[0]
     dose = df['dose'].iloc[0]
     taste_profile = df['taste_profile'].iloc[0]
+
+    # Brewing Recipe
+    coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
+    st.write(
+        "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
+    )
 
     with st.expander("Auto Recipe"):
         
@@ -792,14 +814,17 @@ def app():
             else:
                 columns_filter = df_gsheet2_filter.columns.tolist()
             st.write(df_gsheet2_filter[columns_filter])
-            st.markdown('#### Filter Dial-in Visualizer')
-            render_recipe_dialin_selector(df_gsheet2_filter.reset_index(drop=True), 'recipe_filter', 'Filter Dial-in')
-
-    # Brewing Recipe
-    coffee_water_ratio = CoffeeWaterRatio(strength, float(dose))
-    st.write(
-        "Coffee to Water Ratio: ", float(dose),':', coffee_water_ratio,
-    )
+            enable_filter_visualizer = st.checkbox(
+                'Enable Filter Dial-in Visualizer',
+                key='enable_filter_dialin_visualizer',
+            )
+            if enable_filter_visualizer:
+                st.markdown('#### Filter Dial-in Visualizer')
+                render_recipe_dialin_selector(
+                    df_gsheet2_filter.reset_index(drop=True),
+                    'recipe_filter',
+                    'Filter Dial-in',
+                )
 
     with st.expander("Recipe Guide"):
         if st.button("Recipe 1 Hoffman"):
@@ -856,8 +881,3 @@ def app():
             st.write(
                 '1-2-1 :', int(dose*4),':', coffee_water_ratio, ' ( -', int((coffee_water_ratio-(dose*4))), ') after 1st pour',
             )
-
-    flavorNotes = notesGsheet(df_gsheet)
-    input_df = initDF(flavorNotes, flavor_df_list)
-    fig = flavorWheel(input_df)
-    st.plotly_chart(fig, theme=None, use_container_width=True)
