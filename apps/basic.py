@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
+import json
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -213,19 +215,25 @@ def app():
     radar_chart(score1, categories, coffee_name)
     st.write('Tasting notes: ', df['notes'].iloc[0])
 
-    # Create an empty dataframe
+    # Create input dataframe
     data = df
 
-    # persist state of dataframe
-    session_state = SessionState.get(df=data)
+    # persist state of dataframe (initialize with empty DataFrame so row 0 isn't seeded with dummy data)
+    session_state = SessionState.get(df=pd.DataFrame())
     
     if st.button("Spreadsheet Upload Basic"):
-        df['date_time'] = df['date_time'].astype(str)
-        dial_in_data = df.values.flatten().tolist()
+        upload_df = session_state.df if not session_state.df.empty else df
+        upload_df = upload_df.copy()
+        upload_df['date_time'] = upload_df['date_time'].astype(str)
+        dial_in_data = json.loads(
+            json.dumps(
+                upload_df.values.tolist(),
+                default=lambda o: int(o) if isinstance(o, np.integer) else float(o) if isinstance(o, np.floating) else str(o)
+            )
+        )
         # st.write(dial_in_data)
-        worksheet_dialin.append_row(dial_in_data, table_range='A1')
-        st.write('Basic form has been uploaded!')
-
+        worksheet_dialin.append_rows(dial_in_data, table_range='A1')
+        st.write(f'Basic form has been uploaded ({len(dial_in_data)} row(s))!')
 
     if st.button("Add new value"):
         # update dataframe state
@@ -233,10 +241,12 @@ def app():
         st.text("Updated dataframe")
         st.dataframe(session_state.df)
 
-    download=st.button('Download data (.csv)')
+    download = st.button('Download data (.csv)')
     if download:
-        session_state.df.drop(index=df.index[0], axis=0, inplace=True)
-        csv = session_state.df.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # some strings
-        linko= f'<a href="data:file/csv;base64,{b64}" download="basic.csv">Download csv file</a>'
-        st.markdown(linko, unsafe_allow_html=True)
+        if not session_state.df.empty:
+            csv = session_state.df.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()  # some strings
+            linko = f'<a href="data:file/csv;base64,{b64}" download="basic.csv">Download csv file</a>'
+            st.markdown(linko, unsafe_allow_html=True)
+        else:
+            st.warning("No data to download yet. Please add a new value first.")

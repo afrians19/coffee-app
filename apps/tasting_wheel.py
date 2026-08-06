@@ -246,11 +246,11 @@ def app():
     radar_chart(score1, categories, coffee_name)
     st.write('Tasting notes: ', df['notes'].iloc[0])
 
-    # Create an empty dataframe
+    # Create input dataframe
     data = df
 
-    # persist state of dataframe
-    session_state = SessionState.get(df=data)
+    # persist state of dataframe (initialize with empty DataFrame so row 0 isn't seeded with dummy data)
+    session_state = SessionState.get(df=pd.DataFrame())
 
     if st.button("Add new value"):
         # update dataframe state
@@ -258,10 +258,12 @@ def app():
         st.text("Updated dataframe")
         st.dataframe(session_state.df)
 
-    download=st.button('Download data (.csv)')
+    download = st.button('Download data (.csv)')
     if download:
-        session_state.df.drop(index=df.index[0], axis=0, inplace=True)
-        csv = session_state.df.to_csv(index=False)
-        b64 = base64.b64encode(csv.encode()).decode()  # some strings
-        linko= f'<a href="data:file/csv;base64,{b64}" download="tasting_wheel.csv">Download csv file</a>'
-        st.markdown(linko, unsafe_allow_html=True)
+        if not session_state.df.empty:
+            csv = session_state.df.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()  # some strings
+            linko = f'<a href="data:file/csv;base64,{b64}" download="tasting_wheel.csv">Download csv file</a>'
+            st.markdown(linko, unsafe_allow_html=True)
+        else:
+            st.warning("No data to download yet. Please add a new value first.")
