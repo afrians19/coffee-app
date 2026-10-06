@@ -395,7 +395,6 @@ def app():
 
     hist, bin_edges = np.histogram(diameters_um, bins=bins, weights=volumes_mm3 / total_vol)
     bin_centers = (bin_edges[:-1] + bin_edges[1:]) / 2.0
-    bin_widths = np.diff(bin_edges)
     cdf = np.cumsum(hist) / np.sum(hist)
 
     peak_idx = int(np.argmax(hist))
@@ -404,9 +403,8 @@ def app():
     fig = go.Figure()
     # Amber/Warm Coffee Distribution Bars
     fig.add_trace(go.Bar(
-        x=bin_centers,
-        y=hist,
-        width=bin_widths * 0.9,
+        x=[float(v) for v in bin_centers],
+        y=[float(v) for v in hist],
         name="Mass Fraction",
         marker=dict(color='#D97706', line=dict(color='#B45309', width=1)),
         opacity=0.88,
@@ -414,8 +412,8 @@ def app():
     ))
     # Elegant Navy CDF Line
     fig.add_trace(go.Scatter(
-        x=bin_edges[1:],
-        y=cdf,
+        x=[float(v) for v in bin_edges[1:]],
+        y=[float(v) for v in cdf],
         mode="lines+markers",
         name="Cumulative (CDF)",
         yaxis="y2",
