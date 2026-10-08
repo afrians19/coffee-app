@@ -5,12 +5,16 @@ import SessionState
 import gspread
 from google.oauth2.service_account import Credentials
 import pickle
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import safe_load_model
 from my_method import CoffeeGsheetList
 
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive.readonly'
 ]
 
 credentials = Credentials.from_service_account_info(
@@ -74,36 +78,15 @@ def app():
         
     # Predict
     if st.button("Press here to see specialty coffee that suits you"):
-        loaded_model_randomForest = pickle.load(open(filename_RF, "rb")) # Load Model error in cloud - tried library and python ver
-        result = loaded_model_randomForest.predict(features_data)
-        st.write('Great Choices! The coffee especially for you: ', result[0])
-        df_gsheet = CoffeeGsheetList(worksheet, result[0])
-        
-        
-        # error outputing url clickable, code from here 
-        # header = [{'url':'temp'}]
-        # link_list = pd.DataFrame(header)
-        # link_list.drop(link_list.index, inplace=True)
-
-        # for i in df_gsheet.index:
-
-        #     link = df_gsheet['Card'][i]
-        #     df_temp = pd.DataFrame(
-        #         {
-        #             "url": [
-        #                 f'<a target="_blank" href="{link}">Coffee Details</a>'
-        #             ]
-        #         }
-        #     )
-        #     link_list = pd.concat([link_list, df_temp], ignore_index=True)
-
-        # df_gsheet = pd.concat([df_gsheet, link_list], axis=1)
-        # df_gsheet['url'] = link_list.values
-
-        # til here
-
-        df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price']].sort_values(by='Price')
-        st.write(df_gsheet.to_html(escape=False, index=False), unsafe_allow_html=True)
+        try:
+            loaded_model_randomForest = safe_load_model(filename_RF)
+            result = loaded_model_randomForest.predict(features_data)
+            st.write('Great Choices! The coffee especially for you: ', result[0])
+            df_gsheet = CoffeeGsheetList(worksheet, result[0])
+            df_gsheet = df_gsheet[['Coffee', 'Notes', 'Price']].sort_values(by='Price')
+            st.dataframe(df_gsheet, use_container_width=True, hide_index=True)
+        except Exception as e:
+            st.error(f"Error loading coffee recommendation: {e}")
 
     st.write("Check out this: [Specialty Coffee Experience](https://sway.office.com/Lr2aWABAz1aCc9tC)")
 

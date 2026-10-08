@@ -6,8 +6,18 @@ import base64
 import SessionState
 import datetime
 import os
+import sys
 import gspread
 from google.oauth2.service_account import Credentials
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import (
+    render_honeypot,
+    is_bot_submission,
+    check_submission_rate_limit,
+    verify_and_guard_upload,
+    sanitize_user_input,
+    sanitize_dataframe_for_export,
+)
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
 speech_to_text = None
@@ -15,7 +25,7 @@ speech_to_text = None
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive.readonly'
 ]
 
 credentials = Credentials.from_service_account_info(
@@ -131,11 +141,14 @@ def app():
         temperature = st.sidebar.slider('Temperature', 80,100,93)
         fragrance_aroma = st.sidebar.slider('Fragrance/Aroma', 0.0,5.0,3.0)
         dry = st.sidebar.slider('Dry', 0,5,3)
-        qualities_dry = sidebar_voice_text_input('Qualities Dry', 'sca_qualities_dry')
+        raw_qualities_dry = sidebar_voice_text_input('Qualities Dry', 'sca_qualities_dry')
+        qualities_dry = sanitize_user_input(raw_qualities_dry, field_name='Qualities Dry', max_length=500)
         break_ = st.sidebar.slider('Break', 0,5,3)
-        qualities_break = sidebar_voice_text_input('Qualities Break', 'sca_qualities_break')
+        raw_qualities_break = sidebar_voice_text_input('Qualities Break', 'sca_qualities_break')
+        qualities_break = sanitize_user_input(raw_qualities_break, field_name='Qualities Break', max_length=500)
         flavor = st.sidebar.slider('Flavor', 0.0,5.0,3.0)
-        notes = sidebar_voice_text_input('Notes', 'sca_notes')
+        raw_notes = sidebar_voice_text_input('Notes', 'sca_notes')
+        notes = sanitize_user_input(raw_notes, field_name='Notes', max_length=500)
         aftertaste = st.sidebar.slider('Aftertaste', 0.0,5.0,3.0)
         acidity = st.sidebar.slider('Acidity', 0.0,5.0,3.0)
         acidity_intensity = st.sidebar.slider('Acidity Intensity', 0,5,3)
@@ -146,7 +159,8 @@ def app():
         clean_cup = st.sidebar.slider('Clean cup', 0,5,3)
         sweetness = st.sidebar.slider('Sweetness', 0,5,3)
         rating = st.sidebar.slider('Rating', 0.0,5.0,3.0)
-        notes_recipe = sidebar_voice_text_input('Recipe Notes', 'sca_notes_recipe')
+        raw_notes_recipe = sidebar_voice_text_input('Recipe Notes', 'sca_notes_recipe')
+        notes_recipe = sanitize_user_input(raw_notes_recipe, field_name='Recipe Notes', max_length=500)
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
                 (                     
@@ -233,18 +247,37 @@ def app():
     # persist state of dataframe (initialize with empty DataFrame so row 0 isn't seeded with dummy data)
     session_state = SessionState.get(df=pd.DataFrame())
 
+    # Bot Honeypot Trap
+    render_honeypot("sca")
+
     if st.button("Spreadsheet Upload SCA"):
-        upload_df = session_state.df if not session_state.df.empty else df
-        upload_df = upload_df.copy()
-        upload_df['date_time'] = upload_df['date_time'].astype(str)
-        dial_in_data = json.loads(
-            json.dumps(
-                upload_df.values.tolist(),
-                default=lambda o: int(o) if isinstance(o, np.integer) else float(o) if isinstance(o, np.floating) else str(o)
-            )
+        allowed, msg = verify_and_guard_upload(
+            form_id="sca",
+            worksheet=worksheet_dialin,
+            session_action="sca_upload",
+            cooldown_seconds=4.0,
+            max_session_per_minute=10,
+            max_sheet_rows=50_000
         )
-        worksheet_dialin.append_rows(dial_in_data, table_range='A1')
-        st.write(f'SCA form has been uploaded ({len(dial_in_data)} row(s))!')
+        if not allowed:
+            st.warning(msg)
+        else:
+            upload_df = session_state.df if not session_state.df.empty else df
+            upload_df = upload_df.copy()
+            upload_df['date_time'] = upload_df['date_time'].astype(str)
+            # Formula injection sanitization
+            clean_upload_df = sanitize_dataframe_for_export(upload_df)
+            dial_in_data = json.loads(
+                json.dumps(
+                    clean_upload_df.values.tolist(),
+                    default=lambda o: int(o) if isinstance(o, np.integer) else float(o) if isinstance(o, np.floating) else str(o)
+                )
+            )
+            try:
+                worksheet_dialin.append_rows(dial_in_data, table_range='A1')
+                st.success(f'SCA form has been uploaded ({len(dial_in_data)} row(s))!')
+            except Exception as exc:
+                st.error(f'Upload failed: {exc}')
 
     if st.button("Add new value"):
         # update dataframe state
@@ -255,8 +288,9 @@ def app():
     download = st.button('Download data (.csv)')
     if download:
         if not session_state.df.empty:
-            csv = session_state.df.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings
+            clean_df = sanitize_dataframe_for_export(session_state.df)
+            csv = clean_df.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()
             linko = f'<a href="data:file/csv;base64,{b64}" download="sca_form.csv">Download csv file</a>'
             st.markdown(linko, unsafe_allow_html=True)
         else:

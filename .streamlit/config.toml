@@ -6,4 +6,6 @@ textColor = "#2D2219"
 font = "sans serif"
 
 [server]
+enableCORS = true
+enableXsrfProtection = true
 enableWebsocketCompression = false

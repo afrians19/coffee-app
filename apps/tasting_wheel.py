@@ -8,8 +8,11 @@ import base64
 import SessionState
 import datetime
 import os
+import sys
 import gspread
 from google.oauth2.service_account import Credentials
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import sanitize_user_input, sanitize_dataframe_for_export
 import plotly.express as px
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
@@ -18,7 +21,7 @@ speech_to_text = None
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive.readonly'
 ]
 
 credentials = Credentials.from_service_account_info(
@@ -145,8 +148,10 @@ def app():
         aftertaste = st.sidebar.slider('Aftertaste', 0.0,5.0,3.0)
 
         rating = st.sidebar.slider('Rating', 0,5,3)
-        notes = sidebar_voice_text_input('Tasting Notes', 'tasting_wheel_notes')
-        notes_recipe = sidebar_voice_text_input('Recipe Notes', 'tasting_wheel_notes_recipe')
+        raw_notes = sidebar_voice_text_input('Tasting Notes', 'tasting_wheel_notes')
+        raw_notes_recipe = sidebar_voice_text_input('Recipe Notes', 'tasting_wheel_notes_recipe')
+        notes = sanitize_user_input(raw_notes, field_name='Tasting Notes', max_length=500)
+        notes_recipe = sanitize_user_input(raw_notes_recipe, field_name='Recipe Notes', max_length=500)
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
                 (
@@ -261,7 +266,8 @@ def app():
     download = st.button('Download data (.csv)')
     if download:
         if not session_state.df.empty:
-            csv = session_state.df.to_csv(index=False)
+            clean_df = sanitize_dataframe_for_export(session_state.df)
+            csv = clean_df.to_csv(index=False)
             b64 = base64.b64encode(csv.encode()).decode()  # some strings
             linko = f'<a href="data:file/csv;base64,{b64}" download="tasting_wheel.csv">Download csv file</a>'
             st.markdown(linko, unsafe_allow_html=True)

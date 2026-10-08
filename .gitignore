@@ -1,1 +1,21 @@
-.streamlit
+# Streamlit secrets and credentials
+.streamlit/secrets.toml
+.streamlit/credentials.json
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+apps/__pycache__/
+
+# Environment and sensitive keys
+.env
+.env.*
+
+# Serialization and models
+*.sav
+*.pkl
+
+# OS artifacts
+.DS_Store
+Thumbs.db

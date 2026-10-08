@@ -4,10 +4,15 @@ import gspread
 from google.oauth2.service_account import Credentials
 import plotly.express as px
 import plotly.graph_objects as go
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import sanitize_dataframe_for_export, sanitize_user_input
+
 # data from gsheet <start>
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive.readonly'
 ]
  
 credentials = Credentials.from_service_account_info(
@@ -352,8 +357,8 @@ def app():
             return
 
         selected_full_df = history_df.loc[selected_index].copy()
-        
-        csv_data = selected_full_df.to_csv(index=False).encode('utf-8')
+        clean_selected_df = sanitize_dataframe_for_export(selected_full_df)
+        csv_data = clean_selected_df.to_csv(index=False).encode('utf-8')
         st.download_button(
             label='Download selected data (.csv)',
             data=csv_data,

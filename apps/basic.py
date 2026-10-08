@@ -9,8 +9,18 @@ import base64
 import SessionState
 import datetime
 import os
+import sys
 import gspread
 from google.oauth2.service_account import Credentials
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import (
+    render_honeypot,
+    is_bot_submission,
+    check_submission_rate_limit,
+    verify_and_guard_upload,
+    sanitize_user_input,
+    sanitize_dataframe_for_export,
+)
 from my_method import radar_chart, dataGsheet, notesGsheet, initDF, flavorWheel
 
 speech_to_text = None
@@ -20,7 +30,7 @@ speech_to_text = None
 # Auth start
 scopes = [
     'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
+    'https://www.googleapis.com/auth/drive.readonly'
 ]
 
 credentials = Credentials.from_service_account_info(
@@ -144,13 +154,15 @@ def app():
         body = st.sidebar.slider('Body', 0.0,5.0,3.0)
         aftertaste = st.sidebar.slider('Aftertaste', 0.0,5.0,3.0)
         rating = st.sidebar.slider('Rating', 0.0,5.0,3.0)
-        notes = sidebar_voice_text_input('Tasting Notes', 'basic_notes')
-        notes_recipe = sidebar_voice_text_input('Recipe Notes', 'basic_notes_recipe')
+        raw_notes = sidebar_voice_text_input('Tasting Notes', 'basic_notes')
+        raw_notes_recipe = sidebar_voice_text_input('Recipe Notes', 'basic_notes_recipe')
+        notes = sanitize_user_input(raw_notes, field_name='Tasting Notes', max_length=500)
+        notes_recipe = sanitize_user_input(raw_notes_recipe, field_name='Recipe Notes', max_length=500)
         grinder = st.sidebar.selectbox(
             'Select Grinder', 
-                (                     
-                    'DF64 SSP LS', 'FGM600AD SSP MP', 'C40', 'FGM AF74', 'DF64', 'GR 74'
-                )
+            (                     
+                'DF64 SSP LS', 'FGM600AD SSP MP', 'C40', 'FGM AF74', 'DF64', 'GR 74'
+            )
         )
         grinder_setting = st.sidebar.number_input('Grinder Setting', 0,200,72)
         date_time = datetime.datetime.now()
@@ -221,19 +233,37 @@ def app():
     # persist state of dataframe (initialize with empty DataFrame so row 0 isn't seeded with dummy data)
     session_state = SessionState.get(df=pd.DataFrame())
     
+    # Bot Honeypot Trap
+    render_honeypot("basic")
+    
     if st.button("Spreadsheet Upload Basic"):
-        upload_df = session_state.df if not session_state.df.empty else df
-        upload_df = upload_df.copy()
-        upload_df['date_time'] = upload_df['date_time'].astype(str)
-        dial_in_data = json.loads(
-            json.dumps(
-                upload_df.values.tolist(),
-                default=lambda o: int(o) if isinstance(o, np.integer) else float(o) if isinstance(o, np.floating) else str(o)
-            )
+        allowed, msg = verify_and_guard_upload(
+            form_id="basic",
+            worksheet=worksheet_dialin,
+            session_action="basic_upload",
+            cooldown_seconds=4.0,
+            max_session_per_minute=10,
+            max_sheet_rows=50_000
         )
-        # st.write(dial_in_data)
-        worksheet_dialin.append_rows(dial_in_data, table_range='A1')
-        st.write(f'Basic form has been uploaded ({len(dial_in_data)} row(s))!')
+        if not allowed:
+            st.warning(msg)
+        else:
+            upload_df = session_state.df if not session_state.df.empty else df
+            upload_df = upload_df.copy()
+            upload_df['date_time'] = upload_df['date_time'].astype(str)
+            # Formula injection sanitization
+            clean_upload_df = sanitize_dataframe_for_export(upload_df)
+            dial_in_data = json.loads(
+                json.dumps(
+                    clean_upload_df.values.tolist(),
+                    default=lambda o: int(o) if isinstance(o, np.integer) else float(o) if isinstance(o, np.floating) else str(o)
+                )
+            )
+            try:
+                worksheet_dialin.append_rows(dial_in_data, table_range='A1')
+                st.success(f'Basic form has been uploaded ({len(dial_in_data)} row(s))!')
+            except Exception as exc:
+                st.error(f'Upload failed: {exc}')
 
     if st.button("Add new value"):
         # update dataframe state
@@ -244,8 +274,9 @@ def app():
     download = st.button('Download data (.csv)')
     if download:
         if not session_state.df.empty:
-            csv = session_state.df.to_csv(index=False)
-            b64 = base64.b64encode(csv.encode()).decode()  # some strings
+            clean_df = sanitize_dataframe_for_export(session_state.df)
+            csv = clean_df.to_csv(index=False)
+            b64 = base64.b64encode(csv.encode()).decode()
             linko = f'<a href="data:file/csv;base64,{b64}" download="basic.csv">Download csv file</a>'
             st.markdown(linko, unsafe_allow_html=True)
         else:

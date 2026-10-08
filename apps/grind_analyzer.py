@@ -12,6 +12,10 @@ from PIL import Image
 import cv2
 import io
 import gc
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from security import validate_uploaded_image
 
 # Preset reference coins & objects (diameters in mm)
 REFERENCE_OBJECTS = {
@@ -221,20 +225,34 @@ def app():
     if input_mode == "📁 Upload from Gallery / Files":
         uploaded_file = st.file_uploader("Upload photo of ground coffee with reference coin", type=["jpg", "jpeg", "png", "webp"])
         if uploaded_file is not None:
-            pil_img = Image.open(uploaded_file).convert("RGB")
-            # Downsample ultra high-res mobile photos to prevent mobile browser memory limits
-            max_dim = 1800
-            if max(pil_img.size) > max_dim:
-                pil_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
-            image_rgb = np.array(pil_img)
+            is_valid, err_msg = validate_uploaded_image(uploaded_file, max_size_mb=15.0)
+            if not is_valid:
+                st.error(f"Image validation failed: {err_msg}")
+            else:
+                try:
+                    pil_img = Image.open(uploaded_file).convert("RGB")
+                    # Downsample ultra high-res mobile photos to prevent mobile browser memory limits
+                    max_dim = 1800
+                    if max(pil_img.size) > max_dim:
+                        pil_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+                    image_rgb = np.array(pil_img)
+                except Exception as exc:
+                    st.error(f"Unable to process image: {exc}")
     elif input_mode == "📸 Take Photo with Camera":
         cam_file = st.camera_input("Snap picture of coffee grounds on white paper with coin")
         if cam_file is not None:
-            pil_img = Image.open(cam_file).convert("RGB")
-            max_dim = 1800
-            if max(pil_img.size) > max_dim:
-                pil_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
-            image_rgb = np.array(pil_img)
+            is_valid, err_msg = validate_uploaded_image(cam_file, max_size_mb=15.0)
+            if not is_valid:
+                st.error(f"Image validation failed: {err_msg}")
+            else:
+                try:
+                    pil_img = Image.open(cam_file).convert("RGB")
+                    max_dim = 1800
+                    if max(pil_img.size) > max_dim:
+                        pil_img.thumbnail((max_dim, max_dim), Image.Resampling.LANCZOS)
+                    image_rgb = np.array(pil_img)
+                except Exception as exc:
+                    st.error(f"Unable to process camera image: {exc}")
     else:
         # Synthetic sample
         w, h = 900, 700
