@@ -1,7 +1,8 @@
 """
 Grind Size Analyzer (Particle Size Distribution - PSD)
 Integrated Module for Airkopi Barista App
-Based on optical particle detection algorithms by Jonathan Gagné.
+Based on optical particle detection algorithms by Jonathan Gagné (@jgagneastro).
+Reference: https://github.com/jgagneastro and https://coffeeadastra.com
 """
 
 import streamlit as st
@@ -204,8 +205,11 @@ def app():
     st.markdown("""
     <div class="coffee-card" style="padding: 24px; margin-bottom: 24px;">
         <h2 style="margin: 0 0 8px 0; font-family: 'Playfair Display', serif; color: #2D2219;">🔬 Optical Grind Size Analyzer</h2>
-        <p style="margin: 0; color: #6B5B4D; font-size: 0.95rem; line-height: 1.6;">
+        <p style="margin: 0 0 10px 0; color: #6B5B4D; font-size: 0.95rem; line-height: 1.6;">
             Analyze your coffee grind size distribution (PSD) from smartphone camera photos. Calibrated using standard coins to measure dominant particle size and fines percentage.
+        </p>
+        <p style="margin: 0; font-size: 0.85rem; color: #8C7A6B; line-height: 1.4;">
+            💡 <em>Algorithm adapted from open-source research by <strong><a href="https://github.com/jgagneastro" target="_blank" style="color: #B45309; text-decoration: underline;">Jonathan Gagné</a></strong> (<a href="https://coffeeadastra.com" target="_blank" style="color: #B45309; text-decoration: underline;">Coffee Ad Astra</a>).</em>
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -558,3 +562,11 @@ def app():
             file_name="coffee_particle_psd.csv",
             mime="text/csv"
         )
+
+    # 7. Methodology & Attribution
+    with st.expander("ℹ️ Methodology, Attribution & Open-Source Credits"):
+        st.markdown("""
+        * **Measurement Principle:** Uses adaptive image thresholding, contour detection, and an equivalent ellipse model to compute major and minor axes, estimating volume-weighted Particle Size Distribution (PSD).
+        * **Scale Calibration:** Employs reference coin diameter detection to establish optical pixel-to-millimeter scaling.
+        * **Attribution & Credits:** Core optical detection principles and volume-weighting methodology are based on the pioneering open-source work by **[Jonathan Gagné](https://github.com/jgagneastro)** (author of *The Physics of Filter Coffee* and creator of [Coffee Ad Astra](https://coffeeadastra.com)).
+        """)

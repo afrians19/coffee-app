@@ -4,15 +4,17 @@ A Streamlit app for coffee brewing guidance, dial-in logging, cupping forms, and
 
 ## What This App Does
 
-This project combines four tools in one interface:
+This project combines five tools in one interface:
 
 1. `Brewing Guide`
    Helps you choose brewing inputs and review previous dial-in results from Google Sheets.
-2. `Basic Cupping Form`
+2. `Optical Grind Analyzer`
+   Measures coffee grind particle size distribution (PSD) and fines from photos using reference coin calibration.
+3. `Basic Cupping Form`
    Lets you log everyday dial-in sessions and upload them to a spreadsheet.
-3. `SCA Cupping Form`
+4. `SCA Cupping Form`
    Lets you record a more detailed Specialty Coffee Association style evaluation.
-4. `Coffee Recommendation`
+5. `Coffee Recommendation`
    Suggests a coffee based on a small taste-preference questionnaire.
 
 The app reads coffee data from Google Sheets and, in some pages, writes new dial-in records back to those sheets.
@@ -188,6 +190,8 @@ From the home page you can open:
   Main Streamlit entry point and page registration.
 - [`multiapp.py`](/f:/Cloud/GoogleDrive/Data%20Science/Github%20-%20afrians19/Streamlit-%20coffee-app/multiapp.py)
   Multi-page app helper.
+- [`apps/grind_analyzer.py`](/f:/Cloud/GoogleDrive/Data%20Science/Github%20-%20afrians19/Streamlit-%20coffee-app/apps/grind_analyzer.py)
+  Optical Grind Size Analyzer page.
 - [`apps/recipe.py`](/f:/Cloud/GoogleDrive/Data%20Science/Github%20-%20afrians19/Streamlit-%20coffee-app/apps/recipe.py)
   Brewing Guide page.
 - [`apps/basic.py`](/f:/Cloud/GoogleDrive/Data%20Science/Github%20-%20afrians19/Streamlit-%20coffee-app/apps/basic.py)
@@ -233,6 +237,13 @@ If you only want to use the app and not modify it:
 
 1. Run `streamlit run app.py`
 2. Open `Brewing Guide` to review a coffee and generate brew suggestions
-3. Open `Basic Cupping Form` or `SCA Cupping Form` to log a session
-4. Upload the record to Google Sheets if needed
-5. Use `Coffee Recommendation` when you want a simple coffee suggestion
+3. Open `Optical Grind Analyzer` to evaluate coffee grind particle size distribution (PSD)
+4. Open `Basic Cupping Form` or `SCA Cupping Form` to log a session
+5. Upload the record to Google Sheets if needed
+6. Use `Coffee Recommendation` when you want a simple coffee suggestion
+
+## Acknowledgements & Credits
+
+* **Optical Grind Size Analyzer:** Particle size detection methodology and volume-weighted distribution modeling are adapted from the open-source research and tools by **[Jonathan Gagné](https://github.com/jgagneastro)** (author of *The Physics of Filter Coffee* and creator of [Coffee Ad Astra](https://coffeeadastra.com)).
+* **Specialty Coffee Association (SCA):** Cupping scoring form standards.
+
